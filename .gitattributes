@@ -1,0 +1,17 @@
+# Нормализация переводов строк.
+# В репозитории всегда LF — иначе сборка в Docker/Linux-CI и рабочие копии
+# на Windows расходятся, и весь проект показывается как изменённый.
+* text=auto eol=lf
+
+# Бинарные файлы не трогаем
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Лок-файл не показываем в диффах ревью
+package-lock.json linguist-generated=true -diff

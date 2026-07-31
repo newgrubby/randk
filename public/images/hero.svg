@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="presentation">
+  <defs>
+    <linearGradient id="wash" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#f7f4ef" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#efe9e0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="frame"><rect width="1200" height="900"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="900" fill="#efe9e0"/>
+    <path d="M270.30096783011675 900 L270.30096783011675 631.5957831266792 A260.366898384962 260.366898384962 0 0 1 791.0347646000407 631.5957831266792 L791.0347646000407 900 Z" fill="#e2d8ca" opacity="0.75"/>
+    <path d="M-36.51020983300215 900 L-36.51020983300215 458.738728310852 A376.711913174184 376.711913174184 0 0 1 716.9136165153659 458.738728310852 L716.9136165153659 900 Z" fill="#f7f4ef" opacity="0.54"/>
+    <path d="M714.9389829538793 900 L714.9389829538793 530.8763593509506 A247.60111896870686 247.60111896870686 0 0 1 1210.141220891293 530.8763593509506 L1210.141220891293 900 Z" fill="#e2d8ca" opacity="0.63"/>
+    <g stroke="#241f1d" stroke-width="0.75" opacity="0.1" fill="none">
+      <path d="M0 64.3 H1200"/>
+      <path d="M0 128.6 H1200"/>
+      <path d="M0 192.9 H1200"/>
+      <path d="M0 257.1 H1200"/>
+      <path d="M0 321.4 H1200"/>
+      <path d="M0 385.7 H1200"/>
+      <path d="M0 450.0 H1200"/>
+      <path d="M0 514.3 H1200"/>
+      <path d="M0 578.6 H1200"/>
+      <path d="M0 642.9 H1200"/>
+      <path d="M0 707.1 H1200"/>
+      <path d="M0 771.4 H1200"/>
+      <path d="M0 835.7 H1200"/>
+    </g>
+    <path d="M664.2515093703408 396.4045960482686 A182.35186765025182 182.35186765025182 0 0 1 1028.9552446708444 396.4045960482686" fill="none" stroke="#ad1f2b" stroke-width="23.7" stroke-linecap="round"/>
+    <circle cx="715.3" cy="569.6" r="31.0" fill="#7d1119" opacity="0.85"/>
+    <rect width="1200" height="900" fill="url(#wash)"/>
+  </g>
+</svg>
