@@ -9,6 +9,7 @@ import { emptyLeadForm, leadSchema, type LeadFormValues, type LeadSource } from 
 import { captureUtm, readUtm } from '@/lib/utm';
 import { formatPhoneInput } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
+import { useCity } from '@/components/layout/CityProvider';
 import { ConsentField, FieldWrapper, Honeypot, SelectField, TextField } from './fields';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -41,7 +42,21 @@ export function LeadForm({
   compact = false,
 }: LeadFormProps) {
   const formId = useId();
+  const { branch } = useCity();
+
+  /**
+   * Приоритет: явный `defaults` (страница филиала знает свой город точно) →
+   * город, выбранный в шапке → пусто. Выбор в шапке подставляется через
+   * useEffect, а не в начальном состоянии: он читается из localStorage
+   * уже после гидратации.
+   */
   const [values, setValues] = useState<LeadFormValues>({ ...emptyLeadForm, ...defaults });
+  const [isCityTouched, setIsCityTouched] = useState(false);
+
+  useEffect(() => {
+    if (isCityTouched || defaults?.city || !branch) return;
+    setValues((previous) => (previous.city ? previous : { ...previous, city: branch.city }));
+  }, [branch, defaults?.city, isCityTouched]);
   const [errors, setErrors] = useState<Partial<Record<keyof LeadFormValues, string>>>({});
   const [status, setStatus] = useState<Status>('idle');
   const [serverError, setServerError] = useState<string | null>(null);
@@ -187,7 +202,10 @@ export function LeadForm({
               id={`${formId}-city`}
               name="city"
               value={values.city}
-              onChange={(event) => setField('city', event.target.value)}
+              onChange={(event) => {
+                setIsCityTouched(true);
+                setField('city', event.target.value);
+              }}
             >
               <option value="">Выберите центр</option>
               {branches.map((branch) => (

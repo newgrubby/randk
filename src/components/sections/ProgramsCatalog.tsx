@@ -2,11 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { branches } from '@/content/branches';
 import { ageGroups, programCategoryLabels, programs } from '@/content/programs';
-import type { AgeGroupSlug, ProgramCategory } from '@/content/types';
+import type { AgeGroupSlug, LessonFormat, ProgramCategory } from '@/content/types';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { ArrowRight } from '@/components/ui/Button';
@@ -22,17 +21,28 @@ const categories: CategoryFilter[] = [
   ...(Object.keys(programCategoryLabels) as ProgramCategory[]),
 ];
 
+const formatLabels: Record<LessonFormat, string> = {
+  group: 'группа',
+  'mini-group': 'мини-группа',
+  individual: 'индивидуально',
+};
+
 /**
  * Каталог направлений с фильтрами.
- * Возраст можно задать ссылкой: /programs?age=teens — так работают
- * карточки блока «Программы по возрасту» на главной.
+ *
+ * ВАЖНО про рендеринг: начальный фильтр приходит пропом `initialAge`,
+ * который страница читает из query на сервере. Раньше здесь стоял
+ * `useSearchParams()`, и это ломало SEO: хук переводит поддерево в
+ * динамический режим, Next пропускал его пререндер, и в исходном HTML
+ * вместо карточек уходила заглушка Suspense — каталог видели только
+ * браузеры с выполненным JavaScript.
+ *
+ * Теперь карточки есть в серверном HTML, а переключение фильтров
+ * остаётся чисто клиентским: локальный стейт, без навигации и перезагрузки.
  */
-export function ProgramsCatalog() {
-  const searchParams = useSearchParams();
-  const initialAge = (searchParams.get('age') ?? 'all') as AgeFilter;
-
+export function ProgramsCatalog({ initialAge = 'all' }: { initialAge?: string }) {
   const [age, setAge] = useState<AgeFilter>(
-    ageGroups.some((group) => group.slug === initialAge) ? initialAge : 'all',
+    ageGroups.some((group) => group.slug === initialAge) ? (initialAge as AgeFilter) : 'all',
   );
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [city, setCity] = useState<CityFilter>('all');
@@ -128,10 +138,35 @@ export function ProgramsCatalog() {
                   <h2 className="text-h3 group-hover:text-accent mt-4 font-serif transition-colors duration-300">
                     {program.title}
                   </h2>
-                  <p className="text-muted mt-1.5 text-sm">{program.age}</p>
+
                   <p className="text-muted mt-4 line-clamp-3 text-[0.9375rem] leading-relaxed">
                     {program.description}
                   </p>
+
+                  {/* Структурные параметры: возраст, формат, города — считываются с одного взгляда */}
+                  <dl className="border-border mt-5 flex flex-col gap-2 border-t pt-5 text-sm">
+                    <div className="flex gap-3">
+                      <dt className="text-muted w-20 shrink-0">Возраст</dt>
+                      <dd>{program.age}</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="text-muted w-20 shrink-0">Формат</dt>
+                      <dd>{program.formats.map((format) => formatLabels[format]).join(' · ')}</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="text-muted w-20 shrink-0">Города</dt>
+                      <dd>
+                        {program.cityAvailability.length === branches.length
+                          ? 'все центры'
+                          : program.cityAvailability
+                              .map(
+                                (slug) =>
+                                  branches.find((branch) => branch.slug === slug)?.city ?? slug,
+                              )
+                              .join(', ')}
+                      </dd>
+                    </div>
+                  </dl>
 
                   <span className="text-accent mt-auto inline-flex items-center gap-2 pt-6 text-sm font-medium">
                     Подробнее

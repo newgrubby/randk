@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { YandexMetrika } from '@/components/analytics/YandexMetrika';
 import { LeadModalProvider } from '@/components/forms/LeadModalProvider';
+import { CityProvider } from '@/components/layout/CityProvider';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { MobileActionBar } from '@/components/layout/MobileActionBar';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { JsonLd } from '@/components/ui/JsonLd';
 import { site } from '@/content/site';
@@ -39,16 +41,33 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={`${fontDisplay.variable} ${fontBody.variable}`}>
+      <head>
+        {/*
+          Без JavaScript анимации появления никогда не запустятся, а их
+          начальное состояние (opacity: 0) уже отрендерено в HTML. Этот стиль
+          парсится только при отключённом скриптинге и возвращает контент
+          в видимое состояние — карточки и секции остаются читаемыми.
+        */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body>
         <JsonLd data={organizationJsonLd()} />
-        <LeadModalProvider>
-          <Header />
-          <main id="main" className="pt-[4.75rem] lg:pt-[5.5rem]">
-            {children}
-          </main>
-          <Footer />
-          <BackToTop />
-        </LeadModalProvider>
+        <CityProvider>
+          <LeadModalProvider>
+            <Header />
+            <main id="main" className="pt-[4.75rem] lg:pt-[5.5rem]">
+              {children}
+            </main>
+            {/* Нижний отступ — чтобы подвал не уходил под закреплённую панель на мобильных */}
+            <div className="pb-[4.5rem] lg:pb-0">
+              <Footer />
+            </div>
+            <BackToTop />
+            <MobileActionBar />
+          </LeadModalProvider>
+        </CityProvider>
         <YandexMetrika />
       </body>
     </html>

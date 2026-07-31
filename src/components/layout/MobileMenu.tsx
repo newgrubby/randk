@@ -9,6 +9,7 @@ import { site } from '@/content/site';
 import { track } from '@/lib/analytics';
 import { cn, displayPhone } from '@/lib/utils';
 import { TrialButton } from '@/components/ui/TrialButton';
+import { CitySwitcher } from './CitySwitcher';
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +64,8 @@ export function MobileMenu() {
             transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
           >
             <div className="container-page flex items-center justify-between py-5">
-              <span className="text-eyebrow text-muted font-medium uppercase">Меню</span>
+              {/* На узких экранах выбор города живёт здесь — в шапке для него нет места */}
+              <CitySwitcher />
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}

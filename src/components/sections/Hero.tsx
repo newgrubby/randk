@@ -44,10 +44,16 @@ export function Hero() {
               {hero.eyebrow}
             </motion.p>
 
+            {/*
+              Между строками заголовка стоит пробел: строки — блочные,
+              поэтому визуально он не виден, но без него текстовая версия
+              страницы (скринридер, поисковый робот, режим чтения)
+              склеивает слова: «языки,экзамены и развитие».
+            */}
             <motion.h1 {...rise(0.14)} className="text-display mt-6 font-serif">
               {hero.titleLines.map((line) => (
                 <span key={line} className="block">
-                  {line}
+                  {line}{' '}
                 </span>
               ))}
               <span className="text-accent block italic">{hero.titleAccent}</span>

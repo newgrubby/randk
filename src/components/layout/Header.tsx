@@ -120,9 +120,7 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <div className="hidden lg:block">
-              <CitySwitcher />
-            </div>
+            <CitySwitcher className="hidden md:block" />
 
             {showPhone ? (
               <a

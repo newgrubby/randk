@@ -1,12 +1,15 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { PageHero } from '@/components/layout/PageHero';
 import { Advantages } from '@/components/sections/Advantages';
-import { BranchesGrid } from '@/components/sections/BranchesGrid';
 import { FinalCta } from '@/components/sections/FinalCta';
 import { Results } from '@/components/sections/Results';
+import { Teachers } from '@/components/sections/Teachers';
+import { ArrowRight } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
+import { teachers } from '@/content/teachers';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
@@ -80,9 +83,29 @@ export default function AboutPage() {
         </div>
       </Section>
 
+      {/*
+        Развёрнутые преимущества и процесс контроля результата живут только
+        здесь: на главной от них остались короткие тезисы. Сетка филиалов
+        тоже убрана — она есть на главной и на /branches, третья копия
+        удлиняла страницу, ничего не добавляя.
+      */}
       <Advantages />
       <Results />
-      <BranchesGrid />
+      <Teachers
+        items={teachers}
+        eyebrow="Команда"
+        title="Кто ведёт занятия"
+        lead="Педагога подбираем под возраст и задачу ученика."
+        aside={
+          <Link
+            href="/teachers"
+            className="group text-accent inline-flex items-center gap-2 text-sm font-medium"
+          >
+            Все преподаватели
+            <ArrowRight />
+          </Link>
+        }
+      />
       <FinalCta />
     </>
   );

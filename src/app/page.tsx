@@ -1,4 +1,4 @@
-import { Advantages } from '@/components/sections/Advantages';
+import { AdvantageTheses } from '@/components/sections/AdvantageTheses';
 import { AgeGroups } from '@/components/sections/AgeGroups';
 import { BranchesGrid } from '@/components/sections/BranchesGrid';
 import { Directions } from '@/components/sections/Directions';
@@ -6,11 +6,8 @@ import { FaqSection } from '@/components/sections/FaqSection';
 import { FinalCta } from '@/components/sections/FinalCta';
 import { Hero } from '@/components/sections/Hero';
 import { QuizSection } from '@/components/sections/QuizSection';
-import { Results } from '@/components/sections/Results';
 import { Reviews } from '@/components/sections/Reviews';
-import { Teachers } from '@/components/sections/Teachers';
 import { generalFaq } from '@/content/faq';
-import { teachers } from '@/content/teachers';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
@@ -21,6 +18,14 @@ export const metadata = buildMetadata({
   path: '/',
 });
 
+/**
+ * Главная страница.
+ *
+ * Задача главной — быстро довести до выбора программы или центра, а не
+ * пересказать весь сайт. Поэтому здесь короткие тезисы вместо развёрнутых
+ * преимуществ, а блоки «как мы следим за результатом» и «преподаватели»
+ * раскрываются на /about и /teachers — раньше они дословно дублировались.
+ */
 export default function HomePage() {
   return (
     <>
@@ -28,9 +33,7 @@ export default function HomePage() {
       <AgeGroups />
       <Directions />
       <QuizSection />
-      <Advantages />
-      <Teachers items={teachers} />
-      <Results />
+      <AdvantageTheses />
       <Reviews />
       <BranchesGrid />
       <FaqSection items={generalFaq} />

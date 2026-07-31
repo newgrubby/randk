@@ -32,6 +32,10 @@ export function Reveal({ children, delay = 0, y = 24, className, as = 'div' }: R
 
   return (
     <Component
+      // data-reveal — зацепка для noscript-стиля в layout.tsx.
+      // Начальное состояние (opacity: 0) попадает в серверный HTML, поэтому
+      // без JavaScript контент остался бы в разметке, но невидимым.
+      data-reveal=""
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}

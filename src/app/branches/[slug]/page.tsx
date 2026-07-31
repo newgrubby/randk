@@ -3,8 +3,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LeadForm } from '@/components/forms/LeadForm';
 import { PageHero } from '@/components/layout/PageHero';
-import { FaqSection } from '@/components/sections/FaqSection';
-import { Teachers } from '@/components/sections/Teachers';
 import { BranchActions } from '@/components/ui/BranchActions';
 import { BranchMap } from '@/components/ui/BranchMap';
 import { ArrowRight } from '@/components/ui/Button';
@@ -16,9 +14,7 @@ import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import { branches, getBranch } from '@/content/branches';
-import { branchFaq } from '@/content/faq';
 import { getProgram } from '@/content/programs';
-import { getTeachersByBranch } from '@/content/teachers';
 import { branchJsonLd } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/seo';
 
@@ -55,7 +51,6 @@ export default async function BranchPage({ params }: { params: Promise<{ slug: s
   const branchPrograms = branch.availablePrograms
     .map((programSlug) => getProgram(programSlug))
     .filter((program) => program !== undefined);
-  const branchTeachers = getTeachersByBranch(branch.slug);
 
   return (
     <>
@@ -63,7 +58,7 @@ export default async function BranchPage({ params }: { params: Promise<{ slug: s
 
       <PageHero
         eyebrow="Центр сети"
-        title={`RandK Center ${branch.cityLocative.replace(/^в /, '— ')}`}
+        title={`RandK Center ${branch.cityLocative}`}
         lead={branch.intro}
         breadcrumbs={[
           { name: 'Центры', path: '/branches' },
@@ -101,26 +96,32 @@ export default async function BranchPage({ params }: { params: Promise<{ slug: s
         ) : null}
       </div>
 
-      {/* Преимущества филиала */}
-      <Section spacing="tight">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <SectionHeading eyebrow="Особенности" title="Чем полезен этот центр" />
+      {/*
+        Особенности центра выводятся только когда их подтвердил клиент.
+        Пустой массив = секции нет: лучше короткая страница, чем убедительные
+        утверждения, за которыми ничего не стоит.
+      */}
+      {branch.highlights.length > 0 ? (
+        <Section spacing="tight">
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-5">
+              <SectionHeading eyebrow="Особенности" title="Чем полезен этот центр" />
+            </div>
+            <ul className="lg:col-span-7">
+              {branch.highlights.map((item, index) => (
+                <Reveal as="li" key={item} delay={index * 0.08}>
+                  <div className="border-border flex gap-6 border-b py-6">
+                    <span className="text-accent font-serif text-2xl leading-none">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <p className="text-lead">{item}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </ul>
           </div>
-          <ul className="lg:col-span-7">
-            {branch.highlights.map((item, index) => (
-              <Reveal as="li" key={item} delay={index * 0.08}>
-                <div className="border-border flex gap-6 border-b py-6">
-                  <span className="text-accent font-serif text-2xl leading-none">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <p className="text-lead">{item}</p>
-                </div>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </Section>
+        </Section>
+      ) : null}
 
       {/* Направления филиала */}
       <Section tone="surface" spacing="tight">
@@ -155,12 +156,12 @@ export default async function BranchPage({ params }: { params: Promise<{ slug: s
         </ul>
       </Section>
 
-      <Teachers
-        items={branchTeachers}
-        eyebrow="Преподаватели"
-        title={`Кто ведёт занятия ${branch.cityLocative}`}
-        lead="Педагога подбираем под возраст и задачу ученика. Состав преподавателей уточняется при записи."
-      />
+      {/*
+        Блок преподавателей здесь убран намеренно: до подтверждения состава
+        он показывал одни и те же четыре специализации на всех трёх страницах.
+        Ссылка ведёт на общий раздел; когда появятся реальные педагоги
+        по городам, блок вернётся с настоящими различиями.
+      */}
 
       {/* Контакты и карта */}
       <Section id="contacts" tone="muted" spacing="tight">
@@ -222,7 +223,7 @@ export default async function BranchPage({ params }: { params: Promise<{ slug: s
           <div className="lg:col-span-5">
             <SectionHeading
               eyebrow="Запись"
-              title={`Записаться в центр ${branch.cityLocative.replace(/^в /, 'в ')}`}
+              title={`Записаться ${branch.cityLocative}`}
               lead="Оставьте контакты — администратор свяжется, уточнит уровень и предложит удобное время."
             />
           </div>
@@ -239,7 +240,30 @@ export default async function BranchPage({ params }: { params: Promise<{ slug: s
         </div>
       </Section>
 
-      <FaqSection items={branchFaq} title={`Вопросы о центре ${branch.cityLocative}`} />
+      {/*
+        Общий FAQ и блок преподавателей на страницу города не копируются:
+        одинаковый текст на трёх URL — признак SEO-шаблона, а не полезной
+        страницы. Вместо копий — ссылки на единые разделы.
+      */}
+      <Section spacing="tight">
+        <ul className="border-border flex flex-col gap-px border-t pt-8 sm:flex-row sm:gap-10">
+          {[
+            { label: 'Преподаватели сети', href: '/teachers' },
+            { label: 'Частые вопросы', href: '/#faq' },
+            { label: 'Другие центры', href: '/branches' },
+          ].map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="group text-muted hover:text-accent inline-flex items-center gap-2 py-2 text-sm transition-colors duration-300"
+              >
+                {link.label}
+                <ArrowRight />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Section>
     </>
   );
 }
