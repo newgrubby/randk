@@ -4,12 +4,16 @@
 # Многоступенчатая сборка: в финальный образ попадает только
 # standalone-вывод Next.js (~150 MB вместо ~1.5 GB с node_modules).
 #
+# Мажорная версия Node зафиксирована и должна совпадать с
+# `engines.node` в package.json и с .nvmrc — иначе локальная сборка,
+# Docker и Vercel разойдутся по рантайму.
+#
 # Сборка:  docker build -t randk-center .
 # Запуск:  docker run -p 3000:3000 --env-file .env.production randk-center
 # ============================================================
 
 # --- 1. Зависимости ----------------------------------------
-FROM node:22-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 
 # Сначала только манифесты — слой с npm ci кэшируется,
@@ -19,7 +23,7 @@ RUN npm ci
 
 
 # --- 2. Сборка ---------------------------------------------
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -37,7 +41,7 @@ RUN npm run build
 
 
 # --- 3. Запуск ---------------------------------------------
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
