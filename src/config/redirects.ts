@@ -1,109 +1,107 @@
 /**
- * 301-редиректы со старого сайта (Megagroup) на новую структуру.
+ * 301-редиректы со старого сайта и с адресов первой версии нового сайта.
  *
- * Источник списка старых URL — публичная навигация randkcenter.ru,
- * снятая 31.07.2026. Список подлежит сверке с реальными логами/Метрикой
- * перед переключением домена: см. /docs/REDIRECT_PLAN.md.
+ * Источники:
+ *  • публичная навигация randkcenter.ru (снято 31.07.2026);
+ *  • собственные маршруты первой версии, изменившиеся при доработке
+ *    структуры (/branches → /centers, /programs/[slug] → отдельные разделы).
  *
- * Правило: если старая страница не имеет точного смыслового аналога,
- * ведём на ближайший раздел, а не на главную.
+ * Применение зависит от режима сборки:
+ *  • standalone — правила подхватывает `next.config.ts → redirects()`;
+ *  • статический экспорт — редиректы выполняет веб-сервер, файл
+ *    `public/.htaccess` генерируется из этого же списка
+ *    (`node scripts/generate-htaccess.mjs`).
+ *
+ * Единый источник истины: список правится только здесь.
  */
 
 export type RedirectRule = {
-  /** Старый путь (в формате Next.js `source`). */
   source: string;
-  /** Новый путь. */
   destination: string;
-  /** true → 308/301, false → 307/302. Для SEO-переноса всегда true. */
   permanent: boolean;
-  /** Комментарий для ревью клиентом. */
   note?: string;
 };
 
 const rules: RedirectRule[] = [
-  // --- Информационные страницы ---
-  // ВНИМАНИЕ: /about на старом сайте совпадает с новым адресом,
-  // поэтому правило для него не нужно — редирект «сам на себя»
-  // даёт бесконечный цикл 308.
+  // --- Старый сайт: информационные страницы ---
   { source: '/uchebnyy_process', destination: '/about', permanent: true },
   { source: '/prepodovateli', destination: '/teachers', permanent: true },
-  { source: '/otzyvy_nashih_studentov', destination: '/#reviews', permanent: true },
+  { source: '/otzyvy_nashih_studentov', destination: '/reviews', permanent: true },
   { source: '/address', destination: '/contacts', permanent: true },
   { source: '/fotogalereya', destination: '/about', permanent: true, note: 'Галереи пока нет' },
   { source: '/voprosy_i_otvety', destination: '/#faq', permanent: true },
 
-  // --- Языки ---
-  { source: '/inostrannye_yazyki1', destination: '/programs/inostrannye-yazyki', permanent: true },
-  { source: '/angliyskiy_yazyk', destination: '/programs/angliyskiy-yazyk', permanent: true },
-  { source: '/nemeckiy_yazyk', destination: '/programs/inostrannye-yazyki', permanent: true },
-  { source: '/francuzskiy_yazyk', destination: '/programs/inostrannye-yazyki', permanent: true },
-  { source: '/ispanskiy-yazyk', destination: '/programs/inostrannye-yazyki', permanent: true },
-  { source: '/italyanskiy-yazyk', destination: '/programs/inostrannye-yazyki', permanent: true },
-  { source: '/kitayskiy-yazyk', destination: '/programs/inostrannye-yazyki', permanent: true },
+  // --- Старый сайт: языки (теперь у каждого своя страница) ---
+  { source: '/inostrannye_yazyki1', destination: '/languages', permanent: true },
+  { source: '/angliyskiy_yazyk', destination: '/languages/english', permanent: true },
+  { source: '/nemeckiy_yazyk', destination: '/languages/german', permanent: true },
+  { source: '/francuzskiy_yazyk', destination: '/languages/french', permanent: true },
+  { source: '/ispanskiy-yazyk', destination: '/languages/spanish', permanent: true },
+  { source: '/italyanskiy-yazyk', destination: '/languages/italian', permanent: true },
+  { source: '/kitayskiy-yazyk', destination: '/languages/chinese', permanent: true },
 
-  // --- Экзамены и школа ---
-  { source: '/podgotovka_k_ege', destination: '/programs/podgotovka-k-ege-oge', permanent: true },
-  { source: '/repetitorstvo', destination: '/programs/shkolnye-predmety', permanent: true },
-  {
-    source: '/podgotovka_detey_k_shkole',
-    destination: '/programs/podgotovka-k-shkole',
-    permanent: true,
-  },
-  {
-    source: '/ritmika_i_tancy',
-    destination: '/programs/razvivayushchie-zanyatiya',
-    permanent: true,
-  },
+  // --- Старый сайт: направления ---
+  { source: '/podgotovka_k_ege', destination: '/exams', permanent: true },
+  { source: '/repetitorstvo', destination: '/tutoring', permanent: true },
+  { source: '/podgotovka_detey_k_shkole', destination: '/preschool', permanent: true },
+  { source: '/ritmika_i_tancy', destination: '/development', permanent: true },
+  { source: '/logoped', destination: '/speech-therapist', permanent: true },
+  { source: '/psiholog', destination: '/psychologist', permanent: true },
 
-  // --- Форматы занятий ---
+  // --- Старый сайт: форматы и формы ---
   { source: '/gruppovyye-zanyatiya', destination: '/programs', permanent: true },
-  {
-    source: '/individualnyye-zanyatiya',
-    destination: '/programs/individualnye-zanyatiya',
-    permanent: true,
-  },
+  { source: '/individualnyye-zanyatiya', destination: '/programs', permanent: true },
   { source: '/kursy-dlya-detey', destination: '/programs', permanent: true },
-
-  // --- Формы ---
   { source: '/zapisatsya-na-kursy', destination: '/contacts', permanent: true },
   { source: '/zakazat-zvonok', destination: '/contacts', permanent: true },
 
-  // --- Разделы, которые не переносятся 1:1 ---
-  { source: '/news', destination: '/', permanent: true, note: 'Новостей на новом сайте нет' },
+  // --- Старый сайт: не переносится 1:1 ---
+  { source: '/news', destination: '/', permanent: true, note: 'Новостей на сайте нет' },
   {
     source: '/article_post/:id',
     destination: '/',
     permanent: true,
-    note: 'Устаревшие новости не переносятся',
+    note: 'На старом сайте — шаблонный текст-заглушка платформы',
   },
-  { source: '/vakansii', destination: '/contacts', permanent: true, note: 'Вакансий пока нет' },
+  { source: '/vakansii', destination: '/contacts', permanent: true },
 
-  // --- Страницы, ожидающие решения клиента (см. REDIRECT_PLAN.md) ---
+  // --- Первая версия нового сайта: филиалы стали центрами ---
+  { source: '/branches', destination: '/centers', permanent: true },
+  { source: '/branches/orekhovo-zuevo', destination: '/centers/orekhovo-zuevo', permanent: true },
   {
-    source: '/logoped',
-    destination: '/programs',
+    source: '/branches/pavlovsky-posad',
+    destination: '/centers/pavlovsky-posad',
     permanent: true,
-    note: 'Услуга логопеда требует подтверждения — при подтверждении завести отдельную программу',
   },
+  { source: '/branches/elektrostal', destination: '/centers/elektrostal', permanent: true },
+
+  // --- Первая версия: программы получили собственные маршруты ---
+  { source: '/programs/inostrannye-yazyki', destination: '/languages', permanent: true },
+  { source: '/programs/angliyskiy-yazyk', destination: '/languages/english', permanent: true },
+  { source: '/programs/podgotovka-k-ege-oge', destination: '/exams', permanent: true },
+  { source: '/programs/shkolnye-predmety', destination: '/tutoring', permanent: true },
+  { source: '/programs/podgotovka-k-shkole', destination: '/preschool', permanent: true },
+  { source: '/programs/razvivayushchie-zanyatiya', destination: '/development', permanent: true },
+  { source: '/programs/individualnye-zanyatiya', destination: '/programs', permanent: true },
+
+  // --- Первая версия: страница согласия на обработку ПДн больше не нужна ---
   {
-    source: '/psiholog',
-    destination: '/programs',
+    source: '/personal-data-consent',
+    destination: '/privacy',
     permanent: true,
-    note: 'Услуга психолога требует подтверждения',
+    note: 'Форм заявок нет, персональные данные не собираются',
   },
 ];
 
 /**
- * Страховка от редиректа «сам на себя»: такое правило создаёт
- * бесконечный цикл 308 и полностью выключает страницу.
- * Проверка выполняется при сборке конфига Next.js — ошибка видна сразу.
+ * Страховка от редиректа «сам на себя»: такое правило создаёт бесконечный
+ * цикл и полностью выключает страницу. Проверка выполняется при сборке
+ * конфига, поэтому ошибка видна сразу, а не в продакшене.
  */
 const selfReferencing = rules.filter((rule) => rule.source === rule.destination);
 if (selfReferencing.length > 0) {
   throw new Error(
-    `redirects.ts: правило ведёт само на себя (бесконечный цикл): ${selfReferencing
-      .map((rule) => rule.source)
-      .join(', ')}`,
+    `redirects.ts: правило ведёт само на себя: ${selfReferencing.map((r) => r.source).join(', ')}`,
   );
 }
 

@@ -1,5 +1,6 @@
-import { branches } from './branches';
-import { programs } from './programs';
+import { cities } from './centers';
+import { navigationLanguages } from './languages';
+import { navigationPrograms } from './programs';
 
 export type NavLink = {
   label: string;
@@ -7,57 +8,75 @@ export type NavLink = {
   children?: NavLink[];
 };
 
-/** Основная навигация в шапке. */
+/**
+ * Навигация собирается из контента и уважает флаги видимости.
+ *
+ * Направления с `showInNavigation: false` (логопед, психолог) в меню
+ * не попадают, но их страницы существуют и индексируются.
+ */
 export const mainNavigation: NavLink[] = [
   {
-    label: 'Программы',
+    label: 'Языки',
+    href: '/languages',
+    children: navigationLanguages.map((language) => ({
+      label: language.shortTitle,
+      href: `/languages/${language.slug}`,
+    })),
+  },
+  {
+    label: 'Направления',
     href: '/programs',
-    children: programs.map((program) => ({
+    children: navigationPrograms.map((program) => ({
       label: program.shortTitle,
-      href: `/programs/${program.slug}`,
+      href: program.href,
     })),
   },
   {
     label: 'Центры',
-    href: '/branches',
-    children: branches.map((branch) => ({
-      label: branch.city,
-      href: `/branches/${branch.slug}`,
+    href: '/centers',
+    children: cities.map((city) => ({
+      label: city.name,
+      href: `/centers/${city.slug}`,
     })),
   },
   { label: 'О центре', href: '/about' },
-  { label: 'Преподаватели', href: '/teachers' },
   { label: 'Контакты', href: '/contacts' },
 ];
 
-/** Колонки подвала. */
 export const footerNavigation: { title: string; links: NavLink[] }[] = [
   {
+    title: 'Языки',
+    links: navigationLanguages.map((language) => ({
+      label: language.shortTitle,
+      href: `/languages/${language.slug}`,
+    })),
+  },
+  {
     title: 'Направления',
-    links: programs.map((program) => ({
+    links: navigationPrograms.map((program) => ({
       label: program.shortTitle,
-      href: `/programs/${program.slug}`,
+      href: program.href,
     })),
   },
   {
     title: 'Центры',
-    links: branches.map((branch) => ({
-      label: branch.city,
-      href: `/branches/${branch.slug}`,
-    })),
+    links: [
+      ...cities.map((city) => ({ label: city.name, href: `/centers/${city.slug}` })),
+      { label: 'Все офисы', href: '/centers' },
+    ],
   },
   {
     title: 'О нас',
     links: [
       { label: 'О центре', href: '/about' },
       { label: 'Преподаватели', href: '/teachers' },
+      { label: 'Отзывы', href: '/reviews' },
       { label: 'Контакты', href: '/contacts' },
-      { label: 'Частые вопросы', href: '/#faq' },
     ],
   },
 ];
 
 export const legalNavigation: NavLink[] = [
   { label: 'Политика конфиденциальности', href: '/privacy' },
-  { label: 'Согласие на обработку персональных данных', href: '/personal-data-consent' },
+  { label: 'Политика cookie', href: '/cookies' },
 ];

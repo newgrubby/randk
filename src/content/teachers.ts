@@ -1,60 +1,64 @@
+import { offices } from './centers';
 import type { Teacher } from './types';
 
 /**
  * Преподаватели.
  *
- * СЕЙЧАС: реальные данные не переданы. Карточки ниже — демонстрационные:
- * без ФИО, без фотографий и без сертификатов. Они показывают вёрстку блока
- * и специализации, а не конкретных людей.
+ * Реальные данные не переданы. Карточки нейтральные: показана только
+ * специализация — без ФИО, фотографий, дипломов, сертификатов и стажа.
+ * Вымышленных людей мы не создаём, поэтому портрет заменён графическим знаком.
  *
- * Как заполнить: у каждой карточки указать `name`, `photo`,
- * при необходимости уточнить `role`/`focus` и поставить `isConfirmed: true`.
- * Карточки без `name` автоматически отображаются в нейтральном виде.
- * См. /docs/CONTENT_TODO.md, раздел «Преподаватели».
+ * Как заполнить: указать `name`, `photo`, при необходимости уточнить `role`
+ * и `focus`, ограничить `offices` и поставить `confirmed: true`.
+ * См. /docs/CONTENT_TODO.md.
  */
+
+const allOffices = offices.map((office) => office.id);
 
 export const teachers: Teacher[] = [
   {
-    id: 'english-lead',
+    id: 'languages',
     name: null,
-    role: 'Преподаватель английского языка',
+    role: 'Преподаватель иностранных языков',
     focus: ['Группы для школьников', 'Разговорная практика'],
-    branches: ['orekhovo-zuevo', 'pavlovsky-posad', 'elektrostal'],
+    offices: allOffices,
     photo: null,
-    isConfirmed: false,
+    confirmed: false,
   },
   {
     id: 'exams',
     name: null,
     role: 'Преподаватель подготовки к ОГЭ и ЕГЭ',
     focus: ['Формат экзамена', 'Работа с критериями'],
-    branches: ['orekhovo-zuevo', 'pavlovsky-posad', 'elektrostal'],
+    offices: allOffices,
     photo: null,
-    isConfirmed: false,
+    confirmed: false,
   },
   {
     id: 'preschool',
     name: null,
     role: 'Педагог дошкольного направления',
     focus: ['Подготовка к школе', 'Развивающие занятия'],
-    branches: ['orekhovo-zuevo', 'pavlovsky-posad'],
+    offices: allOffices,
     photo: null,
-    isConfirmed: false,
+    confirmed: false,
   },
   {
-    id: 'school-subjects',
+    id: 'tutoring',
     name: null,
     role: 'Преподаватель школьных предметов',
     focus: ['Индивидуальные занятия', 'Работа с пробелами'],
-    branches: ['orekhovo-zuevo', 'pavlovsky-posad', 'elektrostal'],
+    offices: allOffices,
     photo: null,
-    isConfirmed: false,
+    confirmed: false,
   },
 ];
 
-/** true, если хотя бы у одного преподавателя есть подтверждённые данные. */
-export const hasConfirmedTeachers = teachers.some((teacher) => teacher.isConfirmed && teacher.name);
+/** true, если у кого-то из преподавателей есть подтверждённые данные. */
+export const hasConfirmedTeachers = teachers.some(
+  (teacher) => teacher.confirmed && teacher.name !== null,
+);
 
-export function getTeachersByBranch(slug: string): Teacher[] {
-  return teachers.filter((teacher) => (teacher.branches as string[]).includes(slug));
+export function getTeachersByOffice(officeId: string): Teacher[] {
+  return teachers.filter((teacher) => teacher.offices.includes(officeId));
 }

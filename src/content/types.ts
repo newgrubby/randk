@@ -1,119 +1,173 @@
 /**
  * Типы контентного слоя.
  *
- * Главный принцип проекта: сайт никогда не показывает неподтверждённые
- * факты. Любое поле, которое клиент ещё не подтвердил, объявлено
- * nullable, а сущность целиком помечена флагом `isConfirmed`.
- * Компоненты обязаны проверять флаг/значение перед отображением.
+ * Два сквозных принципа:
+ *
+ * 1. Сайт не показывает выдуманный факт. Неподтверждённое поле = `null`,
+ *    сущность несёт флаг `confirmed`.
+ * 2. Видимостью управляют флаги, а не удаление данных. Спорное направление
+ *    можно убрать из навигации и карты сайта, не теряя заготовку.
  */
 
-/** Слаг города — используется в URL филиалов. */
+/** Слаг города — используется в URL раздела «Центры». */
 export type CitySlug = 'orekhovo-zuevo' | 'pavlovsky-posad' | 'elektrostal';
 
-/** Возрастная ступень. Используется для фильтрации программ и квиза. */
+/** Возрастная ступень. */
 export type AgeGroupSlug = 'preschool' | 'primary' | 'teens' | 'adults';
 
-/** Категория направления — для группировки в каталоге. */
-export type ProgramCategory = 'languages' | 'exams' | 'school' | 'development' | 'individual';
+/** Формат занятий. */
+export type LessonFormat = 'group' | 'mini-group' | 'individual' | 'corporate';
 
-/** Возможные форматы занятий. */
-export type LessonFormat = 'group' | 'individual' | 'mini-group';
+/**
+ * Флаги видимости — общие для языков и направлений.
+ *
+ * `active` — показывать ли сущность на сайте вообще.
+ * `confirmed` — подтверждены ли данные клиентом (влияет на микроразметку).
+ * `showInNavigation` — выводить ли в меню (спорные направления держим вне меню).
+ * `showInSitemap` — включать ли в sitemap.xml.
+ */
+export type VisibilityFlags = {
+  active: boolean;
+  confirmed: boolean;
+  showInNavigation: boolean;
+  showInSitemap: boolean;
+};
 
 export type Photo = {
   src: string;
   alt: string;
-  /** true — изображение предоставлено клиентом. false — временное. */
+  width: number;
+  height: number;
+  /** true — файл предоставлен клиентом. false — временная композиция. */
   isClientProvided: boolean;
 };
 
-export type Program = {
-  slug: string;
-  title: string;
-  /** Короткое название для карточек, меню и хлебных крошек. */
-  shortTitle: string;
-  category: ProgramCategory;
-  /** Человекочитаемый возраст, напр. «7–12 лет». */
-  age: string;
-  ageGroups: AgeGroupSlug[];
-  /** Абзац-лид для страницы программы. */
-  description: string;
-  /** Чему научится ученик. */
-  goals: string[];
-  formats: LessonFormat[];
-  /** Длительность/интенсивность. null — не подтверждено. */
-  duration: string | null;
-  /** Стоимость. null — не подтверждено, на сайте не показывается. */
-  price: string | null;
-  /** В каких городах доступна программа. */
-  cityAvailability: CitySlug[];
-  image: Photo | null;
-  /** Ключ иконки из src/components/ui/ProgramIcon.tsx. */
-  icon: ProgramIconName;
-  /** Без названия бренда: « — RandK Center» добавляется шаблоном в layout.tsx. */
+/* ============================================================
+   Города и офисы
+   ============================================================ */
+
+export type City = {
+  slug: CitySlug;
+  name: string;
+  /** Предложный падеж: «в Орехово-Зуеве». */
+  locative: string;
+  /** Вводный текст страницы города. Без неподтверждённых утверждений. */
+  intro: string;
   seoTitle: string;
   seoDescription: string;
-  /** Подтверждено ли клиентом наполнение программы. */
-  isConfirmed: boolean;
 };
 
-export type ProgramIconName = 'globe' | 'certificate' | 'book' | 'sparkle' | 'pencil' | 'compass';
-
-export type Branch = {
-  slug: CitySlug;
+/**
+ * Физический офис.
+ *
+ * Отдельная сущность, а не синоним города: в Павловском Посаде два офиса
+ * с разными адресами, телефонами и маршрутами. Каждый подтверждённый офис
+ * даёт собственную запись LocalBusiness.
+ */
+export type Office = {
+  id: string;
+  citySlug: CitySlug;
   city: string;
-  /** Город в предложном падеже: «в Орехово-Зуеве». */
-  cityLocative: string;
-  displayName: string;
-  /** Адрес. null — не подтверждён, на сайте не показывается. */
-  address: string | null;
-  /** Телефон в формате +7XXXXXXXXXX. null — не подтверждён. */
+  /** Короткое имя для различения офисов внутри города: «на Кирова». */
+  officeName: string;
+  /** Улица и дом. */
+  address: string;
+  /** Этаж, ТЦ, ориентиры. null — нет уточнений. */
+  addressDetails: string | null;
+  /** В формате +7XXXXXXXXXX. null — телефон не известен. */
   phone: string | null;
-  /** Строки графика работы. Пустой массив — не подтверждён. */
+  /** Строки графика. Пустой массив — график не подтверждён, не выводится. */
   schedule: string[];
-  /** Ссылка на карточку в Яндекс Картах. null — не подтверждена. */
-  mapUrl: string | null;
-  /** [широта, долгота]. null — карта не отображается. */
+  /** Ссылка на карточку в Яндекс Картах. null — кнопка маршрута строится по координатам. */
+  yandexMapUrl: string | null;
+  /** [широта, долгота]. null — карта и координаты в разметке не выводятся. */
   coordinates: [number, number] | null;
-  /** Слаги программ, доступных в филиале. */
+  /** Слаги языков, доступных в офисе. Пустой массив = «уточняется». */
+  availableLanguages: string[];
+  /** Слаги направлений, доступных в офисе. */
   availablePrograms: string[];
   photos: Photo[];
-  vkUrl: string | null;
-  maxUrl: string | null;
   /**
-   * Вводный текст страницы города.
-   *
-   * ВНИМАНИЕ: здесь нельзя утверждать что-либо о конкретном центре
-   * (какие направления есть, для кого он «прежде всего», есть ли вечерние
-   * группы) до подтверждения клиентом. Сейчас используется общая
-   * безопасная формулировка, одинаковая для всех городов.
+   * Подтверждены ли адрес, телефон и график клиентом.
+   * Данные показываются и при `false` (они взяты с сайта клиента),
+   * но в JSON-LD такой офис не попадает.
    */
-  intro: string;
-  /**
-   * Локальные особенности центра.
-   *
-   * Пустой массив = блок не выводится. Заполнять ТОЛЬКО подтверждёнными
-   * фактами: до брифа здесь были догадки («отдельное направление
-   * подготовки к экзаменам», «вечерние занятия для взрослых»),
-   * которые читались как утверждения о центре.
-   */
-  highlights: string[];
+  confirmed: boolean;
+};
+
+/* ============================================================
+   Языки
+   ============================================================ */
+
+export type Language = VisibilityFlags & {
+  slug: string;
+  title: string;
+  shortTitle: string;
+  /** Код для типографского акцента в карточке: EN, DE, FR… */
+  code: string;
+  description: string;
+  ageGroups: AgeGroupSlug[];
+  formats: LessonFormat[];
+  availableCities: CitySlug[];
+  availableOffices: string[];
+  image: Photo | null;
+  /** Смысловые преимущества направления. Без цифр и обещаний результата. */
+  advantages: string[];
   seoTitle: string;
   seoDescription: string;
-  /** Подтверждены ли клиентом адрес/телефон/график. */
-  isConfirmed: boolean;
 };
+
+/* ============================================================
+   Образовательные направления
+   ============================================================ */
+
+export type ProgramIconName =
+  | 'globe'
+  | 'certificate'
+  | 'book'
+  | 'sparkle'
+  | 'pencil'
+  | 'compass'
+  | 'speech'
+  | 'mind'
+  | 'briefcase';
+
+export type Program = VisibilityFlags & {
+  slug: string;
+  /** Собственный маршрут направления: /exams, /tutoring и т. д. */
+  href: string;
+  title: string;
+  shortTitle: string;
+  age: string;
+  ageGroups: AgeGroupSlug[];
+  description: string;
+  goals: string[];
+  formats: LessonFormat[];
+  /** Длительность. null — не подтверждена, не выводится. */
+  duration: string | null;
+  /** Стоимость. null — не подтверждена, не выводится. */
+  price: string | null;
+  availableCities: CitySlug[];
+  availableOffices: string[];
+  image: Photo | null;
+  icon: ProgramIconName;
+  seoTitle: string;
+  seoDescription: string;
+};
+
+/* ============================================================
+   Прочее
+   ============================================================ */
 
 export type Teacher = {
   id: string;
-  /** ФИО. null — реальные данные не переданы, карточка демонстрационная. */
+  /** ФИО. null — данные не переданы, карточка нейтральная. */
   name: string | null;
-  /** Роль/специализация — нейтральная формулировка. */
   role: string;
-  /** Что ведёт преподаватель. */
   focus: string[];
-  branches: CitySlug[];
+  offices: string[];
   photo: Photo | null;
-  isConfirmed: boolean;
+  confirmed: boolean;
 };
 
 export type Review = {
@@ -122,12 +176,10 @@ export type Review = {
   city: string | null;
   program: string | null;
   text: string;
-  /** 1–5. null — рейтинг не указан. */
   rating: number | null;
-  /** Ссылка на первоисточник (VK, Яндекс Карты). */
   sourceUrl: string | null;
   photo: Photo | null;
-  isConfirmed: boolean;
+  confirmed: boolean;
 };
 
 export type FaqItem = {
@@ -138,9 +190,7 @@ export type FaqItem = {
 
 export type AgeGroup = {
   slug: AgeGroupSlug;
-  /** «4–6 лет» */
   label: string;
-  /** Подпись под возрастом. */
   caption: string;
   image: Photo;
 };
