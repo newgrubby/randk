@@ -1,10 +1,17 @@
-﻿# REDIRECT_PLAN — перенос со старого сайта
+# REDIRECT_PLAN — перенос со старого сайта
 
 Цель: заменить сайт на `randkcenter.ru`, не потеряв позиции в поиске.
 
-**Единый источник правил:** `src/config/redirects.ts`.
-В режиме standalone его читает `next.config.ts`, в статическом — генератор
-`scripts/generate-htaccess.mjs` создаёт `public/.htaccess`. Разойтись они не могут.
+**Единый источник правил:** `src/config/redirects.data.json`.
+
+Из него генератор `scripts/generate-redirects.mjs` собирает:
+
+- `public/.htaccess` — редиректы на REG.RU и любом Apache (попадает в `out/`);
+- `vercel.json` — редиректы на Vercel (лежит в корне репозитория);
+- `next.config.ts → redirects()` — только в режиме standalone.
+
+Синхронизацию проверяет `npm test`: количество и содержимое правил во всех
+трёх местах должны совпадать.
 
 ## Источник данных
 

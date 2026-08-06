@@ -32,18 +32,20 @@ npm run dev
 
 ## Команды
 
-| Команда                    | Что делает                            |
-| -------------------------- | ------------------------------------- |
-| `npm run dev`              | сервер разработки                     |
-| `npm run build`            | **статическая** сборка в папку `out/` |
-| `npm run build:standalone` | сборка для VPS / Node.js-хостинга     |
-| `npm run start`            | запуск standalone-сборки              |
-| `npm run typecheck`        | проверка типов                        |
-| `npm run lint`             | ESLint                                |
-| `npm run format`           | Prettier                              |
-| `npm run images`           | пересоздать временные изображения     |
+| Команда                    | Что делает                                |
+| -------------------------- | ----------------------------------------- |
+| `npm run dev`              | сервер разработки                         |
+| `npm run build`            | **статическая** сборка в папку `out/`     |
+| `npm run build:standalone` | сборка для VPS / Node.js-хостинга         |
+| `npm run start`            | запуск standalone-сборки                  |
+| `npm run typecheck`        | проверка типов                            |
+| `npm run lint`             | ESLint                                    |
+| `npm run format`           | Prettier                                  |
+| `npm run images`           | пересоздать временные изображения         |
+| `npm run redirects`        | пересобрать .htaccess и vercel.json       |
+| `npm test`                 | проверка правил редиректа и синхронизации |
 
-Перед сдачей изменений: `npm run typecheck && npm run lint && npm run build`.
+Перед сдачей изменений: `npm run typecheck && npm run lint && npm test && npm run build`.
 
 ---
 
@@ -74,7 +76,7 @@ npm run dev
 | Тексты главной                               | `src/content/home.ts`                 |
 | Вопросы и ответы                             | `src/content/faq.ts`                  |
 | Меню и подвал                                | `src/content/navigation.ts`           |
-| Редиректы                                    | `src/config/redirects.ts`             |
+| Редиректы                                    | `src/config/redirects.data.json`      |
 | Цвета, шрифты, отступы                       | `src/app/globals.css` (блок `@theme`) |
 
 ### Изменить адрес или телефон

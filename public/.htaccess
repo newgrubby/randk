@@ -2,8 +2,9 @@
 # RandK Center — конфигурация Apache для статической сборки
 #
 # ФАЙЛ СГЕНЕРИРОВАН АВТОМАТИЧЕСКИ — не редактируйте вручную.
-# Источник правил: src/config/redirects.ts
-# Пересборка: node scripts/generate-htaccess.mjs
+# Источник правил: src/config/redirects.data.json
+# Пересборка:      node scripts/generate-redirects.mjs
+# Проверка:        npm test
 # ============================================================
 
 Options -Indexes
@@ -12,59 +13,55 @@ DirectoryIndex index.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # --- 301-редиректы со старых адресов ---
-  RewriteRule ^uchebnyy_process/?$ /about [R=301,L]
-  RewriteRule ^prepodovateli/?$ /teachers [R=301,L]
-  RewriteRule ^otzyvy_nashih_studentov/?$ /reviews [R=301,L]
-  RewriteRule ^address/?$ /contacts [R=301,L]
-  RewriteRule ^fotogalereya/?$ /about [R=301,L]
+  # --- Постоянные редиректы со старых адресов (39) ---
+  # Цели указаны сразу со слэшем: страницы лежат в about/index.html,
+  # и без слэша получился бы лишний переход.
+  RewriteRule ^uchebnyy_process/?$ /about/ [R=301,L]
+  RewriteRule ^prepodovateli/?$ /teachers/ [R=301,L]
+  RewriteRule ^otzyvy_nashih_studentov/?$ /reviews/ [R=301,L]
+  RewriteRule ^address/?$ /contacts/ [R=301,L]
+  RewriteRule ^fotogalereya/?$ /about/ [R=301,L]
   RewriteRule ^voprosy_i_otvety/?$ /#faq [R=301,L]
-  RewriteRule ^inostrannye_yazyki1/?$ /languages [R=301,L]
-  RewriteRule ^angliyskiy_yazyk/?$ /languages/english [R=301,L]
-  RewriteRule ^nemeckiy_yazyk/?$ /languages/german [R=301,L]
-  RewriteRule ^francuzskiy_yazyk/?$ /languages/french [R=301,L]
-  RewriteRule ^ispanskiy-yazyk/?$ /languages/spanish [R=301,L]
-  RewriteRule ^italyanskiy-yazyk/?$ /languages/italian [R=301,L]
-  RewriteRule ^kitayskiy-yazyk/?$ /languages/chinese [R=301,L]
-  RewriteRule ^podgotovka_k_ege/?$ /exams [R=301,L]
-  RewriteRule ^repetitorstvo/?$ /tutoring [R=301,L]
-  RewriteRule ^podgotovka_detey_k_shkole/?$ /preschool [R=301,L]
-  RewriteRule ^ritmika_i_tancy/?$ /development [R=301,L]
-  RewriteRule ^logoped/?$ /speech-therapist [R=301,L]
-  RewriteRule ^psiholog/?$ /psychologist [R=301,L]
-  RewriteRule ^gruppovyye-zanyatiya/?$ /programs [R=301,L]
-  RewriteRule ^individualnyye-zanyatiya/?$ /programs [R=301,L]
-  RewriteRule ^kursy-dlya-detey/?$ /programs [R=301,L]
-  RewriteRule ^zapisatsya-na-kursy/?$ /contacts [R=301,L]
-  RewriteRule ^zakazat-zvonok/?$ /contacts [R=301,L]
+  RewriteRule ^inostrannye_yazyki1/?$ /languages/ [R=301,L]
+  RewriteRule ^angliyskiy_yazyk/?$ /languages/english/ [R=301,L]
+  RewriteRule ^nemeckiy_yazyk/?$ /languages/german/ [R=301,L]
+  RewriteRule ^francuzskiy_yazyk/?$ /languages/french/ [R=301,L]
+  RewriteRule ^ispanskiy-yazyk/?$ /languages/spanish/ [R=301,L]
+  RewriteRule ^italyanskiy-yazyk/?$ /languages/italian/ [R=301,L]
+  RewriteRule ^kitayskiy-yazyk/?$ /languages/chinese/ [R=301,L]
+  RewriteRule ^podgotovka_k_ege/?$ /exams/ [R=301,L]
+  RewriteRule ^repetitorstvo/?$ /tutoring/ [R=301,L]
+  RewriteRule ^podgotovka_detey_k_shkole/?$ /preschool/ [R=301,L]
+  RewriteRule ^ritmika_i_tancy/?$ /development/ [R=301,L]
+  RewriteRule ^logoped/?$ /speech-therapist/ [R=301,L]
+  RewriteRule ^psiholog/?$ /psychologist/ [R=301,L]
+  RewriteRule ^gruppovyye-zanyatiya/?$ /programs/ [R=301,L]
+  RewriteRule ^individualnyye-zanyatiya/?$ /programs/ [R=301,L]
+  RewriteRule ^kursy-dlya-detey/?$ /programs/ [R=301,L]
+  RewriteRule ^zapisatsya-na-kursy/?$ /contacts/ [R=301,L]
+  RewriteRule ^zakazat-zvonok/?$ /contacts/ [R=301,L]
   RewriteRule ^news/?$ / [R=301,L]
   RewriteRule ^article_post/([^/]+)/?$ / [R=301,L]
-  RewriteRule ^vakansii/?$ /contacts [R=301,L]
-  RewriteRule ^branches/?$ /centers [R=301,L]
-  RewriteRule ^branches/orekhovo-zuevo/?$ /centers/orekhovo-zuevo [R=301,L]
-  RewriteRule ^branches/pavlovsky-posad/?$ /centers/pavlovsky-posad [R=301,L]
-  RewriteRule ^branches/elektrostal/?$ /centers/elektrostal [R=301,L]
-  RewriteRule ^programs/inostrannye-yazyki/?$ /languages [R=301,L]
-  RewriteRule ^programs/angliyskiy-yazyk/?$ /languages/english [R=301,L]
-  RewriteRule ^programs/podgotovka-k-ege-oge/?$ /exams [R=301,L]
-  RewriteRule ^programs/shkolnye-predmety/?$ /tutoring [R=301,L]
-  RewriteRule ^programs/podgotovka-k-shkole/?$ /preschool [R=301,L]
-  RewriteRule ^programs/razvivayushchie-zanyatiya/?$ /development [R=301,L]
-  RewriteRule ^programs/individualnye-zanyatiya/?$ /programs [R=301,L]
-  RewriteRule ^personal-data-consent/?$ /privacy [R=301,L]
+  RewriteRule ^vakansii/?$ /contacts/ [R=301,L]
+  RewriteRule ^branches/?$ /centers/ [R=301,L]
+  RewriteRule ^branches/orekhovo-zuevo/?$ /centers/orekhovo-zuevo/ [R=301,L]
+  RewriteRule ^branches/pavlovsky-posad/?$ /centers/pavlovsky-posad/ [R=301,L]
+  RewriteRule ^branches/elektrostal/?$ /centers/elektrostal/ [R=301,L]
+  RewriteRule ^programs/inostrannye-yazyki/?$ /languages/ [R=301,L]
+  RewriteRule ^programs/angliyskiy-yazyk/?$ /languages/english/ [R=301,L]
+  RewriteRule ^programs/podgotovka-k-ege-oge/?$ /exams/ [R=301,L]
+  RewriteRule ^programs/shkolnye-predmety/?$ /tutoring/ [R=301,L]
+  RewriteRule ^programs/podgotovka-k-shkole/?$ /preschool/ [R=301,L]
+  RewriteRule ^programs/razvivayushchie-zanyatiya/?$ /development/ [R=301,L]
+  RewriteRule ^programs/individualnye-zanyatiya/?$ /programs/ [R=301,L]
+  RewriteRule ^personal-data-consent/?$ /privacy/ [R=301,L]
 
-  # --- Статические файлы отдаём как есть ---
+  # --- Существующие файлы и каталоги отдаём как есть ---
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # --- Красивые адреса: /about → /about/index.html ---
-  RewriteCond %{REQUEST_FILENAME}/index.html -f
-  RewriteRule ^(.*)$ /$1/index.html [L]
-
   # --- Всё остальное — страница 404 ---
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^ /404.html [L]
 </IfModule>
 

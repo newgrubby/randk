@@ -1,0 +1,200 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/uchebnyy_process",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/prepodovateli",
+      "destination": "/teachers/",
+      "permanent": true
+    },
+    {
+      "source": "/otzyvy_nashih_studentov",
+      "destination": "/reviews/",
+      "permanent": true
+    },
+    {
+      "source": "/address",
+      "destination": "/contacts/",
+      "permanent": true
+    },
+    {
+      "source": "/fotogalereya",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/voprosy_i_otvety",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/inostrannye_yazyki1",
+      "destination": "/languages/",
+      "permanent": true
+    },
+    {
+      "source": "/angliyskiy_yazyk",
+      "destination": "/languages/english/",
+      "permanent": true
+    },
+    {
+      "source": "/nemeckiy_yazyk",
+      "destination": "/languages/german/",
+      "permanent": true
+    },
+    {
+      "source": "/francuzskiy_yazyk",
+      "destination": "/languages/french/",
+      "permanent": true
+    },
+    {
+      "source": "/ispanskiy-yazyk",
+      "destination": "/languages/spanish/",
+      "permanent": true
+    },
+    {
+      "source": "/italyanskiy-yazyk",
+      "destination": "/languages/italian/",
+      "permanent": true
+    },
+    {
+      "source": "/kitayskiy-yazyk",
+      "destination": "/languages/chinese/",
+      "permanent": true
+    },
+    {
+      "source": "/podgotovka_k_ege",
+      "destination": "/exams/",
+      "permanent": true
+    },
+    {
+      "source": "/repetitorstvo",
+      "destination": "/tutoring/",
+      "permanent": true
+    },
+    {
+      "source": "/podgotovka_detey_k_shkole",
+      "destination": "/preschool/",
+      "permanent": true
+    },
+    {
+      "source": "/ritmika_i_tancy",
+      "destination": "/development/",
+      "permanent": true
+    },
+    {
+      "source": "/logoped",
+      "destination": "/speech-therapist/",
+      "permanent": true
+    },
+    {
+      "source": "/psiholog",
+      "destination": "/psychologist/",
+      "permanent": true
+    },
+    {
+      "source": "/gruppovyye-zanyatiya",
+      "destination": "/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/individualnyye-zanyatiya",
+      "destination": "/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/kursy-dlya-detey",
+      "destination": "/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/zapisatsya-na-kursy",
+      "destination": "/contacts/",
+      "permanent": true
+    },
+    {
+      "source": "/zakazat-zvonok",
+      "destination": "/contacts/",
+      "permanent": true
+    },
+    {
+      "source": "/news",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/article_post/:id",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/vakansii",
+      "destination": "/contacts/",
+      "permanent": true
+    },
+    {
+      "source": "/branches",
+      "destination": "/centers/",
+      "permanent": true
+    },
+    {
+      "source": "/branches/orekhovo-zuevo",
+      "destination": "/centers/orekhovo-zuevo/",
+      "permanent": true
+    },
+    {
+      "source": "/branches/pavlovsky-posad",
+      "destination": "/centers/pavlovsky-posad/",
+      "permanent": true
+    },
+    {
+      "source": "/branches/elektrostal",
+      "destination": "/centers/elektrostal/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/inostrannye-yazyki",
+      "destination": "/languages/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/angliyskiy-yazyk",
+      "destination": "/languages/english/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/podgotovka-k-ege-oge",
+      "destination": "/exams/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/shkolnye-predmety",
+      "destination": "/tutoring/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/podgotovka-k-shkole",
+      "destination": "/preschool/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/razvivayushchie-zanyatiya",
+      "destination": "/development/",
+      "permanent": true
+    },
+    {
+      "source": "/programs/individualnye-zanyatiya",
+      "destination": "/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/personal-data-consent",
+      "destination": "/privacy/",
+      "permanent": true
+    }
+  ]
+}

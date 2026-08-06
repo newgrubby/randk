@@ -5,10 +5,12 @@
   "description": "RandK Center — сеть образовательных и языковых центров",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/generate-htaccess.mjs",
+    "prebuild": "node scripts/generate-redirects.mjs",
     "build": "next build",
     "build:standalone": "node scripts/build-standalone.mjs",
     "images": "node scripts/generate-placeholders.mjs",
+    "redirects": "node scripts/generate-redirects.mjs",
+    "test": "node scripts/validate-redirects.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
