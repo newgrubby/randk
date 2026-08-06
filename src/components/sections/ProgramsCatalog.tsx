@@ -1,11 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { branches } from '@/content/branches';
-import { ageGroups, programCategoryLabels, programs } from '@/content/programs';
-import type { AgeGroupSlug, LessonFormat, ProgramCategory } from '@/content/types';
+import { useEffect, useMemo, useState } from 'react';
+import { cities } from '@/content/centers';
+import { activeLanguages } from '@/content/languages';
+import { activePrograms, ageGroups } from '@/content/programs';
+import type { AgeGroupSlug } from '@/content/types';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { ArrowRight } from '@/components/ui/Button';
@@ -13,54 +13,85 @@ import { ProgramIcon } from '@/components/ui/ProgramIcon';
 import { Reveal } from '@/components/ui/Reveal';
 
 type AgeFilter = AgeGroupSlug | 'all';
-type CategoryFilter = ProgramCategory | 'all';
+type KindFilter = 'all' | 'languages' | 'programs';
 type CityFilter = string | 'all';
 
-const categories: CategoryFilter[] = [
-  'all',
-  ...(Object.keys(programCategoryLabels) as ProgramCategory[]),
-];
-
-const formatLabels: Record<LessonFormat, string> = {
-  group: 'группа',
-  'mini-group': 'мини-группа',
-  individual: 'индивидуально',
-};
-
 /**
- * Каталог направлений с фильтрами.
+ * Единый каталог: языки и образовательные направления в одном списке.
  *
- * ВАЖНО про рендеринг: начальный фильтр приходит пропом `initialAge`,
- * который страница читает из query на сервере. Раньше здесь стоял
- * `useSearchParams()`, и это ломало SEO: хук переводит поддерево в
- * динамический режим, Next пропускал его пререндер, и в исходном HTML
- * вместо карточек уходила заглушка Suspense — каталог видели только
- * браузеры с выполненным JavaScript.
+ * РЕНДЕРИНГ: компонент клиентский, но React рендерит его и на сервере,
+ * поэтому все карточки попадают в исходный HTML — это важно и для
+ * поисковых роботов, и для доступности.
  *
- * Теперь карточки есть в серверном HTML, а переключение фильтров
- * остаётся чисто клиентским: локальный стейт, без навигации и перезагрузки.
+ * Начальный фильтр по возрасту читается из `?age=` в useEffect, а не на
+ * сервере: сайт собирается статически, и серверных query-параметров у него
+ * нет. До гидратации виден полный список — это корректное состояние,
+ * а не «мигание пустотой».
  */
-export function ProgramsCatalog({ initialAge = 'all' }: { initialAge?: string }) {
-  const [age, setAge] = useState<AgeFilter>(
-    ageGroups.some((group) => group.slug === initialAge) ? (initialAge as AgeFilter) : 'all',
-  );
-  const [category, setCategory] = useState<CategoryFilter>('all');
+export function ProgramsCatalog() {
+  const [age, setAge] = useState<AgeFilter>('all');
+  const [kind, setKind] = useState<KindFilter>('all');
   const [city, setCity] = useState<CityFilter>('all');
 
-  const filtered = useMemo(
-    () =>
-      programs.filter((program) => {
-        if (age !== 'all' && !program.ageGroups.includes(age)) return false;
-        if (category !== 'all' && program.category !== category) return false;
-        if (city !== 'all' && !(program.cityAvailability as string[]).includes(city)) return false;
-        return true;
-      }),
-    [age, category, city],
-  );
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('age');
+    if (requested && ageGroups.some((group) => group.slug === requested)) {
+      setAge(requested as AgeFilter);
+    }
+  }, []);
+
+  const items = useMemo(() => {
+    const languageItems = activeLanguages.map((language) => ({
+      key: `lang-${language.slug}`,
+      href: `/languages/${language.slug}`,
+      kind: 'languages' as const,
+      badge: language.code,
+      icon: 'globe' as const,
+      title: language.title,
+      description: language.description,
+      age: 'Дети, подростки и взрослые',
+      ageGroups: language.ageGroups,
+      cities: language.availableCities as string[],
+      category: 'Иностранный язык',
+    }));
+
+    const programItems = activePrograms.map((program) => ({
+      key: `prog-${program.slug}`,
+      href: program.href,
+      kind: 'programs' as const,
+      badge: null,
+      icon: program.icon,
+      title: program.title,
+      description: program.description,
+      age: program.age,
+      ageGroups: program.ageGroups,
+      cities: program.availableCities as string[],
+      category: 'Направление',
+    }));
+
+    return [...languageItems, ...programItems].filter((item) => {
+      if (kind !== 'all' && item.kind !== kind) return false;
+      if (age !== 'all' && !(item.ageGroups as string[]).includes(age)) return false;
+      if (city !== 'all' && !item.cities.includes(city)) return false;
+      return true;
+    });
+  }, [age, kind, city]);
 
   return (
     <div>
       <div className="border-border flex flex-col gap-6 border-y py-7">
+        <FilterRow label="Раздел">
+          <FilterChip active={kind === 'all'} onClick={() => setKind('all')}>
+            Всё
+          </FilterChip>
+          <FilterChip active={kind === 'languages'} onClick={() => setKind('languages')}>
+            Языки
+          </FilterChip>
+          <FilterChip active={kind === 'programs'} onClick={() => setKind('programs')}>
+            Направления
+          </FilterChip>
+        </FilterRow>
+
         <FilterRow label="Возраст">
           <FilterChip active={age === 'all'} onClick={() => setAge('all')}>
             Любой
@@ -76,103 +107,81 @@ export function ProgramsCatalog({ initialAge = 'all' }: { initialAge?: string })
           ))}
         </FilterRow>
 
-        <FilterRow label="Тип">
-          {categories.map((item) => (
-            <FilterChip key={item} active={category === item} onClick={() => setCategory(item)}>
-              {item === 'all' ? 'Все' : programCategoryLabels[item]}
-            </FilterChip>
-          ))}
-        </FilterRow>
-
         <FilterRow label="Город">
           <FilterChip active={city === 'all'} onClick={() => setCity('all')}>
-            Все центры
+            Все города
           </FilterChip>
-          {branches.map((branch) => (
+          {cities.map((item) => (
             <FilterChip
-              key={branch.slug}
-              active={city === branch.slug}
-              onClick={() => setCity(branch.slug)}
+              key={item.slug}
+              active={city === item.slug}
+              onClick={() => setCity(item.slug)}
             >
-              {branch.city}
+              {item.name}
             </FilterChip>
           ))}
         </FilterRow>
       </div>
 
       <p aria-live="polite" className="text-muted mt-6 text-sm">
-        {filtered.length > 0
-          ? `Показано направлений: ${filtered.length}`
-          : 'По выбранным условиям направлений нет'}
+        {items.length > 0 ? `Показано: ${items.length}` : 'По выбранным условиям ничего нет'}
       </p>
 
-      {filtered.length > 0 ? (
-        <ul className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((program, index) => (
-            <Reveal as="li" key={program.slug} delay={(index % 3) * 0.07}>
+      {items.length > 0 ? (
+        <ul className="mt-8 grid gap-px md:grid-cols-2 lg:grid-cols-3">
+          {items.map((item, index) => (
+            <Reveal as="li" key={item.key} delay={(index % 3) * 0.06} className="h-full">
               <Link
-                href={`/programs/${program.slug}`}
-                onClick={() => track('program_select', { program: program.slug })}
-                className="group bg-surface border-border hover:shadow-lift flex h-full flex-col overflow-hidden rounded-[1.25rem] border transition-all duration-500 ease-[var(--ease-out-quart)] hover:-translate-y-1"
+                href={item.href}
+                onClick={() =>
+                  track(item.kind === 'languages' ? 'language_select' : 'program_select', {
+                    href: item.href,
+                  })
+                }
+                className="group border-border hover:bg-surface flex h-full flex-col gap-4 border p-7 transition-colors duration-500"
               >
-                {program.image ? (
-                  <div className="relative aspect-[16/10] w-full overflow-hidden">
-                    <Image
-                      src={program.image.src}
-                      alt={program.image.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 ease-[var(--ease-out-quart)] group-hover:scale-105"
-                    />
-                  </div>
-                ) : null}
-
-                <div className="flex flex-1 flex-col p-7">
-                  <div className="text-accent flex items-center gap-3">
-                    <ProgramIcon name={program.icon} className="size-5" />
-                    <span className="text-eyebrow font-medium uppercase">
-                      {programCategoryLabels[program.category]}
+                <div className="text-accent flex items-center justify-between gap-3">
+                  <ProgramIcon name={item.icon} className="size-5" />
+                  {item.badge ? (
+                    <span className="font-serif text-2xl leading-none opacity-30">
+                      {item.badge}
                     </span>
-                  </div>
-
-                  <h2 className="text-h3 group-hover:text-accent mt-4 font-serif transition-colors duration-300">
-                    {program.title}
-                  </h2>
-
-                  <p className="text-muted mt-4 line-clamp-3 text-[0.9375rem] leading-relaxed">
-                    {program.description}
-                  </p>
-
-                  {/* Структурные параметры: возраст, формат, города — считываются с одного взгляда */}
-                  <dl className="border-border mt-5 flex flex-col gap-2 border-t pt-5 text-sm">
-                    <div className="flex gap-3">
-                      <dt className="text-muted w-20 shrink-0">Возраст</dt>
-                      <dd>{program.age}</dd>
-                    </div>
-                    <div className="flex gap-3">
-                      <dt className="text-muted w-20 shrink-0">Формат</dt>
-                      <dd>{program.formats.map((format) => formatLabels[format]).join(' · ')}</dd>
-                    </div>
-                    <div className="flex gap-3">
-                      <dt className="text-muted w-20 shrink-0">Города</dt>
-                      <dd>
-                        {program.cityAvailability.length === branches.length
-                          ? 'все центры'
-                          : program.cityAvailability
-                              .map(
-                                (slug) =>
-                                  branches.find((branch) => branch.slug === slug)?.city ?? slug,
-                              )
-                              .join(', ')}
-                      </dd>
-                    </div>
-                  </dl>
-
-                  <span className="text-accent mt-auto inline-flex items-center gap-2 pt-6 text-sm font-medium">
-                    Подробнее
-                    <ArrowRight />
-                  </span>
+                  ) : null}
                 </div>
+
+                <span className="text-eyebrow text-muted font-medium uppercase">
+                  {item.category}
+                </span>
+
+                <h2 className="text-h3 group-hover:text-accent font-serif transition-colors duration-300">
+                  {item.title}
+                </h2>
+
+                <p className="text-muted line-clamp-3 text-[0.9375rem] leading-relaxed">
+                  {item.description}
+                </p>
+
+                <dl className="border-border mt-2 flex flex-col gap-1.5 border-t pt-4 text-sm">
+                  <div className="flex gap-3">
+                    <dt className="text-muted w-16 shrink-0">Возраст</dt>
+                    <dd>{item.age}</dd>
+                  </div>
+                  <div className="flex gap-3">
+                    <dt className="text-muted w-16 shrink-0">Города</dt>
+                    <dd>
+                      {item.cities.length === cities.length
+                        ? 'все города'
+                        : item.cities
+                            .map((slug) => cities.find((c) => c.slug === slug)?.name ?? slug)
+                            .join(', ')}
+                    </dd>
+                  </div>
+                </dl>
+
+                <span className="text-accent mt-auto inline-flex items-center gap-2 pt-4 text-sm font-medium">
+                  Подробнее
+                  <ArrowRight />
+                </span>
               </Link>
             </Reveal>
           ))}
@@ -181,14 +190,14 @@ export function ProgramsCatalog({ initialAge = 'all' }: { initialAge?: string })
         <div className="border-border mt-8 rounded-[1.25rem] border border-dashed p-10 text-center">
           <p className="text-h3 font-serif">Подберём вариант вручную</p>
           <p className="text-muted mx-auto mt-3 max-w-md text-sm leading-relaxed">
-            Сбросьте фильтры или оставьте заявку — администратор предложит подходящее направление и
-            центр.
+            Сбросьте фильтры или позвоните в ближайший офис — администратор подскажет подходящее
+            направление.
           </p>
           <button
             type="button"
             onClick={() => {
               setAge('all');
-              setCategory('all');
+              setKind('all');
               setCity('all');
             }}
             className="link-underline text-accent mt-5 text-sm"

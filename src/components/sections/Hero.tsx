@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'motion/react';
 import { hero } from '@/content/home';
 import { ArrowRight } from '@/components/ui/Button';
-import { TrialButton } from '@/components/ui/TrialButton';
 
 /**
  * Первый экран.
@@ -63,8 +62,19 @@ export function Hero() {
               {hero.lead}
             </motion.p>
 
+            {/*
+              Обе кнопки — обычные ссылки на разделы каталога, а не открытие
+              формы: сайт больше не собирает заявки, а первый шаг посетителя —
+              выбрать направление или ближайший офис.
+            */}
             <motion.div {...rise(0.36)} className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <TrialButton label={hero.primaryCta.label} size="lg" />
+              <Link
+                href={hero.primaryCta.href}
+                className="group bg-accent rounded-pill shadow-soft hover:bg-accent-dark hover:shadow-lift inline-flex min-h-11 items-center justify-center gap-2.5 px-8 py-4 text-[0.9375rem] font-medium text-white transition-all duration-300"
+              >
+                {hero.primaryCta.label}
+                <ArrowRight />
+              </Link>
               <Link
                 href={hero.secondaryCta.href}
                 className="group rounded-pill border-border-strong text-text hover:border-accent hover:text-accent inline-flex min-h-11 items-center justify-center gap-2.5 border px-8 py-4 text-[0.9375rem] font-medium transition-colors duration-300"
@@ -87,7 +97,7 @@ export function Hero() {
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.75rem] md:aspect-[3/2] lg:-mr-[max(0px,calc((100vw-90rem)/2))] lg:aspect-[4/3]">
               <Image
-                src="/images/hero.svg"
+                src="/images/generated/hero.svg"
                 alt="Образовательная среда RandK Center"
                 fill
                 priority

@@ -8,24 +8,26 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 
 /**
  * Отзывы.
- * Вымышленные отзывы не создаются. Пока подтверждённых нет,
- * показываем честное сообщение и ведём в сообщество.
+ * Вымышленные отзывы не создаются. Пока подтверждённых нет, показываем
+ * честное сообщение и ведём в сообщество, где обратная связь настоящая.
  */
-export function Reviews() {
+export function Reviews({ withHeading = true }: { withHeading?: boolean }) {
   return (
     <Section id="reviews">
-      <SectionHeading
-        eyebrow="Отзывы"
-        title="Что говорят ученики и родители"
-        lead={
-          publishedReviews.length > 0
-            ? 'Собираем обратную связь после занятий и публикуем её со ссылкой на источник.'
-            : undefined
-        }
-      />
+      {withHeading ? (
+        <SectionHeading
+          eyebrow="Отзывы"
+          title="Что говорят ученики и родители"
+          lead={
+            publishedReviews.length > 0
+              ? 'Собираем обратную связь после занятий и публикуем её со ссылкой на источник.'
+              : undefined
+          }
+        />
+      ) : null}
 
       {publishedReviews.length > 0 ? (
-        <ul className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <ul className={`grid gap-5 md:grid-cols-2 lg:grid-cols-3 ${withHeading ? 'mt-12' : ''}`}>
           {publishedReviews.map((review, index) => (
             <Reveal as="li" key={review.id} delay={(index % 3) * 0.08}>
               <figure className="bg-surface border-border flex h-full flex-col rounded-[1.25rem] border p-7">
@@ -77,7 +79,9 @@ export function Reviews() {
         </ul>
       ) : (
         <Reveal>
-          <div className="bg-surface border-border mt-12 flex flex-col items-start gap-6 rounded-[1.5rem] border p-8 md:flex-row md:items-center md:justify-between md:p-12">
+          <div
+            className={`bg-surface border-border flex flex-col items-start gap-6 rounded-[1.5rem] border p-8 md:flex-row md:items-center md:justify-between md:p-12 ${withHeading ? 'mt-12' : ''}`}
+          >
             <div className="max-w-xl">
               <p className="text-h3 font-serif">
                 Отзывы учеников и родителей будут добавлены после подтверждения материалов
@@ -87,12 +91,10 @@ export function Reviews() {
                 посмотреть жизнь центров и обратную связь можно в сообществе.
               </p>
             </div>
-            {site.social.vkPrimary ? (
-              <ButtonLink href={site.social.vkPrimary} external variant="secondary" size="lg">
-                Перейти в сообщество
-                <ArrowRight />
-              </ButtonLink>
-            ) : null}
+            <ButtonLink href={site.social.vkPrimary} external variant="secondary" size="lg">
+              Перейти в сообщество
+              <ArrowRight />
+            </ButtonLink>
           </div>
         </Reveal>
       )}

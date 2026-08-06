@@ -26,7 +26,7 @@ export function Teachers({
 }) {
   if (items.length === 0) return null;
 
-  const hasRealData = items.some((teacher) => teacher.isConfirmed && teacher.name);
+  const hasRealData = items.some((teacher) => teacher.confirmed && teacher.name);
 
   return (
     <Section id="teachers" tone="surface">
