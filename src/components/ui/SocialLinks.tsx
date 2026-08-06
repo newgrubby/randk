@@ -5,24 +5,21 @@ import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 /**
- * Кнопки соцсетей.
+ * Кнопки сообществ.
  *
- * Ключевое правило: кнопка не отображается, если ссылки нет.
- * Так MAX появится автоматически, как только клиент передаст URL,
- * и до этого момента на сайте не будет «мёртвых» иконок.
+ * Ключевое правило: кнопки нет, если нет ссылки. MAX появится сам, как
+ * только клиент передаст URL, и до этого момента на сайте не будет ни
+ * «мёртвой» иконки, ни пустого места на её месте.
  */
-
-type SocialLinksProps = {
-  /** Ссылки конкретного филиала имеют приоритет над сетевыми. */
-  vkUrl?: string | null;
-  maxUrl?: string | null;
+export function SocialLinks({
+  tone = 'light',
+  className,
+}: {
   tone?: 'light' | 'dark';
   className?: string;
-};
-
-export function SocialLinks({ vkUrl, maxUrl, tone = 'light', className }: SocialLinksProps) {
-  const vk = vkUrl ?? site.social.vkPrimary;
-  const max = maxUrl ?? site.social.max;
+}) {
+  const vk = site.social.vkPrimary;
+  const max = site.social.max;
 
   if (!vk && !max) return null;
 

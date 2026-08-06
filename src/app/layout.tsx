@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { YandexMetrika } from '@/components/analytics/YandexMetrika';
-import { LeadModalProvider } from '@/components/forms/LeadModalProvider';
+import { ContactModalProvider } from '@/components/contact/ContactModalProvider';
 import { CityProvider } from '@/components/layout/CityProvider';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  manifest: '/manifest.webmanifest',
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
@@ -46,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Без JavaScript анимации появления никогда не запустятся, а их
           начальное состояние (opacity: 0) уже отрендерено в HTML. Этот стиль
           парсится только при отключённом скриптинге и возвращает контент
-          в видимое состояние — карточки и секции остаются читаемыми.
+          в видимое состояние.
         */}
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
@@ -55,18 +56,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <JsonLd data={organizationJsonLd()} />
         <CityProvider>
-          <LeadModalProvider>
+          <ContactModalProvider>
             <Header />
             <main id="main" className="pt-[4.75rem] lg:pt-[5.5rem]">
               {children}
             </main>
-            {/* Нижний отступ — чтобы подвал не уходил под закреплённую панель на мобильных */}
-            <div className="pb-[4.5rem] lg:pb-0">
+            {/* Отступ, чтобы подвал не уходил под закреплённую панель на мобильных */}
+            <div className="pb-[4.75rem] lg:pb-0">
               <Footer />
             </div>
             <BackToTop />
             <MobileActionBar />
-          </LeadModalProvider>
+          </ContactModalProvider>
         </CityProvider>
         <YandexMetrika />
       </body>

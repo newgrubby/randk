@@ -8,17 +8,24 @@
 
 export const metrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID ?? '';
 
+/**
+ * Цели.
+ *
+ * Сайт не собирает заявки, поэтому событий отправки формы нет.
+ * Отслеживаются контактные действия и навигация по каталогу.
+ * Персональные данные в аналитику не передаются — только слаги и метки мест.
+ */
 export const analyticsEvents = [
-  'lead_submit',
-  'trial_lesson_click',
-  'program_select',
-  'branch_select',
   'phone_click',
   'vk_click',
   'max_click',
   'map_click',
-  'quiz_start',
-  'quiz_complete',
+  'language_select',
+  'program_select',
+  'city_select',
+  'office_select',
+  'contact_modal_open',
+  'gallery_open',
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];

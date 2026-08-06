@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 import { Breadcrumbs, type Crumb } from '@/components/ui/Breadcrumbs';
 import { site } from '@/content/site';
 
@@ -36,7 +36,7 @@ export function LegalPage({
             </p>
           ) : null}
 
-          {!legal.isConfirmed ? (
+          {!legal.confirmed ? (
             <p className="bg-surface-muted text-muted mt-8 rounded-xl px-5 py-4 text-sm leading-relaxed">
               Документ подготовлен как рабочий черновик и требует согласования с юристом
               организации. Реквизиты оператора персональных данных будут добавлены после их передачи
@@ -46,7 +46,7 @@ export function LegalPage({
 
           <div className="legal-prose mt-10">{children}</div>
 
-          {legal.isConfirmed ? (
+          {legal.confirmed ? (
             <div className="border-border mt-14 border-t pt-8">
               <h2 className="font-serif text-xl">Реквизиты оператора</h2>
               <dl className="text-muted mt-4 flex flex-col gap-2 text-sm">

@@ -2,17 +2,17 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { branches } from '@/content/branches';
+import { cities, countOffices } from '@/content/centers';
 import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import { useCity } from './CityProvider';
 
 /**
- * Переключатель города в шапке.
+ * Переключатель города.
  *
- * Показывает выбранный город прямо в интерфейсе («Ваш город: …»),
- * чтобы выбор не начинался только внутри квиза. Выбранное значение
- * подставляется в формы заявок и в мобильную панель действий.
+ * Показывает выбранный город прямо в шапке и подсказывает, где офисов
+ * больше одного — иначе посетитель из Павловского Посада не узнает
+ * о втором офисе, пока не дойдёт до страницы города.
  */
 export function CitySwitcher({
   tone = 'light',
@@ -23,7 +23,7 @@ export function CitySwitcher({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { branch, select } = useCity();
+  const { city, setCitySlug } = useCity();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -64,10 +64,10 @@ export function CitySwitcher({
           <circle cx="8" cy="6.4" r="1.7" stroke="currentColor" strokeWidth="1.3" />
         </svg>
 
-        {branch ? (
+        {city ? (
           <>
             <span className="hidden xl:inline">Ваш город:</span>
-            <span className={tone === 'dark' ? 'text-white' : 'text-text'}>{branch.city}</span>
+            <span className={tone === 'dark' ? 'text-white' : 'text-text'}>{city.name}</span>
           </>
         ) : (
           'Выбрать город'
@@ -87,36 +87,44 @@ export function CitySwitcher({
       </button>
 
       {isOpen ? (
-        <div className="bg-surface border-border shadow-lift absolute top-full left-0 z-50 mt-3 w-60 rounded-2xl border p-2">
+        <div className="bg-surface border-border shadow-lift absolute top-full left-0 z-50 mt-3 w-64 rounded-2xl border p-2">
           <p className="text-eyebrow text-muted px-3.5 py-2 font-medium uppercase">
-            Выберите центр
+            Выберите город
           </p>
-          {branches.map((item) => (
-            <Link
-              key={item.slug}
-              href={`/branches/${item.slug}`}
-              onClick={() => {
-                select(item.slug);
-                setIsOpen(false);
-                track('branch_select', { branch: item.slug });
-              }}
-              className={cn(
-                'hover:bg-surface-muted flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm transition-colors duration-200',
-                branch?.slug === item.slug ? 'text-accent' : 'text-text',
-              )}
-            >
-              {item.city}
-              {branch?.slug === item.slug ? (
-                <span aria-hidden className="bg-accent size-1.5 rounded-full" />
-              ) : null}
-            </Link>
-          ))}
+          {cities.map((item) => {
+            const officeCount = countOffices(item.slug);
+            return (
+              <Link
+                key={item.slug}
+                href={`/centers/${item.slug}`}
+                onClick={() => {
+                  setCitySlug(item.slug);
+                  setIsOpen(false);
+                  track('city_select', { city: item.slug });
+                }}
+                className={cn(
+                  'hover:bg-surface-muted flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm transition-colors duration-200',
+                  city?.slug === item.slug ? 'text-accent' : 'text-text',
+                )}
+              >
+                <span>
+                  {item.name}
+                  {officeCount > 1 ? (
+                    <span className="text-muted mt-0.5 block text-xs">{officeCount} офиса</span>
+                  ) : null}
+                </span>
+                {city?.slug === item.slug ? (
+                  <span aria-hidden className="bg-accent size-1.5 shrink-0 rounded-full" />
+                ) : null}
+              </Link>
+            );
+          })}
           <Link
-            href="/branches"
+            href="/centers"
             onClick={() => setIsOpen(false)}
             className="text-muted hover:text-accent border-border mt-1 block border-t px-3.5 pt-3 pb-1.5 text-xs"
           >
-            Сравнить все центры
+            Все офисы сети
           </Link>
         </div>
       ) : null}

@@ -5,10 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { legalNavigation, mainNavigation } from '@/content/navigation';
-import { site } from '@/content/site';
-import { track } from '@/lib/analytics';
-import { cn, displayPhone } from '@/lib/utils';
-import { TrialButton } from '@/components/ui/TrialButton';
+import { cn } from '@/lib/utils';
+import { ContactButton } from '@/components/contact/ContactButton';
 import { CitySwitcher } from './CitySwitcher';
 
 export function MobileMenu() {
@@ -16,7 +14,6 @@ export function MobileMenu() {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
 
-  // Закрываем меню при переходе на другую страницу
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -37,8 +34,6 @@ export function MobileMenu() {
     };
   }, [isOpen]);
 
-  const showPhone = site.contacts.isConfirmed && site.contacts.phone;
-
   return (
     <>
       <button
@@ -46,6 +41,7 @@ export function MobileMenu() {
         onClick={() => setIsOpen(true)}
         aria-label="Открыть меню"
         aria-expanded={isOpen}
+        aria-controls="mobile-menu"
         className="border-border-strong hover:border-accent hover:text-accent flex size-11 items-center justify-center rounded-full border transition-colors duration-300 lg:hidden"
       >
         <span aria-hidden className="flex flex-col gap-[5px]">
@@ -57,6 +53,7 @@ export function MobileMenu() {
       <AnimatePresence>
         {isOpen ? (
           <motion.div
+            id="mobile-menu"
             className="bg-background fixed inset-0 z-100 flex flex-col lg:hidden"
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -85,7 +82,7 @@ export function MobileMenu() {
 
             <nav
               aria-label="Мобильная навигация"
-              className="container-page flex-1 overflow-y-auto pb-8"
+              className="container-page flex-1 overflow-y-auto pb-28"
             >
               <ul className="flex flex-col">
                 {mainNavigation.map((item, index) => (
@@ -124,17 +121,7 @@ export function MobileMenu() {
               </ul>
 
               <div className="mt-8 flex flex-col gap-4">
-                <TrialButton size="lg" className="w-full" />
-
-                {showPhone ? (
-                  <a
-                    href={`tel:${site.contacts.phone}`}
-                    onClick={() => track('phone_click', { place: 'mobile-menu' })}
-                    className="text-text text-center text-lg font-medium"
-                  >
-                    {site.contacts.phoneDisplay ?? displayPhone(site.contacts.phone ?? '')}
-                  </a>
-                ) : null}
+                <ContactButton size="lg" className="w-full" place="mobile-menu" />
 
                 <ul className="text-muted mt-2 flex flex-col gap-2 text-xs">
                   {legalNavigation.map((item) => (

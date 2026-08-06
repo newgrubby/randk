@@ -2,15 +2,15 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { branches } from '@/content/branches';
-import type { Branch } from '@/content/types';
+import { cities, getCity } from '@/content/centers';
+import type { City, CitySlug } from '@/content/types';
 
 const STORAGE_KEY = 'randk:city';
 
 type CityContextValue = {
-  /** Выбранный филиал или null, если пользователь ещё не выбирал. */
-  branch: Branch | null;
-  select: (slug: string) => void;
+  citySlug: CitySlug | null;
+  city: City | null;
+  setCitySlug: (slug: CitySlug) => void;
   clear: () => void;
 };
 
@@ -25,32 +25,34 @@ export function useCity(): CityContextValue {
 /**
  * Выбранный город.
  *
- * Хранится в localStorage и переживает переходы по сайту. Сейчас выбор
- * подставляется в формы заявок и в мобильную панель — администратор сразу
- * видит, о каком центре речь.
+ * Хранится в localStorage и переживает переходы. Используется контактным
+ * окном и мобильной панелью, чтобы посетитель сразу видел телефон своего
+ * города, а не выбирал его заново на каждой странице.
  *
- * Чего провайдер намеренно НЕ делает: не подменяет контент страницы.
- * У каждого города свой постоянный URL с собственным title и текстом —
- * это нужно для локального SEO, а подмена контента на одном адресе
- * сделала бы три города неразличимыми для поиска.
+ * Провайдер намеренно НЕ подменяет контент страницы: у каждого города свой
+ * постоянный URL с собственным title и текстом — это нужно для локального
+ * SEO, а подмена контента на одном адресе сделала бы города неразличимыми
+ * для поиска.
  *
  * Значение читается в useEffect, а не при инициализации состояния:
  * localStorage недоступен на сервере, и чтение при первом рендере
- * рассинхронизировало бы разметку сервера и клиента (ошибка гидратации).
+ * рассинхронизировало бы разметку сервера и клиента.
  */
 export function CityProvider({ children }: { children: ReactNode }) {
-  const [slug, setSlug] = useState<string | null>(null);
+  const [citySlug, setSlug] = useState<CitySlug | null>(null);
 
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored && branches.some((item) => item.slug === stored)) setSlug(stored);
+      if (stored && cities.some((city) => city.slug === stored)) {
+        setSlug(stored as CitySlug);
+      }
     } catch {
-      // Приватный режим браузера — просто не запоминаем выбор.
+      // Приватный режим — просто не запоминаем выбор.
     }
   }, []);
 
-  const select = useCallback((next: string) => {
+  const setCitySlug = useCallback((next: CitySlug) => {
     setSlug(next);
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
@@ -70,11 +72,12 @@ export function CityProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<CityContextValue>(
     () => ({
-      branch: branches.find((item) => item.slug === slug) ?? null,
-      select,
+      citySlug,
+      city: citySlug ? (getCity(citySlug) ?? null) : null,
+      setCitySlug,
       clear,
     }),
-    [slug, select, clear],
+    [citySlug, setCitySlug, clear],
   );
 
   return <CityContext.Provider value={value}>{children}</CityContext.Provider>;

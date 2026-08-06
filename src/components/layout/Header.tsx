@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { mainNavigation } from '@/content/navigation';
 import { site } from '@/content/site';
 import { track } from '@/lib/analytics';
-import { cn, displayPhone } from '@/lib/utils';
-import { TrialButton } from '@/components/ui/TrialButton';
+import { cn } from '@/lib/utils';
+import { ContactButton } from '@/components/contact/ContactButton';
 import { CitySwitcher } from './CitySwitcher';
 import { Logo } from './Logo';
 import { MobileMenu } from './MobileMenu';
@@ -25,8 +25,6 @@ export function Header() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const showPhone = site.contacts.isConfirmed && site.contacts.phone;
 
   return (
     <header
@@ -58,7 +56,6 @@ export function Header() {
             </span>
           </div>
 
-          {/* Основная навигация */}
           <nav aria-label="Основная навигация" className="hidden lg:block">
             <ul className="flex items-center gap-7">
               {mainNavigation.map((item) => {
@@ -100,10 +97,13 @@ export function Header() {
                               href={child.href}
                               onClick={() => {
                                 setOpenMenu(null);
-                                track(
-                                  item.href === '/branches' ? 'branch_select' : 'program_select',
-                                  { href: child.href },
-                                );
+                                if (item.href === '/languages') {
+                                  track('language_select', { href: child.href });
+                                } else if (item.href === '/centers') {
+                                  track('city_select', { href: child.href });
+                                } else {
+                                  track('program_select', { href: child.href });
+                                }
                               }}
                               className="text-text hover:bg-surface-muted hover:text-accent block rounded-xl px-3.5 py-2.5 text-sm transition-colors duration-200"
                             >
@@ -121,19 +121,7 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             <CitySwitcher className="hidden md:block" />
-
-            {showPhone ? (
-              <a
-                href={`tel:${site.contacts.phone}`}
-                onClick={() => track('phone_click', { place: 'header' })}
-                className="text-text hover:text-accent hidden text-sm font-medium transition-colors duration-300 xl:block"
-              >
-                {site.contacts.phoneDisplay ?? displayPhone(site.contacts.phone ?? '')}
-              </a>
-            ) : null}
-
-            <TrialButton label="Записаться" className="hidden md:inline-flex" />
-
+            <ContactButton label="Связаться" className="hidden md:inline-flex" place="header" />
             <MobileMenu />
           </div>
         </div>

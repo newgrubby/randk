@@ -43,6 +43,24 @@ const paths: Record<ProgramIconName, React.ReactNode> = {
       <path d="m15.5 8.5-2 5-5 2 2-5z" />
     </>
   ),
+  speech: (
+    <>
+      <path d="M4 5.5h16v10H9l-5 4z" />
+      <path d="M8.5 10.5h7" />
+    </>
+  ),
+  mind: (
+    <>
+      <path d="M12 4.5a4 4 0 0 0-4 4v1a3 3 0 0 0 0 6v2.5a2 2 0 0 0 4 0z" />
+      <path d="M12 4.5a4 4 0 0 1 4 4v1a3 3 0 0 1 0 6v2.5a2 2 0 0 1-4 0z" />
+    </>
+  ),
+  briefcase: (
+    <>
+      <rect x="3" y="7.5" width="18" height="12" rx="2" />
+      <path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5M3 12.5h18" />
+    </>
+  ),
 };
 
 export function ProgramIcon({ name, className }: { name: ProgramIconName; className?: string }) {

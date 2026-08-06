@@ -1,14 +1,15 @@
-import { branches } from '@/content/branches';
-import type { FaqItem } from '@/content/types';
+import { cities, offices } from '@/content/centers';
 import { site } from '@/content/site';
+import type { FaqItem, Office } from '@/content/types';
 import { absoluteUrl, siteUrl } from './seo';
 
 /**
  * Микроразметка.
  *
  * Жёсткое правило: в JSON-LD не попадает ничего неподтверждённого.
- * Адрес, телефон, рейтинг и отзывы добавляются только при isConfirmed.
- * Ложные данные в разметке — прямой риск санкций поисковых систем.
+ * Адрес, телефон, координаты, график, рейтинг и отзывы добавляются только
+ * при `confirmed: true`. Ложные данные в разметке — прямой риск санкций
+ * поисковых систем, и в отличие от текста на странице их не видно глазами.
  */
 
 type JsonLd = Record<string, unknown>;
@@ -21,7 +22,7 @@ export function organizationJsonLd(): JsonLd {
     name: site.name,
     description: site.description,
     url: siteUrl,
-    areaServed: branches.map((branch) => ({ '@type': 'City', name: branch.city })),
+    areaServed: cities.map((city) => ({ '@type': 'City', name: city.name })),
   };
 
   const sameAs = [site.social.vkPrimary, site.social.max].filter(
@@ -29,47 +30,54 @@ export function organizationJsonLd(): JsonLd {
   );
   if (sameAs.length > 0) data.sameAs = sameAs;
 
-  if (site.contacts.isConfirmed && site.contacts.phone) {
-    data.telephone = site.contacts.phone;
-  }
-  if (site.contacts.isConfirmed && site.contacts.email) {
-    data.email = site.contacts.email;
-  }
-
   return data;
 }
 
-/** LocalBusiness — только для филиалов с подтверждённым адресом. */
-export function branchJsonLd(slug: string): JsonLd | null {
-  const branch = branches.find((item) => item.slug === slug);
-  if (!branch || !branch.isConfirmed || !branch.address) return null;
+/**
+ * LocalBusiness для одного физического офиса.
+ *
+ * Каждый офис — самостоятельная запись: в Павловском Посаде их две,
+ * и объединять их в одну организацию нельзя — это разные точки на карте.
+ *
+ * Возвращает null, пока офис не подтверждён клиентом.
+ */
+export function officeJsonLd(office: Office): JsonLd | null {
+  if (!office.confirmed) return null;
 
   const data: JsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': absoluteUrl(`/branches/${branch.slug}#localbusiness`),
-    name: branch.displayName,
-    url: absoluteUrl(`/branches/${branch.slug}`),
+    '@id': absoluteUrl(`/centers/${office.citySlug}#${office.id}`),
+    name: `${site.name} — ${office.city}, ${office.address}`,
+    url: absoluteUrl(`/centers/${office.citySlug}`),
     parentOrganization: { '@id': `${siteUrl}/#organization` },
     address: {
       '@type': 'PostalAddress',
-      addressLocality: branch.city,
+      addressLocality: office.city,
+      addressRegion: 'Московская область',
       addressCountry: 'RU',
-      streetAddress: branch.address,
+      streetAddress: [office.address, office.addressDetails].filter(Boolean).join(', '),
     },
   };
 
-  if (branch.phone) data.telephone = branch.phone;
-  if (branch.coordinates) {
+  if (office.phone) data.telephone = office.phone;
+  if (office.coordinates) {
     data.geo = {
       '@type': 'GeoCoordinates',
-      latitude: branch.coordinates[0],
-      longitude: branch.coordinates[1],
+      latitude: office.coordinates[0],
+      longitude: office.coordinates[1],
     };
   }
-  if (branch.schedule.length > 0) data.openingHours = branch.schedule;
+  if (office.schedule.length > 0) data.openingHours = office.schedule;
 
   return data;
+}
+
+/** Все подтверждённые офисы — для страницы «Контакты». */
+export function allOfficesJsonLd(): JsonLd[] {
+  return offices
+    .map((office) => officeJsonLd(office))
+    .filter((schema): schema is JsonLd => schema !== null);
 }
 
 export function breadcrumbJsonLd(items: { name: string; path: string }[]): JsonLd {
