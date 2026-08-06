@@ -30,5 +30,6 @@
     <path d="M453.6079921139423 323.9084362486397 A161.77505197277645 161.77505197277645 0 0 1 777.1580960594952 323.9084362486397" fill="none" stroke="#ad1f2b" stroke-width="21.0" stroke-linecap="round"/>
     <circle cx="498.9" cy="477.6" r="27.5" fill="#7d1119" opacity="0.85"/>
     <rect width="1000" height="750" fill="url(#wash)"/>
+    
   </g>
 </svg>
