@@ -11,6 +11,7 @@
     "images": "node scripts/generate-placeholders.mjs",
     "redirects": "node scripts/generate-redirects.mjs",
     "test": "node scripts/validate-redirects.mjs",
+    "check:deployment": "node scripts/check-deployment.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
