@@ -1,5 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { cities, offices } from '@/content/centers';
+import { activeLanguages } from '@/content/languages';
+import { teachers } from '@/content/teachers';
+import { buildMetadata } from '@/lib/seo';
 import { PageHero } from '@/components/layout/PageHero';
 import { Advantages } from '@/components/sections/Advantages';
 import { FinalCta } from '@/components/sections/FinalCta';
@@ -9,13 +13,11 @@ import { ArrowRight } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { teachers } from '@/content/teachers';
-import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
   title: 'О центре',
   description:
-    'RandK Center — сеть образовательных и языковых центров для детей, подростков и взрослых в Орехово-Зуеве, Павловском Посаде и Электростали.',
+    'RandK Center — сеть языковых и образовательных центров для детей, подростков и взрослых. Четыре офиса в Орехово-Зуеве, Павловском Посаде и Электростали.',
   path: '/about',
 });
 
@@ -26,12 +28,16 @@ const principles = [
     text: 'Мы не продаём «курс вообще». Разговор начинается с того, зачем ученику занятия: экзамен, школьная программа, разговорная речь или подготовка к первому классу. Программа собирается уже под этот ответ.',
   },
   {
+    title: 'Языковой центр, а не курсы английского',
+    text: 'Английский — самое востребованное направление, но не единственное. В каталоге шесть языков, и у каждого своя логика: то, что работает в испанском, не переносится на китайский напрямую.',
+  },
+  {
     title: 'Возраст определяет подход',
     text: 'Дошкольник, подросток и взрослый учатся по-разному — по темпу, мотивации и формату обратной связи. Поэтому направления разведены по возрастным ступеням, а не сведены к одному «универсальному» уроку.',
   },
   {
     title: 'Очный формат как основа',
-    text: 'Центры работают вживую. Присутствие в классе даёт то, что сложно воспроизвести онлайн: живую речь, внимание преподавателя к деталям и привычку к учебной среде.',
+    text: 'Занятия идут вживую в четырёх офисах. Присутствие в классе даёт то, что сложно воспроизвести онлайн: живую речь, внимание преподавателя к деталям и привычку к учебной среде.',
   },
   {
     title: 'Прозрачность для семьи',
@@ -44,8 +50,8 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="О центре"
-        title="Сеть образовательных и языковых центров RandK"
-        lead="Работаем с детьми, подростками и взрослыми в трёх городах Подмосковья. Помогаем получать знания и увереннее чувствовать себя в учёбе."
+        title="Сеть языковых и образовательных центров RandK"
+        lead={`Работаем с детьми, подростками и взрослыми. ${offices.length} офиса в ${cities.length} городах Подмосковья, ${activeLanguages.length} языков и образовательные направления от подготовки к школе до экзаменов.`}
         breadcrumbs={[{ name: 'О центре', path: '/about' }]}
       />
 
@@ -53,7 +59,7 @@ export default function AboutPage() {
         <Reveal>
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[1.75rem] md:aspect-[21/9]">
             <Image
-              src="/images/about.svg"
+              src="/images/generated/about.svg"
               alt="Образовательная среда центров RandK"
               fill
               priority
@@ -85,9 +91,8 @@ export default function AboutPage() {
 
       {/*
         Развёрнутые преимущества и процесс контроля результата живут только
-        здесь: на главной от них остались короткие тезисы. Сетка филиалов
-        тоже убрана — она есть на главной и на /branches, третья копия
-        удлиняла страницу, ничего не добавляя.
+        здесь — на главной от них остались короткие тезисы. Сетка офисов тоже
+        не дублируется: она есть на главной и на /centers.
       */}
       <Advantages />
       <Results />
