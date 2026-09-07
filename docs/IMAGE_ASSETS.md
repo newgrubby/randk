@@ -10,20 +10,20 @@
 Отдельно: фотографии сотрудников не запрашиваются и не публикуются —
 информация о преподавателях на сайте не публикуется по решению клиента.
 
-### Готовые файлы — 7 штук, 728 KB
+### Готовые файлы — 7 штук, 711 KB на диске
 
 Лежат в `public/images/generated/`, оптимизированы в WebP, кроп и inset уже
 применены (обрезаны артефакты плёночной рамки и нечитаемый псевдотекст).
 
 | Файл                                     | Размер    | Вес    | Для чего             |
 | ---------------------------------------- | --------- | ------ | -------------------- |
-| `hero/hero-main.webp`                    | 1800×1200 | 129 KB | Первый экран главной |
-| `ages/age-7-12.webp`                     | 900×675   | 33 KB  | Карточка 7–12 лет    |
-| `programs/program-exams.webp`            | 1600×1000 | 85 KB  | `/exams`             |
-| `programs/program-tutoring.webp`         | 1600×1000 | 96 KB  | `/tutoring`          |
-| `programs/program-preschool.webp`        | 1600×1000 | 62 KB  | `/preschool`         |
-| `programs/program-development.webp`      | 1600×1000 | 86 KB  | `/development`       |
-| `programs/program-speech-therapist.webp` | 1600×1000 | 81 KB  | `/speech-therapist`  |
+| `hero/hero-main.webp`                    | 1800×1200 | 176 KB | Первый экран главной |
+| `ages/age-7-12.webp`                     | 900×675   | 39 KB  | Карточка 7–12 лет    |
+| `programs/program-exams.webp`            | 1600×1000 | 100 KB | `/exams`             |
+| `programs/program-tutoring.webp`         | 1600×1000 | 117 KB | `/tutoring`          |
+| `programs/program-preschool.webp`        | 1600×1000 | 76 KB  | `/preschool`         |
+| `programs/program-development.webp`      | 1600×1000 | 108 KB | `/development`       |
+| `programs/program-speech-therapist.webp` | 1600×1000 | 94 KB  | `/speech-therapist`  |
 
 Все сгенерированы моделью Higgsfield Soul 2.0, 3:2 и 4:3, 2k, и проверены
 глазами на плёночную рамку, оранжевые края, виньетку, псевдотекст, руки,
