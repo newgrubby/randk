@@ -61,8 +61,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main id="main" className="pt-[4.75rem] lg:pt-[5.5rem]">
               {children}
             </main>
-            {/* Отступ, чтобы подвал не уходил под закреплённую панель на мобильных */}
-            <div className="pb-[4.75rem] lg:pb-0">
+            {/* Отступ под нижнюю навигацию: её высота + системная зона жестов */}
+            <div className="pb-[calc(3.75rem+env(safe-area-inset-bottom))] lg:pb-0">
               <Footer />
             </div>
             <BackToTop />

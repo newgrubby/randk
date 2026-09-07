@@ -161,10 +161,6 @@ export function getCity(slug: string): City | undefined {
   return cities.find((city) => city.slug === slug);
 }
 
-export function getOffice(id: string): Office | undefined {
-  return offices.find((office) => office.id === id);
-}
-
 /** Офисы города в порядке объявления. */
 export function getOfficesByCity(slug: string): Office[] {
   return offices.filter((office) => office.citySlug === slug);
@@ -179,6 +175,3 @@ export function countOffices(slug: CitySlug): number {
 export function fullAddress(office: Office): string {
   return [office.address, office.addressDetails].filter(Boolean).join(', ');
 }
-
-/** Офисы с подтверждённым адресом — только они попадают в LocalBusiness. */
-export const confirmedOffices = offices.filter((office) => office.confirmed);

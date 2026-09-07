@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cities, fullAddress, getOfficesByCity, offices } from '@/content/centers';
 import { site } from '@/content/site';
 import { track } from '@/lib/analytics';
@@ -16,7 +16,6 @@ import { useCity } from '@/components/layout/CityProvider';
  * офисами и копирования номера.
  */
 export function ContactPanel({ initialOfficeId }: { initialOfficeId?: string }) {
-  const fieldId = useId();
   const { citySlug, setCitySlug } = useCity();
 
   const initialOffice = initialOfficeId
@@ -131,9 +130,7 @@ export function ContactPanel({ initialOfficeId }: { initialOfficeId?: string }) 
           </div>
         </fieldset>
       ) : (
-        <p id={fieldId} className="text-muted text-sm leading-relaxed">
-          {fullAddress(office)}
-        </p>
+        <p className="text-muted text-sm leading-relaxed">{fullAddress(office)}</p>
       )}
 
       {/* Телефон и действия */}

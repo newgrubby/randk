@@ -123,10 +123,13 @@ export function MobileMenu() {
               <div className="mt-8 flex flex-col gap-4">
                 <ContactButton size="lg" className="w-full" place="mobile-menu" />
 
-                <ul className="text-muted mt-2 flex flex-col gap-2 text-xs">
+                <ul className="text-muted mt-2 flex flex-col text-[0.8125rem]">
                   {legalNavigation.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href} className="link-underline">
+                      <Link
+                        href={item.href}
+                        className="link-underline inline-flex min-h-11 items-center"
+                      >
                         {item.label}
                       </Link>
                     </li>

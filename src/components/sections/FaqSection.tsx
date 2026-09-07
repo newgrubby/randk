@@ -30,8 +30,8 @@ export function FaqSection({
             <Eyebrow className="text-muted">{eyebrow}</Eyebrow>
             <h2 className="text-h2 mt-4 font-serif">{title}</h2>
             <p className="text-muted mt-5 leading-relaxed">
-              Не нашли ответ? Оставьте заявку — администратор ответит на вопросы и поможет с
-              выбором.
+              Не нашли ответ? Позвоните в удобный центр или напишите в сообщество — администратор
+              ответит на вопросы и поможет с выбором.
             </p>
           </Reveal>
         </div>

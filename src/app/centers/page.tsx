@@ -40,7 +40,7 @@ export default function CentersPage() {
               aside={
                 <Link
                   href={`/centers/${city.slug}`}
-                  className="group text-accent inline-flex items-center gap-2 text-sm font-medium"
+                  className="group text-accent inline-flex min-h-11 items-center gap-2 text-sm font-medium"
                 >
                   Страница центра
                   <ArrowRight />

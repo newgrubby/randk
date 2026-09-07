@@ -179,7 +179,7 @@ export const languages: Language[] = seeds.map((seed) => ({
     isClientProvided: false,
   },
   advantages: seed.advantages ?? commonAdvantages,
-  seoTitle: `${seed.title} — курсы в Орехово-Зуеве, Павловском Посаде и Электростали`,
+  seoTitle: `${seed.title} — курсы в Подмосковье`,
   seoDescription: `Курсы «${seed.title.toLowerCase()}» в центрах RandK: занятия для детей, подростков и взрослых, группы, мини-группы и индивидуальный формат.`,
   active: seed.active,
   confirmed: seed.confirmed,
@@ -197,10 +197,6 @@ export const navigationLanguages = languages.filter(
 
 export function getLanguage(slug: string): Language | undefined {
   return activeLanguages.find((language) => language.slug === slug);
-}
-
-export function getLanguagesByOffice(officeId: string): Language[] {
-  return activeLanguages.filter((language) => language.availableOffices.includes(officeId));
 }
 
 export function getLanguagesByCity(citySlug: string): Language[] {

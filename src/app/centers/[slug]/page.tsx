@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { cities, fullAddress, getCity, getOfficesByCity } from '@/content/centers';
-import { activeLanguages } from '@/content/languages';
-import { activePrograms } from '@/content/programs';
+import { getLanguagesByCity } from '@/content/languages';
+import { getProgramsByCity } from '@/content/programs';
 import { officeJsonLd } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/seo';
 import { displayPhone } from '@/lib/utils';
@@ -56,12 +56,8 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
   if (!city) notFound();
 
   const cityOffices = getOfficesByCity(city.slug);
-  const cityLanguages = activeLanguages.filter((language) =>
-    (language.availableCities as string[]).includes(city.slug),
-  );
-  const cityPrograms = activePrograms.filter((program) =>
-    (program.availableCities as string[]).includes(city.slug),
-  );
+  const cityLanguages = getLanguagesByCity(city.slug);
+  const cityPrograms = getProgramsByCity(city.slug);
 
   /* LocalBusiness выводится только для подтверждённых офисов. */
   const officeSchemas = cityOffices
@@ -175,7 +171,7 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
           aside={
             <Link
               href="/languages"
-              className="group text-accent inline-flex items-center gap-2 text-sm font-medium"
+              className="group text-accent inline-flex min-h-11 items-center gap-2 text-sm font-medium"
             >
               Все языки
               <ArrowRight />

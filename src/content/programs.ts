@@ -46,7 +46,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'certificate',
-    seoTitle: 'Подготовка к ОГЭ и ЕГЭ в Орехово-Зуеве, Павловском Посаде и Электростали',
+    seoTitle: 'Подготовка к ОГЭ и ЕГЭ в Подмосковье',
     seoDescription:
       'Подготовка к ОГЭ и ЕГЭ в центрах RandK: диагностика, работа с критериями, тренировка формата экзамена, групповые и индивидуальные занятия.',
     active: true,
@@ -82,7 +82,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'book',
-    seoTitle: 'Репетитор по школьным предметам — Орехово-Зуево, Павловский Посад, Электросталь',
+    seoTitle: 'Репетитор по школьным предметам',
     seoDescription:
       'Репетиторство в центрах RandK: разбор сложных тем, работа над успеваемостью, индивидуальный и мини-групповой формат для школьников.',
     active: true,
@@ -118,7 +118,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'pencil',
-    seoTitle: 'Подготовка детей к школе — центры RandK',
+    seoTitle: 'Подготовка детей к школе',
     seoDescription:
       'Подготовка к школе в центрах RandK: чтение, счёт, письмо, внимание и навыки работы в группе для детей 5–7 лет.',
     active: true,
@@ -154,7 +154,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'sparkle',
-    seoTitle: 'Развивающие занятия для детей — центры RandK',
+    seoTitle: 'Развивающие занятия для детей',
     seoDescription:
       'Развивающие занятия для детей 4–7 лет в центрах RandK: речь, мышление, внимание и работа в группе.',
     active: true,
@@ -190,7 +190,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'briefcase',
-    seoTitle: 'Корпоративное обучение иностранным языкам — RandK Center',
+    seoTitle: 'Корпоративное обучение иностранным языкам',
     seoDescription:
       'Корпоративные языковые программы RandK: обучение сотрудников, гибкий формат и расписание, оценка уровня перед стартом.',
     active: true,
@@ -232,7 +232,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'speech',
-    seoTitle: 'Логопед — центры RandK',
+    seoTitle: 'Логопед для детей',
     seoDescription:
       'Занятия с логопедом в центрах RandK: диагностика, индивидуальный план работы, отработка речевых навыков.',
     active: true,
@@ -268,7 +268,7 @@ export const programs: Program[] = [
       isClientProvided: false,
     },
     icon: 'mind',
-    seoTitle: 'Психолог — центры RandK',
+    seoTitle: 'Детский психолог',
     seoDescription:
       'Консультации психолога в центрах RandK: мотивация к учёбе, тревога перед экзаменами, вопросы адаптации.',
     active: true,
@@ -292,10 +292,6 @@ export function getProgramsByCity(citySlug: string): Program[] {
   return activePrograms.filter((program) =>
     (program.availableCities as string[]).includes(citySlug),
   );
-}
-
-export function getProgramsByOffice(officeId: string): Program[] {
-  return activePrograms.filter((program) => program.availableOffices.includes(officeId));
 }
 
 /** Возрастные ступени для блока «Программы по возрасту» на главной. */

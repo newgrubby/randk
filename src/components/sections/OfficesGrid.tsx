@@ -34,7 +34,7 @@ export function OfficesGrid({
           aside={
             <Link
               href="/centers"
-              className="group text-accent inline-flex items-center gap-2 text-sm font-medium"
+              className="group text-accent inline-flex min-h-11 items-center gap-2 text-sm font-medium"
             >
               Все центры
               <ArrowRight />

@@ -16,11 +16,7 @@ export function Logo({
   className?: string;
 }) {
   return (
-    <Link
-      href="/"
-      aria-label="RandK Center — на главную"
-      className={cn('group inline-flex flex-col leading-none', className)}
-    >
+    <Link href="/" className={cn('group inline-flex flex-col leading-none', className)}>
       <span
         className={cn(
           'font-serif text-[1.6rem] tracking-[-0.01em] transition-colors duration-300 sm:text-[1.75rem]',
@@ -37,6 +33,7 @@ export function Logo({
       >
         Center
       </span>
+      <span className="sr-only"> — на главную</span>
     </Link>
   );
 }

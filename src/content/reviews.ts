@@ -19,5 +19,3 @@ export const reviews: Review[] = [];
 
 /** Отзывы, разрешённые к публикации. */
 export const publishedReviews = reviews.filter((review) => review.confirmed);
-
-export const hasPublishedReviews = publishedReviews.length > 0;

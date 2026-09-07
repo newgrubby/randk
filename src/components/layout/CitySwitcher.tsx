@@ -51,7 +51,7 @@ export function CitySwitcher({
         aria-expanded={isOpen}
         aria-haspopup="true"
         className={cn(
-          'flex items-center gap-1.5 text-sm whitespace-nowrap transition-colors duration-300',
+          'flex min-h-11 items-center gap-1.5 text-sm whitespace-nowrap transition-colors duration-300',
           tone === 'dark' ? 'text-white/70 hover:text-white' : 'text-muted hover:text-accent',
         )}
       >

@@ -101,13 +101,19 @@ export function Modal({ open, onClose, title, description, children }: ModalProp
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.985 }}
             transition={{ duration: 0.42, ease: [0.25, 1, 0.5, 1] }}
-            className="bg-surface relative max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-[1.75rem] p-6 shadow-[var(--shadow-lift)] sm:rounded-[1.75rem] sm:p-9"
+            className="bg-surface relative max-h-[92vh] w-full max-w-lg overflow-y-auto overscroll-contain rounded-t-[1.75rem] p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-lift)] sm:rounded-[1.75rem] sm:p-9 sm:pb-9"
           >
+            {/* Полоска-«ручка»: на мобильных сразу читается как шторка снизу */}
+            <span
+              aria-hidden
+              className="bg-border-strong mx-auto mb-4 block h-1 w-10 rounded-full sm:hidden"
+            />
+
             <button
               type="button"
               onClick={onClose}
               aria-label="Закрыть окно"
-              className="text-muted hover:border-accent hover:text-accent absolute top-5 right-5 flex size-9 items-center justify-center rounded-full border border-transparent transition-colors duration-300"
+              className="text-muted hover:border-accent hover:text-accent absolute top-5 right-5 flex size-11 items-center justify-center rounded-full border border-transparent transition-colors duration-300"
             >
               <svg aria-hidden viewBox="0 0 16 16" fill="none" className="size-4">
                 <path

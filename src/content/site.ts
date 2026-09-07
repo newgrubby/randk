@@ -54,9 +54,3 @@ export const site = {
 
   copyrightStartYear: 2026,
 } as const;
-
-/** Ссылка MAX, если она задана. */
-export const maxUrl: string | null = site.social.max;
-
-/** Основное сообщество VK. */
-export const vkUrl: string = site.social.vkPrimary;
