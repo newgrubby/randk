@@ -42,8 +42,9 @@ export function AgeGroups() {
                   src={group.image.src}
                   alt={group.image.alt}
                   fill
+                  loading="lazy"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-700 ease-[var(--ease-out-quart)] group-hover:scale-105"
+                  className="object-cover object-center transition-transform duration-700 ease-[var(--ease-out-quart)] group-hover:scale-105"
                 />
                 <span
                   aria-hidden

@@ -64,9 +64,9 @@ export function LanguagePage({ language }: { language: Language }) {
                     src={language.image.src}
                     alt={language.image.alt}
                     fill
-                    priority
+                    loading="lazy"
                     sizes="(max-width: 1024px) 100vw, 58vw"
-                    className="object-cover"
+                    className="object-cover object-center"
                   />
                 </div>
               </Reveal>

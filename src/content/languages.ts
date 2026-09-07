@@ -172,10 +172,14 @@ export const languages: Language[] = seeds.map((seed) => ({
   availableCities: allCities,
   availableOffices: allOffices,
   image: {
-    src: `/images/languages/${seed.slug}.svg`,
-    alt: `${seed.title} в центрах RandK`,
-    width: 800,
-    height: 600,
+    src: seed.active
+      ? `/images/generated/languages/language-${seed.slug}.webp`
+      : `/images/languages/${seed.slug}.svg`,
+    alt: seed.active
+      ? `Занятие по направлению «${seed.shortTitle}» в современной учебной аудитории`
+      : `${seed.title} в центрах RandK`,
+    width: seed.active ? 1586 : 800,
+    height: seed.active ? 992 : 600,
     isClientProvided: false,
   },
   advantages: seed.advantages ?? commonAdvantages,

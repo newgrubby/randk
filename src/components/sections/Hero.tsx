@@ -108,12 +108,12 @@ export function Hero() {
           <div className="lg:col-span-6 xl:col-span-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.75rem] md:aspect-[3/2] lg:-mr-[max(0px,calc((100vw-90rem)/2))] lg:aspect-[4/3]">
               <Image
-                src="/images/generated/hero.svg"
+                src="/images/generated/hero/hero-main.webp"
                 alt="Образовательная среда RandK Center"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
+                className="object-cover object-[52%_50%] md:object-center lg:object-[52%_50%]"
               />
             </div>
           </div>

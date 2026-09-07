@@ -55,12 +55,12 @@ export default function AboutPage() {
         <Reveal>
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[1.75rem] md:aspect-[21/9]">
             <Image
-              src="/images/generated/about.svg"
-              alt="Образовательная среда центров RandK"
+              src="/images/generated/editorial/editorial-common-room.webp"
+              alt="Светлая общая учебная зона с учениками за столами"
               fill
-              priority
+              loading="lazy"
               sizes="100vw"
-              className="object-cover"
+              className="object-cover object-center md:object-[50%_52%]"
             />
           </div>
         </Reveal>
