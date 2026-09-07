@@ -4,8 +4,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { cities, fullAddress, getOfficesByCity, offices } from '@/content/centers';
 import { site } from '@/content/site';
 import { track } from '@/lib/analytics';
-import { buildYandexRouteUrl, cn, displayPhone } from '@/lib/utils';
+import { cn, displayPhone } from '@/lib/utils';
 import { useCity } from '@/components/layout/CityProvider';
+import { YandexRouteLink } from '@/components/ui/YandexRouteLink';
 
 /**
  * Содержимое контактного окна: выбор города → выбор офиса → действия.
@@ -56,9 +57,6 @@ export function ContactPanel({ initialOfficeId }: { initialOfficeId?: string }) 
       // Буфер обмена недоступен — номер всё равно виден и кликабелен.
     }
   }
-
-  const routeUrl =
-    office.yandexMapUrl ?? (office.coordinates ? buildYandexRouteUrl(office.coordinates) : null);
 
   return (
     <div className="flex flex-col gap-6">
@@ -196,17 +194,7 @@ export function ContactPanel({ initialOfficeId }: { initialOfficeId?: string }) 
           </a>
         ) : null}
 
-        {routeUrl ? (
-          <a
-            href={routeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track('map_click', { office: office.id, kind: 'route' })}
-            className="rounded-pill border-border-strong text-text hover:border-accent hover:text-accent inline-flex min-h-11 items-center justify-center border px-5 text-sm transition-colors duration-300"
-          >
-            Построить маршрут
-          </a>
-        ) : null}
+        <YandexRouteLink office={office} label="Построить маршрут" />
       </div>
 
       <p className="text-muted text-xs leading-relaxed">

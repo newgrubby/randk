@@ -64,8 +64,8 @@ export function officeJsonLd(office: Office): JsonLd | null {
   if (office.coordinates) {
     data.geo = {
       '@type': 'GeoCoordinates',
-      latitude: office.coordinates[0],
-      longitude: office.coordinates[1],
+      latitude: office.coordinates.lat,
+      longitude: office.coordinates.lon,
     };
   }
   if (office.schedule.length > 0) data.openingHours = office.schedule;

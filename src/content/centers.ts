@@ -15,7 +15,7 @@ import type { City, CitySlug, Office } from './types';
  * Уточнение из задания: в Орехово-Зуеве дом 16/1 (на старом сайте — «16»).
  *
  * Как подтвердить офис: сверить адрес, телефон и график с клиентом,
- * добавить `coordinates` и `yandexMapUrl`, поставить `confirmed: true`.
+ * добавить `coordinates` и `yandexRouteUrl`, поставить `confirmed: true`.
  * После этого появятся карта и запись LocalBusiness.
  */
 
@@ -68,8 +68,8 @@ export const offices: Office[] = [
     addressDetails: 'ТЦ «КИМ», 2 этаж',
     phone: '+79096635360',
     schedule: [],
-    yandexMapUrl: null,
-    coordinates: null,
+    yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.780664%2C38.662987&rtt=auto',
+    coordinates: { lat: 55.780664, lon: 38.662987 },
     availableLanguages: baseLanguages,
     availablePrograms: basePrograms,
     photos: [
@@ -92,8 +92,8 @@ export const offices: Office[] = [
     addressDetails: '2 этаж',
     phone: '+79261487871',
     schedule: [],
-    yandexMapUrl: null,
-    coordinates: null,
+    yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.770107%2C38.654417&rtt=auto',
+    coordinates: { lat: 55.770107, lon: 38.654417 },
     availableLanguages: baseLanguages,
     availablePrograms: basePrograms,
     photos: [
@@ -116,8 +116,8 @@ export const offices: Office[] = [
     addressDetails: null,
     phone: '+79629026275',
     schedule: [],
-    yandexMapUrl: null,
-    coordinates: null,
+    yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.819090%2C38.997546&rtt=auto',
+    coordinates: { lat: 55.81909, lon: 38.997546 },
     availableLanguages: baseLanguages,
     availablePrograms: basePrograms,
     photos: [
@@ -140,8 +140,8 @@ export const offices: Office[] = [
     addressDetails: '2 этаж',
     phone: '+79263238438',
     schedule: [],
-    yandexMapUrl: null,
-    coordinates: null,
+    yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.780481%2C38.440833&rtt=auto',
+    coordinates: { lat: 55.780481, lon: 38.440833 },
     availableLanguages: baseLanguages,
     availablePrograms: basePrograms,
     photos: [

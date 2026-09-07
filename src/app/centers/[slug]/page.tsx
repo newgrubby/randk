@@ -17,6 +17,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SocialLinks } from '@/components/ui/SocialLinks';
+import { YandexRouteLink } from '@/components/ui/YandexRouteLink';
 
 export function generateStaticParams() {
   return cities.map((city) => ({ slug: city.slug }));
@@ -133,7 +134,7 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
                   </div>
                 </dl>
 
-                <div className="mt-8">
+                <div className="mt-8 flex flex-wrap gap-3">
                   <ContactButton
                     label="Связаться с этим офисом"
                     size="lg"
@@ -141,6 +142,7 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
                     place={`office-${office.id}`}
                     title={`${office.city} — ${office.officeName}`}
                   />
+                  <YandexRouteLink office={office} label="Маршрут" className="px-8 py-4" />
                 </div>
               </Reveal>
             </div>

@@ -12,6 +12,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SocialLinks } from '@/components/ui/SocialLinks';
+import { YandexRouteLink } from '@/components/ui/YandexRouteLink';
 
 export const metadata = buildMetadata({
   title: 'Контакты — телефоны и адреса офисов',
@@ -83,6 +84,16 @@ export default function ContactsPage() {
                         ? office.schedule.join(' · ')
                         : 'График работы уточняется у администратора'}
                     </p>
+
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      <ContactButton
+                        label="Связаться"
+                        officeId={office.id}
+                        place={`contacts-${office.id}`}
+                        title={`${office.city} — ${office.officeName}`}
+                      />
+                      <YandexRouteLink office={office} />
+                    </div>
                   </div>
                 </Reveal>
               ))}

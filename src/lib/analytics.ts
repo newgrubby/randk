@@ -20,6 +20,7 @@ export const analyticsEvents = [
   'vk_click',
   'max_click',
   'map_click',
+  'map_route_click',
   'language_select',
   'program_select',
   'city_select',

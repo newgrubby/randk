@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { fullAddress } from '@/content/centers';
 import type { Office } from '@/content/types';
 import { track } from '@/lib/analytics';
-import { buildYandexRouteUrl, cn, displayPhone } from '@/lib/utils';
+import { cn, displayPhone } from '@/lib/utils';
 import { useContactModal } from '@/components/contact/ContactModalProvider';
 import { ArrowRight } from './Button';
+import { YandexRouteLink } from './YandexRouteLink';
 
 /**
  * Карточка физического офиса.
@@ -28,9 +29,6 @@ export function OfficeCard({
   className?: string;
 }) {
   const { open } = useContactModal();
-
-  const routeUrl =
-    office.yandexMapUrl ?? (office.coordinates ? buildYandexRouteUrl(office.coordinates) : null);
 
   return (
     <article
@@ -76,22 +74,12 @@ export function OfficeCard({
                   title: `${office.city} — ${office.officeName}`,
                 });
               }}
-              className="bg-accent hover:bg-accent-dark rounded-pill inline-flex min-h-10 items-center justify-center px-5 text-sm font-medium text-white transition-colors duration-300"
+              className="bg-accent hover:bg-accent-dark rounded-pill inline-flex min-h-11 items-center justify-center px-5 text-sm font-medium text-white transition-colors duration-300"
             >
               Связаться
             </button>
 
-            {routeUrl ? (
-              <a
-                href={routeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track('map_click', { office: office.id, kind: 'route' })}
-                className="rounded-pill border-border-strong text-text hover:border-accent hover:text-accent inline-flex min-h-10 items-center justify-center border px-5 text-sm transition-colors duration-300"
-              >
-                Маршрут
-              </a>
-            ) : null}
+            <YandexRouteLink office={office} />
           </div>
 
           {showCityLink ? (

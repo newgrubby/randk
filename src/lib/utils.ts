@@ -13,14 +13,8 @@ export function displayPhone(normalized: string): string {
   return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`;
 }
 
-/** Ссылка на построение маршрута в Яндекс Картах. */
-export function buildYandexRouteUrl(coordinates: [number, number]): string {
-  const [lat, lon] = coordinates;
-  return `https://yandex.ru/maps/?rtext=~${lat}%2C${lon}&rtt=auto`;
-}
-
 /** Встраиваемая карта Яндекса. Грузится только по действию пользователя. */
-export function buildYandexEmbedUrl(coordinates: [number, number]): string {
-  const [lat, lon] = coordinates;
+export function buildYandexEmbedUrl(coordinates: { lat: number; lon: number }): string {
+  const { lat, lon } = coordinates;
   return `https://yandex.ru/map-widget/v1/?ll=${lon}%2C${lat}&z=17&pt=${lon},${lat},pm2rdm`;
 }
