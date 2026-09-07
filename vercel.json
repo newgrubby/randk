@@ -8,7 +8,12 @@
     },
     {
       "source": "/prepodovateli",
-      "destination": "/teachers/",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/teachers",
+      "destination": "/about/",
       "permanent": true
     },
     {

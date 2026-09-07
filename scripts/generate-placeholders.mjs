@@ -231,10 +231,6 @@ async function main() {
     'images/client/README.txt',
     'Сюда загружаются фотографии, предоставленные клиентом.\nПосле загрузки обновите путь в src/content/*.ts и поставьте isClientProvided: true.\n',
   );
-  await write(
-    'images/teachers/README.txt',
-    'Портреты преподавателей. Вертикальный кадр, минимум 800x1000.\nВымышленные люди сюда не добавляются.\n',
-  );
   await write('images/ui/README.txt', 'Служебная графика интерфейса.\n');
 
   // OG-изображение: растр, потому что часть соцсетей не рендерит SVG

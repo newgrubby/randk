@@ -1,6 +1,17 @@
 [
   { "source": "/uchebnyy_process", "destination": "/about", "permanent": true },
-  { "source": "/prepodovateli", "destination": "/teachers", "permanent": true },
+  {
+    "source": "/prepodovateli",
+    "destination": "/about",
+    "permanent": true,
+    "note": "Информация о преподавателях не публикуется по решению клиента"
+  },
+  {
+    "source": "/teachers",
+    "destination": "/about",
+    "permanent": true,
+    "note": "Раздел первой версии нового сайта, снят по решению клиента"
+  },
   { "source": "/otzyvy_nashih_studentov", "destination": "/reviews", "permanent": true },
   { "source": "/address", "destination": "/contacts", "permanent": true },
   {

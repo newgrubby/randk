@@ -69,7 +69,6 @@ export const footerNavigation: { title: string; links: NavLink[] }[] = [
     title: 'О нас',
     links: [
       { label: 'О центре', href: '/about' },
-      { label: 'Преподаватели', href: '/teachers' },
       { label: 'Отзывы', href: '/reviews' },
       { label: 'Контакты', href: '/contacts' },
     ],

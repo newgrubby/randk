@@ -59,7 +59,6 @@
 /branches/pavlovsky-posad      Центр в Павловском Посаде
 /branches/elektrostal          Центр в Электростали
 /about                         О центре
-/teachers                      Преподаватели
 /contacts                      Контакты
 /privacy                       Политика конфиденциальности (черновик)
 /personal-data-consent         Согласие на обработку ПДн (черновик)

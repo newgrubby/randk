@@ -13,11 +13,12 @@ DirectoryIndex index.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # --- Постоянные редиректы со старых адресов (39) ---
+  # --- Постоянные редиректы со старых адресов (40) ---
   # Цели указаны сразу со слэшем: страницы лежат в about/index.html,
   # и без слэша получился бы лишний переход.
   RewriteRule ^uchebnyy_process/?$ /about/ [R=301,L]
-  RewriteRule ^prepodovateli/?$ /teachers/ [R=301,L]
+  RewriteRule ^prepodovateli/?$ /about/ [R=301,L]
+  RewriteRule ^teachers/?$ /about/ [R=301,L]
   RewriteRule ^otzyvy_nashih_studentov/?$ /reviews/ [R=301,L]
   RewriteRule ^address/?$ /contacts/ [R=301,L]
   RewriteRule ^fotogalereya/?$ /about/ [R=301,L]

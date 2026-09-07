@@ -159,17 +159,6 @@ export type Program = VisibilityFlags & {
    Прочее
    ============================================================ */
 
-export type Teacher = {
-  id: string;
-  /** ФИО. null — данные не переданы, карточка нейтральная. */
-  name: string | null;
-  role: string;
-  focus: string[];
-  offices: string[];
-  photo: Photo | null;
-  confirmed: boolean;
-};
-
 export type Review = {
   id: string;
   authorName: string;

@@ -31,7 +31,7 @@
 | -------------------------- | ----------------------------------- |
 | `/about`                   | `/about` (совпал, правило не нужно) |
 | `/uchebnyy_process`        | `/about`                            |
-| `/prepodovateli`           | `/teachers`                         |
+| `/prepodovateli`           | `/about`                            |
 | `/otzyvy_nashih_studentov` | `/reviews`                          |
 | `/address`                 | `/contacts`                         |
 | `/fotogalereya`            | `/about`                            |

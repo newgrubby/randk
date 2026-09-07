@@ -228,7 +228,7 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
       <Section spacing="tight">
         <ul className="border-border flex flex-col gap-px border-t pt-8 sm:flex-row sm:gap-10">
           {[
-            { label: 'Преподаватели сети', href: '/teachers' },
+            { label: 'Направления сети', href: '/programs' },
             { label: 'Частые вопросы', href: '/#faq' },
             { label: 'Другие центры', href: '/centers' },
           ].map((link) => (

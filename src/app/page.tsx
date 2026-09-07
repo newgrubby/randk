@@ -8,9 +8,7 @@ import { LanguagesSection } from '@/components/sections/LanguagesSection';
 import { Methodology } from '@/components/sections/Methodology';
 import { OfficesGrid } from '@/components/sections/OfficesGrid';
 import { Reviews } from '@/components/sections/Reviews';
-import { Teachers } from '@/components/sections/Teachers';
 import { generalFaq } from '@/content/faq';
-import { teachers } from '@/content/teachers';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
@@ -39,7 +37,6 @@ export default function HomePage() {
       <Methodology />
       <AdvantageTheses />
       <OfficesGrid />
-      <Teachers items={teachers} />
       <Reviews />
       <FaqSection items={generalFaq} />
       <FinalCta />

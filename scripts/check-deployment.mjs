@@ -91,7 +91,6 @@ const direct = [
   '/exams/',
   '/centers/',
   '/centers/pavlovsky-posad/',
-  '/teachers/',
   '/about/',
   '/reviews/',
   '/contacts/',

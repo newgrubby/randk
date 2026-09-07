@@ -1,15 +1,11 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { cities, offices } from '@/content/centers';
 import { activeLanguages } from '@/content/languages';
-import { teachers } from '@/content/teachers';
 import { buildMetadata } from '@/lib/seo';
 import { PageHero } from '@/components/layout/PageHero';
 import { Advantages } from '@/components/sections/Advantages';
 import { FinalCta } from '@/components/sections/FinalCta';
 import { Results } from '@/components/sections/Results';
-import { Teachers } from '@/components/sections/Teachers';
-import { ArrowRight } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -93,24 +89,12 @@ export default function AboutPage() {
         Развёрнутые преимущества и процесс контроля результата живут только
         здесь — на главной от них остались короткие тезисы. Сетка офисов тоже
         не дублируется: она есть на главной и на /centers.
+
+        Раздела о преподавателях здесь нет: информация о них на сайте
+        не публикуется по решению клиента.
       */}
       <Advantages />
       <Results />
-      <Teachers
-        items={teachers}
-        eyebrow="Команда"
-        title="Кто ведёт занятия"
-        lead="Педагога подбираем под возраст и задачу ученика."
-        aside={
-          <Link
-            href="/teachers"
-            className="group text-accent inline-flex items-center gap-2 text-sm font-medium"
-          >
-            Все преподаватели
-            <ArrowRight />
-          </Link>
-        }
-      />
       <FinalCta />
     </>
   );
