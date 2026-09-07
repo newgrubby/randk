@@ -161,6 +161,18 @@ npm run dev
 
 Без ID Метрики счётчик не загружается вообще.
 
+`NEXT_PUBLIC_SITE_URL` разбирается в [`src/lib/site-url.ts`](./src/lib/site-url.ts)
+и сборку не роняет. Пустое значение, пробелы и отсутствие переменной молча дают
+адрес из `src/content/site.ts`; значение без схемы (`randkcenter.ru`), с чужим
+протоколом (`ftp://`, `javascript:`) или с query и якорем отбрасывается — в лог
+сборки печатается `[seo] NEXT_PUBLIC_SITE_URL проигнорирован: …`. Завершающий
+слэш снимается, поэтому `https://example.vercel.app/` и `https://example.vercel.app`
+равнозначны.
+
+⚠️ На Vercel объявленная, но незаполненная переменная приходит **пустой строкой**,
+а не `undefined`. Именно на этом сборка падала с `TypeError: Invalid URL, input: ''`.
+Проверки на все случаи — `node scripts/validate-site-url.mjs` (входит в `npm test`).
+
 ---
 
 ## Публикация
