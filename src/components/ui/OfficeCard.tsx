@@ -10,6 +10,22 @@ import { useContactModal } from '@/components/contact/ContactModalProvider';
 import { ArrowRight } from './Button';
 import { YandexRouteLink } from './YandexRouteLink';
 
+const officeCardImages: Record<string, { src: string; alt: string; position?: string }> = {
+  'pavlovsky-posad-kirova': {
+    src: '/images/generated/ages/age-4-6.webp',
+    alt: 'Занятие педагога с детьми в светлом учебном классе',
+  },
+  'orekhovo-zuevo-parkovskaya': {
+    src: '/images/generated/ages/age-7-12.webp',
+    alt: 'Индивидуальное занятие школьника с преподавателем',
+    position: 'center 42%',
+  },
+  'elektrostal-nikolaeva': {
+    src: '/images/generated/ages/age-13-17.webp',
+    alt: 'Подростки вместе работают над учебным заданием',
+  },
+};
+
 /**
  * Карточка физического офиса.
  *
@@ -27,6 +43,7 @@ export function OfficeCard({
   className?: string;
 }) {
   const { open } = useContactModal();
+  const cardImage = officeCardImages[office.id] ?? office.photos[0];
 
   return (
     <article
@@ -37,11 +54,12 @@ export function OfficeCard({
     >
       <div className="relative aspect-[16/11] w-full overflow-hidden">
         <Image
-          src={office.photos[0]?.src ?? '/images/offices/placeholder.svg'}
-          alt={office.photos[0]?.alt ?? `Центр RandK — ${office.city}`}
+          src={cardImage?.src ?? '/images/offices/placeholder.svg'}
+          alt={cardImage?.alt ?? `Центр RandK — ${office.city}`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover"
+          style={{ objectPosition: officeCardImages[office.id]?.position }}
         />
       </div>
 
