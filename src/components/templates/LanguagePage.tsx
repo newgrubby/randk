@@ -173,9 +173,9 @@ export function LanguagePage({ language }: { language: Language }) {
           title={`Офисы, где есть ${language.title.toLowerCase()}`}
           lead="Позвоните в ближайший офис, чтобы узнать про набор в группы и уровень."
         />
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <ul className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {availableOffices.map((office, index) => (
-            <Reveal as="li" key={office.id} delay={(index % 4) * 0.07}>
+            <Reveal as="li" key={office.id} delay={(index % 3) * 0.07}>
               <OfficeCard office={office} />
             </Reveal>
           ))}

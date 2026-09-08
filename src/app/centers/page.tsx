@@ -10,9 +10,9 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
-  title: 'Центры сети — четыре офиса в трёх городах',
+  title: 'Центры сети — три офиса в трёх городах',
   description:
-    'Офисы RandK Center: два в Павловском Посаде, по одному в Орехово-Зуеве и Электростали. Адреса, телефоны и маршруты.',
+    'Офисы RandK Center в Павловском Посаде, Орехово-Зуеве и Электростали. Адреса, телефоны и маршруты.',
   path: '/centers',
 });
 
@@ -21,12 +21,12 @@ export default function CentersPage() {
     <>
       <PageHero
         eyebrow="География сети"
-        title="Четыре офиса в трёх городах"
-        lead="Занятия проходят очно. В Павловском Посаде работают два офиса — выбирайте тот, до которого удобнее добираться."
+        title="Три офиса в трёх городах"
+        lead="Занятия проходят очно в Павловском Посаде, Орехово-Зуеве и Электростали."
         breadcrumbs={[{ name: 'Центры', path: '/centers' }]}
       />
 
-      {/* Города, а внутри — их офисы. Так видно, что городов три, а офисов четыре. */}
+      {/* Города, а внутри — их офисы. */}
       {cities.map((city, cityIndex) => {
         const cityOffices = getOfficesByCity(city.slug);
         const officeCount = countOffices(city.slug);

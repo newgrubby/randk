@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { cities, fullAddress, getOfficesByCity, offices } from '@/content/centers';
-import { site } from '@/content/site';
 import { allOfficesJsonLd } from '@/lib/jsonld';
 import { buildMetadata } from '@/lib/seo';
 import { displayPhone } from '@/lib/utils';
@@ -8,6 +7,7 @@ import { ContactButton } from '@/components/contact/ContactButton';
 import { PageHero } from '@/components/layout/PageHero';
 import { ArrowRight } from '@/components/ui/Button';
 import { JsonLd } from '@/components/ui/JsonLd';
+import { OfficeMaxLink } from '@/components/ui/OfficeMaxLink';
 import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -17,7 +17,7 @@ import { YandexRouteLink } from '@/components/ui/YandexRouteLink';
 export const metadata = buildMetadata({
   title: 'Контакты — телефоны и адреса офисов',
   description:
-    'Контакты RandK Center: телефоны и адреса четырёх офисов в Орехово-Зуеве, Павловском Посаде и Электростали.',
+    'Контакты RandK Center: телефоны и адреса трёх офисов в Орехово-Зуеве, Павловском Посаде и Электростали.',
   path: '/contacts',
 });
 
@@ -39,7 +39,7 @@ export default function ContactsPage() {
         title="Контакты"
         lead="Позвоните в удобный офис — администратор ответит на вопросы, расскажет о расписании и поможет выбрать программу."
         breadcrumbs={[{ name: 'Контакты', path: '/contacts' }]}
-        aside={<ContactButton label="Выбрать офис" place="contacts-hero" />}
+        aside={<ContactButton label="Выбрать город" place="contacts-hero" />}
       />
 
       {cities.map((city, cityIndex) => {
@@ -93,6 +93,7 @@ export default function ContactsPage() {
                         title={`${office.city} — ${office.officeName}`}
                       />
                       <YandexRouteLink office={office} />
+                      <OfficeMaxLink office={office} />
                     </div>
                   </div>
                 </Reveal>
@@ -117,11 +118,6 @@ export default function ContactsPage() {
               Сайт не собирает и не хранит персональные данные: форм заявок на нём нет, связь идёт
               напрямую по телефону или через сообщество.
             </p>
-            {!site.social.max ? (
-              <p className="text-muted mt-3 max-w-xl text-xs leading-relaxed">
-                Кнопка MAX появится автоматически, как только будет добавлена ссылка на сообщество.
-              </p>
-            ) : null}
           </div>
         </div>
       </Section>

@@ -4,8 +4,8 @@ import type { City, CitySlug, Office } from './types';
  * Города и физические офисы сети.
  *
  * КЛЮЧЕВОЕ ОТЛИЧИЕ ОТ ПЕРВОЙ ВЕРСИИ: офис — самостоятельная сущность,
- * а не синоним города. В Павловском Посаде два офиса с разными адресами,
- * телефонами и маршрутами, и модель обязана это выражать.
+ * а не синоним города. Это позволяет каждой точке хранить собственные
+ * адрес, телефон, маршрут и медиаматериалы.
  *
  * Адреса и телефоны взяты с действующего сайта клиента randkcenter.ru
  * (снято 31.07.2026) и помечены `confirmed: false` — они показываются
@@ -25,10 +25,10 @@ export const cities: City[] = [
     name: 'Павловский Посад',
     locative: 'в Павловском Посаде',
     intro:
-      'В Павловском Посаде работают два офиса RandK. Языковые и образовательные программы распределены между ними, поэтому удобнее выбирать центр по расположению — администратор подскажет, в каком из них идёт набор в нужную группу.',
-    seoTitle: 'Языковой центр в Павловском Посаде — два офиса',
+      'RandK Center в Павловском Посаде работает на улице Кирова. Администратор расскажет о языковых и образовательных программах, расписании и наборе в группы.',
+    seoTitle: 'Языковой центр в Павловском Посаде',
     seoDescription:
-      'RandK Center в Павловском Посаде: два офиса на улице Кирова и Большой Покровской. Иностранные языки, подготовка к ОГЭ и ЕГЭ, репетиторство, подготовка к школе.',
+      'RandK Center в Павловском Посаде на улице Кирова: иностранные языки, подготовка к ОГЭ и ЕГЭ, репетиторство и подготовка к школе.',
   },
   {
     slug: 'orekhovo-zuevo',
@@ -67,6 +67,7 @@ export const offices: Office[] = [
     address: 'ул. Кирова, д. 56',
     addressDetails: 'ТЦ «КИМ», 2 этаж',
     phone: '+79096635360',
+    maxUrl: 'https://max.ru/u/f9LHodD0cOIpxkAtrPY33-3YZ5DS74dCjhAOmfIvQG1hxTTPJ6jSMiE7tjo',
     schedule: [],
     yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.780664%2C38.662987&rtt=auto',
     coordinates: { lat: 55.780664, lon: 38.662987 },
@@ -84,30 +85,6 @@ export const offices: Office[] = [
     confirmed: false,
   },
   {
-    id: 'pavlovsky-posad-pokrovskaya',
-    citySlug: 'pavlovsky-posad',
-    city: 'Павловский Посад',
-    officeName: 'на Большой Покровской',
-    address: 'ул. Большая Покровская, д. 41',
-    addressDetails: '2 этаж',
-    phone: '+79261487871',
-    schedule: [],
-    yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.770107%2C38.654417&rtt=auto',
-    coordinates: { lat: 55.770107, lon: 38.654417 },
-    availableLanguages: baseLanguages,
-    availablePrograms: basePrograms,
-    photos: [
-      {
-        src: '/images/offices/pavlovsky-posad-pokrovskaya.svg',
-        alt: 'Центр RandK в Павловском Посаде на Большой Покровской',
-        width: 900,
-        height: 640,
-        isClientProvided: false,
-      },
-    ],
-    confirmed: false,
-  },
-  {
     id: 'orekhovo-zuevo-parkovskaya',
     citySlug: 'orekhovo-zuevo',
     city: 'Орехово-Зуево',
@@ -115,6 +92,7 @@ export const offices: Office[] = [
     address: 'ул. Парковская, д. 16/1',
     addressDetails: null,
     phone: '+79629026275',
+    maxUrl: null,
     schedule: [],
     yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.819090%2C38.997546&rtt=auto',
     coordinates: { lat: 55.81909, lon: 38.997546 },
@@ -139,6 +117,7 @@ export const offices: Office[] = [
     address: 'ул. Николаева, д. 46',
     addressDetails: '2 этаж',
     phone: '+79263238438',
+    maxUrl: null,
     schedule: [],
     yandexRouteUrl: 'https://yandex.ru/maps/?rtext=~55.780481%2C38.440833&rtt=auto',
     coordinates: { lat: 55.780481, lon: 38.440833 },
@@ -166,7 +145,7 @@ export function getOfficesByCity(slug: string): Office[] {
   return offices.filter((office) => office.citySlug === slug);
 }
 
-/** Сколько офисов в городе — нужно для формулировок «два офиса». */
+/** Сколько офисов в городе. */
 export function countOffices(slug: CitySlug): number {
   return getOfficesByCity(slug).length;
 }

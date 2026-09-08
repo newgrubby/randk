@@ -181,13 +181,19 @@ export function ContactPanel({ initialOfficeId }: { initialOfficeId?: string }) 
           Написать во ВКонтакте
         </a>
 
-        {/* Кнопка MAX появляется автоматически, когда клиент передаст ссылку */}
-        {site.social.max ? (
+        {office.maxUrl ? (
           <a
-            href={site.social.max}
+            href={office.maxUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => track('max_click', { place: 'contact-modal' })}
+            aria-label={`Написать в MAX: офис RandK Center, ${office.city}`}
+            onClick={() =>
+              track('max_click', {
+                city: office.citySlug,
+                officeId: office.id,
+                place: 'contact-modal',
+              })
+            }
             className="rounded-pill border-border-strong text-text hover:border-accent hover:text-accent inline-flex min-h-11 items-center justify-center border px-5 text-sm transition-colors duration-300"
           >
             Написать в MAX

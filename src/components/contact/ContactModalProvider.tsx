@@ -29,16 +29,19 @@ export function useContactModal(): ContactModalContextValue {
 const defaults = {
   title: 'Связаться с центром',
   description:
-    'Выберите удобный офис — позвоните напрямую или напишите в сообщество. Администратор подскажет расписание и подберёт программу.',
+    'Выберите город — позвоните напрямую или напишите в сообщество. Администратор подскажет расписание и подберёт программу.',
 };
+
+const selectedOfficeDescription =
+  'Позвоните напрямую или напишите в сообщество. Администратор подскажет расписание и подберёт программу.';
 
 /**
  * Единое контактное окно вместо форм заявок.
  *
  * Клиенту неудобно обрабатывать заявки через собственную систему сайта,
  * поэтому сайт не собирает и не хранит персональные данные вовсе.
- * Все призывы к действию ведут сюда: выбор офиса → звонок, копирование
- * номера, сообщество или маршрут.
+ * Все призывы к действию ведут сюда: город → звонок, копирование номера,
+ * сообщество или маршрут. Если офис уже задан кнопкой, лишнего шага выбора нет.
  */
 export function ContactModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +54,9 @@ export function ContactModalProvider({ children }: { children: ReactNode }) {
   const open = useCallback((options?: OpenOptions) => {
     setState({
       title: options?.title ?? defaults.title,
-      description: options?.description ?? defaults.description,
+      description:
+        options?.description ??
+        (options?.officeId ? selectedOfficeDescription : defaults.description),
       ...(options?.officeId ? { officeId: options.officeId } : {}),
     });
     setIsOpen(true);

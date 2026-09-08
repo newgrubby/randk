@@ -5,23 +5,22 @@ import { track } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 
 /**
- * Кнопки сообществ.
- *
- * Ключевое правило: кнопки нет, если нет ссылки. MAX появится сам, как
- * только клиент передаст URL, и до этого момента на сайте не будет ни
- * «мёртвой» иконки, ни пустого места на её месте.
+ * Ссылка на основное сообщество сети.
  */
 export function SocialLinks({
   tone = 'light',
   className,
+  maxUrl = null,
+  office,
 }: {
   tone?: 'light' | 'dark';
   className?: string;
+  maxUrl?: string | null;
+  office?: { id: string; city: string; citySlug: string };
 }) {
   const vk = site.social.vkPrimary;
-  const max = site.social.max;
 
-  if (!vk && !max) return null;
+  if (!vk && !maxUrl) return null;
 
   const itemClass = cn(
     'flex size-11 items-center justify-center rounded-full border transition-all duration-300 ease-[var(--ease-out-quart)] hover:-translate-y-0.5',
@@ -47,13 +46,13 @@ export function SocialLinks({
         </a>
       ) : null}
 
-      {max ? (
+      {maxUrl && office ? (
         <a
-          href={max}
+          href={maxUrl}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="RandK Center в MAX"
-          onClick={() => track('max_click')}
+          aria-label={`Написать в MAX: офис RandK Center, ${office.city}`}
+          onClick={() => track('max_click', { city: office.citySlug, officeId: office.id })}
           className={itemClass}
         >
           <span className="text-[0.6875rem] font-semibold tracking-[0.08em]">MAX</span>

@@ -13,9 +13,7 @@ import { YandexRouteLink } from './YandexRouteLink';
 /**
  * Карточка физического офиса.
  *
- * Один офис = одна карточка. В Павловском Посаде их две, поэтому под
- * заголовком выводится уточнение расположения («на улице Кирова»), иначе
- * два адреса одного города визуально сливаются.
+ * Один офис = одна карточка. Под городом выводится короткое уточнение расположения.
  *
  * Телефон и маршрут — обычные ссылки: работают без JavaScript.
  */
@@ -42,7 +40,7 @@ export function OfficeCard({
           src={office.photos[0]?.src ?? '/images/offices/placeholder.svg'}
           alt={office.photos[0]?.alt ?? `Центр RandK — ${office.city}`}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover"
         />
       </div>

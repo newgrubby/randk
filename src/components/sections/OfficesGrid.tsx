@@ -7,17 +7,13 @@ import { Section } from '@/components/ui/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 /**
- * Четыре офиса сети.
- *
- * Сетка в четыре колонки на десктопе: города три, а офисов четыре, и это
- * должно читаться сразу — два офиса Павловского Посада стоят рядом и
- * различаются подписью расположения.
+ * Три офиса сети: по одному в каждом городе.
  */
 export function OfficesGrid({
   withHeading = true,
   officeList = offices,
-  title = 'Четыре офиса в трёх городах',
-  lead = 'Занятия проходят очно. В Павловском Посаде работают два офиса — выбирайте тот, до которого удобнее добираться.',
+  title = 'Три офиса в трёх городах',
+  lead = 'Занятия проходят очно в Павловском Посаде, Орехово-Зуеве и Электростали.',
 }: {
   withHeading?: boolean;
   officeList?: typeof offices;
@@ -43,9 +39,9 @@ export function OfficesGrid({
         />
       ) : null}
 
-      <ul className={`grid gap-5 sm:grid-cols-2 xl:grid-cols-4 ${withHeading ? 'mt-12' : ''}`}>
+      <ul className={`grid gap-5 sm:grid-cols-2 xl:grid-cols-3 ${withHeading ? 'mt-12' : ''}`}>
         {officeList.map((office, index) => (
-          <Reveal as="li" key={office.id} delay={(index % 4) * 0.07}>
+          <Reveal as="li" key={office.id} delay={(index % 3) * 0.07}>
             <OfficeCard office={office} />
           </Reveal>
         ))}

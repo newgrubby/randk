@@ -25,10 +25,7 @@ export function organizationJsonLd(): JsonLd {
     areaServed: cities.map((city) => ({ '@type': 'City', name: city.name })),
   };
 
-  const sameAs = [site.social.vkPrimary, site.social.max].filter(
-    (value): value is string => typeof value === 'string' && value.length > 0,
-  );
-  if (sameAs.length > 0) data.sameAs = sameAs;
+  data.sameAs = [site.social.vkPrimary];
 
   return data;
 }
@@ -36,8 +33,7 @@ export function organizationJsonLd(): JsonLd {
 /**
  * LocalBusiness для одного физического офиса.
  *
- * Каждый офис — самостоятельная запись: в Павловском Посаде их две,
- * и объединять их в одну организацию нельзя — это разные точки на карте.
+ * Каждый офис — самостоятельная запись и отдельная точка на карте.
  *
  * Возвращает null, пока офис не подтверждён клиентом.
  */

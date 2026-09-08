@@ -16,20 +16,13 @@ export const site = {
 
   /**
    * Соцсети.
-   *
-   * Клиент передал два сообщества VK, основное пока не выбрано.
-   * До решения в интерфейсе используется `vkPrimary` — меняется здесь,
-   * одной строкой, и подхватывается везде (см. CONTENT_TODO.md).
+   * MAX хранится в данных конкретного офиса (`centers.ts`), поскольку
+   * у каждого центра будет собственная ссылка.
    */
   social: {
-    vkPrimary: 'https://vk.ru/randkcenter1',
-    vkAll: ['https://vk.ru/randk', 'https://vk.ru/randkcenter1'],
-    /**
-     * MAX: ссылка не передана. Пока значение `null`, кнопка не отображается
-     * вовсе — без пустого места и без «мёртвого» элемента.
-     */
-    max: null as string | null,
-    isVkPrimaryConfirmed: false,
+    vkPrimary: 'https://vk.ru/randkcenter',
+    vkAll: ['https://vk.ru/randkcenter'],
+    isVkPrimaryConfirmed: true,
   },
 
   /**

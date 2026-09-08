@@ -165,9 +165,9 @@ export function DirectionPage({ program }: { program: Program }) {
           title="Офисы с этим направлением"
           lead="Набор в группы идёт в течение года. Позвоните в ближайший офис, чтобы уточнить актуальное расписание."
         />
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <ul className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {availableOffices.map((office, index) => (
-            <Reveal as="li" key={office.id} delay={(index % 4) * 0.07}>
+            <Reveal as="li" key={office.id} delay={(index % 3) * 0.07}>
               <OfficeCard office={office} />
             </Reveal>
           ))}

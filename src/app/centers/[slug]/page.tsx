@@ -47,9 +47,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 /**
  * Страница города.
  *
- * Ключевое отличие от первой версии: город может содержать несколько офисов.
- * В Павловском Посаде их два, и каждый получает собственный блок с адресом,
- * телефоном, кнопкой звонка, маршрутом и картой — они не сливаются в один.
+ * Город хранит список своих физических офисов. Каждый офис получает собственный блок
+ * с адресом, телефоном, кнопкой звонка, маршрутом и картой.
  */
 export default async function CityRoute({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -77,7 +76,13 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
           { name: 'Центры', path: '/centers' },
           { name: city.name, path: `/centers/${city.slug}` },
         ]}
-        aside={<ContactButton label="Показать телефоны" place={`city-${city.slug}`} />}
+        aside={
+          <ContactButton
+            label="Показать телефон"
+            officeId={cityOffices.length === 1 ? cityOffices[0]?.id : undefined}
+            place={`city-${city.slug}`}
+          />
+        }
       />
 
       {/* Каждый офис — отдельный развёрнутый блок */}
@@ -87,7 +92,9 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
             <div className="lg:col-span-5">
               <Reveal>
                 <p className="text-eyebrow text-accent font-medium uppercase">
-                  Офис {index + 1} из {cityOffices.length}
+                  {cityOffices.length > 1
+                    ? `Офис ${index + 1} из ${cityOffices.length}`
+                    : 'Адрес центра'}
                 </p>
                 <h2 className="text-h2 mt-4 font-serif">{office.officeName}</h2>
 
@@ -129,7 +136,7 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
                   <div>
                     <dt className="text-eyebrow text-muted font-medium uppercase">Сообщества</dt>
                     <dd className="mt-3">
-                      <SocialLinks />
+                      <SocialLinks maxUrl={office.maxUrl} office={office} />
                     </dd>
                   </div>
                 </dl>
@@ -205,7 +212,7 @@ export default async function CityRoute({ params }: { params: Promise<{ slug: st
         <SectionHeading
           eyebrow="Направления"
           title={`Что ещё есть ${city.locative}`}
-          lead="Состав групп и расписание отличаются по офисам — подскажем, где сейчас идёт набор."
+          lead="Состав групп и расписание уточняйте у администратора — он подскажет, где сейчас идёт набор."
         />
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {cityPrograms.map((program, index) => (

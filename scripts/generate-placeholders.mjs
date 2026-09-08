@@ -167,7 +167,6 @@ const ageSeeds = ['preschool', 'primary', 'teens', 'adults'];
 
 const officeSeeds = [
   ['pavlovsky-posad-kirova', 'Павловский Посад', 'ул. Кирова, д. 56 · ТЦ «КИМ», 2 этаж'],
-  ['pavlovsky-posad-pokrovskaya', 'Павловский Посад', 'ул. Большая Покровская, д. 41 · 2 этаж'],
   ['orekhovo-zuevo-parkovskaya', 'Орехово-Зуево', 'ул. Парковская, д. 16/1'],
   ['elektrostal-nikolaeva', 'Электросталь', 'ул. Николаева, д. 46 · 2 этаж'],
 ];
@@ -254,7 +253,10 @@ async function main() {
   </svg>`;
 
   await writeFile(join(publicDir, 'icon.svg'), iconSvg, 'utf8');
-  await sharp(Buffer.from(iconSvg)).resize(180, 180).png().toFile(join(publicDir, 'apple-icon.png'));
+  await sharp(Buffer.from(iconSvg))
+    .resize(180, 180)
+    .png()
+    .toFile(join(publicDir, 'apple-icon.png'));
   console.log('✓ icon.svg, apple-icon.png');
 }
 
