@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Rand K</title>
+  <desc id="desc">Монограмма RK с фирменной бордовой дугой</desc>
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="#f7f4ef" stroke="#e3dcd2" stroke-width="2"/>
+  <path d="M55 16C42 11 27 9 18 12c-6 2-9 7-9 13 0 5 2 8 6 11h41" fill="none" stroke="#ad1f2b" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="15" y="48" fill="#1f1c1a" font-family="Georgia, 'Times New Roman', serif" font-size="29" font-weight="600" letter-spacing="-2">RK</text>
+</svg>

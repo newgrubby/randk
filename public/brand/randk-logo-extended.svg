@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 126" role="img" aria-labelledby="title desc">
+  <title id="title">Rand K — основан в 2003 году</title>
+  <desc id="desc">Расширенный логотип Rand K в кавычках с фирменной бордовой дугой</desc>
+  <path d="M350 29C273 9 185 2 108 5 49 7 10 23 8 52c-1 17 9 29 29 37h289" fill="none" stroke="#c93a45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="40" y="77" fill="#f7f4ef" font-family="Georgia, 'Times New Roman', serif" font-size="32">“</text>
+  <text x="70" y="80" fill="#f7f4ef" font-family="Georgia, 'Times New Roman', serif" font-size="56" letter-spacing="-1.7">Rand K</text>
+  <text x="298" y="77" fill="#f7f4ef" font-family="Georgia, 'Times New Roman', serif" font-size="32">”</text>
+  <text x="180" y="119" text-anchor="middle" fill="#c93a45" font-family="Georgia, 'Times New Roman', serif" font-size="17" letter-spacing="3">ОСНОВАН В 2003 г.</text>
+</svg>

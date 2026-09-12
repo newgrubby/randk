@@ -12,11 +12,11 @@ export function Footer() {
     year > site.copyrightStartYear ? `${site.copyrightStartYear}—${year}` : `${year}`;
 
   return (
-    <footer className="surface-deep">
+    <footer id="site-footer" className="surface-deep">
       <div className="container-page py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)]">
           <div className="max-w-sm">
-            <Logo tone="dark" />
+            <Logo variant="extended" />
             <p className="mt-6 text-sm leading-relaxed text-white/60">{site.description}</p>
             <div className="mt-8">
               <SocialLinks tone="dark" />

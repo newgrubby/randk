@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   description: site.description,
   applicationName: site.name,
   manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: '/apple-icon.png',
+  },
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',

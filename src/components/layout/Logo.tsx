@@ -1,39 +1,36 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-/**
- * Логотип-леттеринг.
- *
- * Клиент не передал векторный логотип, поэтому знак собран типографикой:
- * serif-начертание «RandK» + разрядка «CENTER». Когда появится оригинальный
- * логотип, достаточно заменить содержимое этого компонента.
- */
 export function Logo({
-  tone = 'light',
+  variant = 'header',
   className,
 }: {
-  tone?: 'light' | 'dark';
+  variant?: 'header' | 'extended';
   className?: string;
 }) {
+  const isExtended = variant === 'extended';
+
   return (
-    <Link href="/" className={cn('group inline-flex flex-col leading-none', className)}>
-      <span
+    <Link
+      href="/"
+      aria-label="Rand K — на главную"
+      className={cn('group inline-flex shrink-0', className)}
+    >
+      <Image
+        src={isExtended ? '/brand/randk-logo-extended.svg' : '/brand/randk-logo-header.svg'}
+        alt="Rand K"
+        width={isExtended ? 360 : 190}
+        height={isExtended ? 126 : 56}
+        priority
+        unoptimized
         className={cn(
-          'font-serif text-[1.6rem] tracking-[-0.01em] transition-colors duration-300 sm:text-[1.75rem]',
-          tone === 'dark' ? 'text-white' : 'text-accent',
+          'transition-opacity duration-300 group-hover:opacity-80',
+          isExtended
+            ? 'h-[6.3rem] w-72 max-w-full'
+            : 'h-10 w-[8.5rem] sm:h-11 sm:w-[9.35rem]',
         )}
-      >
-        Rand<span className={tone === 'dark' ? 'text-white' : 'text-text'}>K</span>
-      </span>
-      <span
-        className={cn(
-          'mt-1 text-[0.5625rem] font-medium tracking-[0.42em] uppercase',
-          tone === 'dark' ? 'text-white/55' : 'text-muted',
-        )}
-      >
-        Center
-      </span>
-      <span className="sr-only"> — на главную</span>
+      />
     </Link>
   );
 }
