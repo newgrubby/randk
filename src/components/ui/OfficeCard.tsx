@@ -12,17 +12,19 @@ import { YandexRouteLink } from './YandexRouteLink';
 
 const officeCardImages: Record<string, { src: string; alt: string; position?: string }> = {
   'pavlovsky-posad-kirova': {
-    src: '/images/generated/ages/age-4-6.webp',
-    alt: 'Занятие педагога с детьми в светлом учебном классе',
+    src: '/images/cities/pavlovsky-posad.webp',
+    alt: 'Панорама Павловского Посада с Воскресенской колокольней',
+    position: '50% 50%',
   },
   'orekhovo-zuevo-parkovskaya': {
-    src: '/images/generated/ages/age-7-12.webp',
-    alt: 'Индивидуальное занятие школьника с преподавателем',
-    position: 'center 42%',
+    src: '/images/cities/orekhovo-zuevo.webp',
+    alt: 'Набережная Клязьмы и Никольская мануфактура в Орехово-Зуеве',
+    position: '54% 50%',
   },
   'elektrostal-nikolaeva': {
-    src: '/images/generated/ages/age-13-17.webp',
-    alt: 'Подростки вместе работают над учебным заданием',
+    src: '/images/cities/elektrostal.webp',
+    alt: 'Вознесенская аллея и храм Вознесения Господня в Электростали',
+    position: '50% 50%',
   },
 };
 
