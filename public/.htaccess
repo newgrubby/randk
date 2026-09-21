@@ -7,63 +7,87 @@
 # Проверка:        npm test
 # ============================================================
 
-Options -Indexes
-DirectoryIndex index.html
+<IfModule mod_dir.c>
+  DirectoryIndex index.html
+</IfModule>
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
   # --- Постоянные редиректы со старых адресов (40) ---
-  # Цели указаны сразу со слэшем: страницы лежат в about/index.html,
-  # и без слэша получился бы лишний переход.
-  RewriteRule ^uchebnyy_process/?$ /about/ [R=301,L]
-  RewriteRule ^prepodovateli/?$ /about/ [R=301,L]
-  RewriteRule ^teachers/?$ /about/ [R=301,L]
-  RewriteRule ^otzyvy_nashih_studentov/?$ /reviews/ [R=301,L]
-  RewriteRule ^address/?$ /contacts/ [R=301,L]
-  RewriteRule ^fotogalereya/?$ /about/ [R=301,L]
-  RewriteRule ^voprosy_i_otvety/?$ /#faq [R=301,L]
-  RewriteRule ^inostrannye_yazyki1/?$ /languages/ [R=301,L]
-  RewriteRule ^angliyskiy_yazyk/?$ /languages/english/ [R=301,L]
-  RewriteRule ^nemeckiy_yazyk/?$ /languages/german/ [R=301,L]
-  RewriteRule ^francuzskiy_yazyk/?$ /languages/french/ [R=301,L]
-  RewriteRule ^ispanskiy-yazyk/?$ /languages/spanish/ [R=301,L]
-  RewriteRule ^italyanskiy-yazyk/?$ /languages/italian/ [R=301,L]
-  RewriteRule ^kitayskiy-yazyk/?$ /languages/chinese/ [R=301,L]
-  RewriteRule ^podgotovka_k_ege/?$ /exams/ [R=301,L]
-  RewriteRule ^repetitorstvo/?$ /tutoring/ [R=301,L]
-  RewriteRule ^podgotovka_detey_k_shkole/?$ /preschool/ [R=301,L]
-  RewriteRule ^ritmika_i_tancy/?$ /development/ [R=301,L]
-  RewriteRule ^logoped/?$ /speech-therapist/ [R=301,L]
-  RewriteRule ^psiholog/?$ /psychologist/ [R=301,L]
-  RewriteRule ^gruppovyye-zanyatiya/?$ /programs/ [R=301,L]
-  RewriteRule ^individualnyye-zanyatiya/?$ /programs/ [R=301,L]
-  RewriteRule ^kursy-dlya-detey/?$ /programs/ [R=301,L]
-  RewriteRule ^zapisatsya-na-kursy/?$ /contacts/ [R=301,L]
-  RewriteRule ^zakazat-zvonok/?$ /contacts/ [R=301,L]
-  RewriteRule ^news/?$ / [R=301,L]
-  RewriteRule ^article_post/([^/]+)/?$ / [R=301,L]
-  RewriteRule ^vakansii/?$ /contacts/ [R=301,L]
-  RewriteRule ^branches/?$ /centers/ [R=301,L]
-  RewriteRule ^branches/orekhovo-zuevo/?$ /centers/orekhovo-zuevo/ [R=301,L]
-  RewriteRule ^branches/pavlovsky-posad/?$ /centers/pavlovsky-posad/ [R=301,L]
-  RewriteRule ^branches/elektrostal/?$ /centers/elektrostal/ [R=301,L]
-  RewriteRule ^programs/inostrannye-yazyki/?$ /languages/ [R=301,L]
-  RewriteRule ^programs/angliyskiy-yazyk/?$ /languages/english/ [R=301,L]
-  RewriteRule ^programs/podgotovka-k-ege-oge/?$ /exams/ [R=301,L]
-  RewriteRule ^programs/shkolnye-predmety/?$ /tutoring/ [R=301,L]
-  RewriteRule ^programs/podgotovka-k-shkole/?$ /preschool/ [R=301,L]
-  RewriteRule ^programs/razvivayushchie-zanyatiya/?$ /development/ [R=301,L]
-  RewriteRule ^programs/individualnye-zanyatiya/?$ /programs/ [R=301,L]
-  RewriteRule ^personal-data-consent/?$ /privacy/ [R=301,L]
+  # Абсолютная canonical-цель одновременно исправляет протокол/host.
+  # QSD удаляет старые query-параметры (например album_id), чтобы они
+  # не создавали индексируемые дубли. NE сохраняет якоря вроде #faq.
+  RewriteRule ^uchebnyy_process/?$ https://randkcenter.ru/about/ [R=301,L,NE,QSD]
+  RewriteRule ^prepodovateli/?$ https://randkcenter.ru/about/ [R=301,L,NE,QSD]
+  RewriteRule ^teachers/?$ https://randkcenter.ru/about/ [R=301,L,NE,QSD]
+  RewriteRule ^otzyvy_nashih_studentov/?$ https://randkcenter.ru/reviews/ [R=301,L,NE,QSD]
+  RewriteRule ^address/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
+  RewriteRule ^fotogalereya/?$ https://randkcenter.ru/about/ [R=301,L,NE,QSD]
+  RewriteRule ^voprosy_i_otvety/?$ https://randkcenter.ru/#faq [R=301,L,NE,QSD]
+  RewriteRule ^inostrannye_yazyki1/?$ https://randkcenter.ru/languages/ [R=301,L,NE,QSD]
+  RewriteRule ^angliyskiy_yazyk/?$ https://randkcenter.ru/languages/english/ [R=301,L,NE,QSD]
+  RewriteRule ^nemeckiy_yazyk/?$ https://randkcenter.ru/languages/german/ [R=301,L,NE,QSD]
+  RewriteRule ^francuzskiy_yazyk/?$ https://randkcenter.ru/languages/french/ [R=301,L,NE,QSD]
+  RewriteRule ^ispanskiy-yazyk/?$ https://randkcenter.ru/languages/spanish/ [R=301,L,NE,QSD]
+  RewriteRule ^italyanskiy-yazyk/?$ https://randkcenter.ru/languages/italian/ [R=301,L,NE,QSD]
+  RewriteRule ^kitayskiy-yazyk/?$ https://randkcenter.ru/languages/chinese/ [R=301,L,NE,QSD]
+  RewriteRule ^podgotovka_k_ege/?$ https://randkcenter.ru/exams/ [R=301,L,NE,QSD]
+  RewriteRule ^repetitorstvo/?$ https://randkcenter.ru/tutoring/ [R=301,L,NE,QSD]
+  RewriteRule ^podgotovka_detey_k_shkole/?$ https://randkcenter.ru/preschool/ [R=301,L,NE,QSD]
+  RewriteRule ^ritmika_i_tancy/?$ https://randkcenter.ru/development/ [R=301,L,NE,QSD]
+  RewriteRule ^logoped/?$ https://randkcenter.ru/speech-therapist/ [R=301,L,NE,QSD]
+  RewriteRule ^psiholog/?$ https://randkcenter.ru/psychologist/ [R=301,L,NE,QSD]
+  RewriteRule ^gruppovyye-zanyatiya/?$ https://randkcenter.ru/programs/ [R=301,L,NE,QSD]
+  RewriteRule ^individualnyye-zanyatiya/?$ https://randkcenter.ru/programs/ [R=301,L,NE,QSD]
+  RewriteRule ^kursy-dlya-detey/?$ https://randkcenter.ru/programs/ [R=301,L,NE,QSD]
+  RewriteRule ^zapisatsya-na-kursy/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
+  RewriteRule ^zakazat-zvonok/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
+  RewriteRule ^news/?$ https://randkcenter.ru/ [R=301,L,NE,QSD]
+  RewriteRule ^article_post/([^/]+)/?$ https://randkcenter.ru/ [R=301,L,NE,QSD]
+  RewriteRule ^vakansii/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
+  RewriteRule ^branches/?$ https://randkcenter.ru/centers/ [R=301,L,NE,QSD]
+  RewriteRule ^branches/orekhovo-zuevo/?$ https://randkcenter.ru/centers/orekhovo-zuevo/ [R=301,L,NE,QSD]
+  RewriteRule ^branches/pavlovsky-posad/?$ https://randkcenter.ru/centers/pavlovsky-posad/ [R=301,L,NE,QSD]
+  RewriteRule ^branches/elektrostal/?$ https://randkcenter.ru/centers/elektrostal/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/inostrannye-yazyki/?$ https://randkcenter.ru/languages/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/angliyskiy-yazyk/?$ https://randkcenter.ru/languages/english/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/podgotovka-k-ege-oge/?$ https://randkcenter.ru/exams/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/shkolnye-predmety/?$ https://randkcenter.ru/tutoring/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/podgotovka-k-shkole/?$ https://randkcenter.ru/preschool/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/razvivayushchie-zanyatiya/?$ https://randkcenter.ru/development/ [R=301,L,NE,QSD]
+  RewriteRule ^programs/individualnye-zanyatiya/?$ https://randkcenter.ru/programs/ [R=301,L,NE,QSD]
+  RewriteRule ^personal-data-consent/?$ https://randkcenter.ru/privacy/ [R=301,L,NE,QSD]
+
+  # --- Canonical HTTPS + non-www + trailing slash за один переход ---
+  # Сначала отдельное правило для каталогов без слэша: так запрос
+  # http://www.randkcenter.ru/contacts сразу попадёт на канонический URL.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^randkcenter\.ru$ [NC]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.+)$ https://randkcenter.ru/$1/ [R=301,L,NE]
+
+  # Остальные запросы на HTTP или www сохраняют path и query string.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^randkcenter\.ru$ [NC]
+  RewriteRule ^ https://randkcenter.ru%{REQUEST_URI} [R=301,L,NE]
+
+  # На canonical host нормализуем существующие каталоги без цепочек.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.+)$ /$1/ [R=301,L,NE]
+
+  # Метка для immutable-кэша только у хешированных файлов Next.js.
+  RewriteRule ^_next/static/ - [E=IMMUTABLE_ASSET:1]
 
   # --- Существующие файлы и каталоги отдаём как есть ---
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # --- Всё остальное — страница 404 ---
-  RewriteRule ^ /404.html [L]
+  # --- Всё остальное получает реальный статус 404 ---
+  RewriteRule ^ - [R=404,L]
 </IfModule>
 
 ErrorDocument 404 /404.html
@@ -73,18 +97,30 @@ ErrorDocument 404 /404.html
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set X-Frame-Options "SAMEORIGIN"
+  Header set Cache-Control "public, max-age=31536000, immutable" env=IMMUTABLE_ASSET
+  <FilesMatch "^(?:.*\.html|sitemap\.xml|robots\.txt|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
 </IfModule>
 
-# --- Кэширование статики ---
+# --- Безопасное кеширование нехешированных media assets ---
 <IfModule mod_expires.c>
   ExpiresActive On
-  ExpiresByType text/css "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 6 months"
-  ExpiresByType image/webp "access plus 6 months"
-  ExpiresByType image/avif "access plus 6 months"
-  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 7 days"
+  ExpiresByType image/png "access plus 7 days"
+  ExpiresByType image/x-icon "access plus 7 days"
+  ExpiresByType image/webp "access plus 7 days"
+  ExpiresByType image/avif "access plus 7 days"
   ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# --- MIME-типы для современных assets ---
+<IfModule mod_mime.c>
+  AddType image/avif .avif
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .webmanifest
 </IfModule>
 
 # --- Сжатие ---

@@ -7,6 +7,7 @@ export const metadata = buildMetadata({
   title: 'Политика использования cookie',
   description: 'Какие файлы cookie использует сайт RandK Center и как отказаться от их сохранения.',
   path: '/cookies',
+  noIndex: true,
 });
 
 export default function CookiesPage() {

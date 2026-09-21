@@ -41,9 +41,10 @@ npm run dev
 | `npm run typecheck`        | проверка типов                            |
 | `npm run lint`             | ESLint                                    |
 | `npm run format`           | Prettier                                  |
-| `npm run images`           | пересоздать временные изображения         |
 | `npm run redirects`        | пересобрать .htaccess и vercel.json       |
 | `npm test`                 | проверка правил редиректа и синхронизации |
+| `npm run audit:predeploy`  | аудит static export и матрицы редиректов  |
+| `npm run serve:export`     | локальный preview папки `out/`            |
 
 Перед сдачей изменений: `npm run typecheck && npm run lint && npm test && npm run build`.
 
@@ -182,7 +183,9 @@ npm run dev
 
 ## Публикация
 
-Подробное сравнение вариантов — [HOSTING_OPTIONS.md](./docs/HOSTING_OPTIONS.md).
+Основная инструкция по передаче и публикации —
+[CLIENT_HANDOFF.md](./docs/CLIENT_HANDOFF.md). Пошаговое размещение на REG.RU —
+[REG_RU_DEPLOYMENT.md](./docs/REG_RU_DEPLOYMENT.md).
 
 ### Вариант 1 — обычный хостинг (рекомендуется)
 
@@ -248,18 +251,20 @@ src/
 
 ## Документация
 
-| Документ                                                               | О чём                                  |
-| ---------------------------------------------------------------------- | -------------------------------------- |
-| [PROJECT_BRIEF](./docs/PROJECT_BRIEF.md)                               | задачи, рамки, стек                    |
-| [CURRENT_IMPLEMENTATION_AUDIT](./docs/CURRENT_IMPLEMENTATION_AUDIT.md) | аудит перед доработкой                 |
-| [CONTENT_TODO](./docs/CONTENT_TODO.md)                                 | **что должен предоставить клиент**     |
-| [IMAGE_ASSETS](./docs/IMAGE_ASSETS.md)                                 | изображения и их замена                |
-| [DESIGN_SYSTEM](./docs/DESIGN_SYSTEM.md)                               | цвет, типографика, сетка, анимация     |
-| [DECISIONS](./docs/DECISIONS.md)                                       | принятые решения и их причины          |
-| [HOSTING_OPTIONS](./docs/HOSTING_OPTIONS.md)                           | размещение в российской инфраструктуре |
-| [REDIRECT_PLAN](./docs/REDIRECT_PLAN.md)                               | перенос со старого сайта               |
-| [ASSUMPTIONS](./docs/ASSUMPTIONS.md)                                   | временные допущения                    |
-| [PROGRESS](./docs/PROGRESS.md)                                         | что сделано и что дальше               |
+| Документ                                                           | О чём                                  |
+| ------------------------------------------------------------------ | -------------------------------------- |
+| [PROJECT_BRIEF](./docs/PROJECT_BRIEF.md)                           | задачи, рамки, стек                    |
+| [CLIENT_HANDOFF](./docs/CLIENT_HANDOFF.md)                         | передача, deploy и rollback            |
+| [REG_RU_DEPLOYMENT](./docs/REG_RU_DEPLOYMENT.md)                   | пошаговое размещение на REG.RU         |
+| [CONTENT_TODO](./docs/CONTENT_TODO.md)                             | **что должен предоставить клиент**     |
+| [IMAGE_ASSETS](./docs/IMAGE_ASSETS.md)                             | изображения и их замена                |
+| [DESIGN_SYSTEM](./docs/DESIGN_SYSTEM.md)                           | цвет, типографика, сетка, анимация     |
+| [DECISIONS](./docs/DECISIONS.md)                                   | принятые решения и их причины          |
+| [HOSTING_OPTIONS](./docs/HOSTING_OPTIONS.md)                       | размещение в российской инфраструктуре |
+| [REDIRECT_PLAN](./docs/REDIRECT_PLAN.md)                           | перенос со старого сайта               |
+| [REDIRECT_VALIDATION_MATRIX](./docs/REDIRECT_VALIDATION_MATRIX.md) | проверка 40 legacy redirects           |
+| [OFFICE_MAPS](./docs/OFFICE_MAPS.md)                               | карты и маршруты офисов                |
+| [ASSUMPTIONS](./docs/ASSUMPTIONS.md)                               | временные допущения                    |
 
 ---
 

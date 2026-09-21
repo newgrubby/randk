@@ -1,7 +1,7 @@
 import { cities, offices } from '@/content/centers';
 import { site } from '@/content/site';
 import type { FaqItem, Office } from '@/content/types';
-import { absoluteUrl, siteUrl } from './seo';
+import { canonicalUrl, siteUrl } from './seo';
 
 /**
  * Микроразметка.
@@ -43,9 +43,9 @@ export function officeJsonLd(office: Office): JsonLd | null {
   const data: JsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': absoluteUrl(`/centers/${office.citySlug}#${office.id}`),
+    '@id': canonicalUrl(`/centers/${office.citySlug}#${office.id}`),
     name: `${site.name} — ${office.city}, ${office.address}`,
-    url: absoluteUrl(`/centers/${office.citySlug}`),
+    url: canonicalUrl(`/centers/${office.citySlug}`),
     parentOrganization: { '@id': `${siteUrl}/#organization` },
     address: {
       '@type': 'PostalAddress',
@@ -84,7 +84,7 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]): JsonL
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: absoluteUrl(item.path),
+      item: canonicalUrl(item.path),
     })),
   };
 }
@@ -107,7 +107,7 @@ export function courseJsonLd(input: { name: string; description: string; path: s
     '@type': 'Course',
     name: input.name,
     description: input.description,
-    url: absoluteUrl(input.path),
+    url: canonicalUrl(input.path),
     provider: { '@id': `${siteUrl}/#organization` },
   };
 }

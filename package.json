@@ -8,9 +8,12 @@
     "prebuild": "node scripts/generate-redirects.mjs",
     "build": "next build",
     "build:standalone": "node scripts/build-standalone.mjs",
-    "images": "node scripts/generate-placeholders.mjs",
     "redirects": "node scripts/generate-redirects.mjs",
     "test": "node scripts/validate-redirects.mjs && node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/validate-site-url.mjs",
+    "audit:export": "node scripts/audit-static-export.mjs",
+    "audit:redirects": "node scripts/generate-redirect-matrix.mjs",
+    "audit:predeploy": "npm run audit:export && npm run audit:redirects",
+    "serve:export": "node scripts/serve-static-export.mjs",
     "check:deployment": "node scripts/check-deployment.mjs",
     "start": "next start",
     "lint": "eslint .",
@@ -19,7 +22,6 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,css,md,json}\""
   },
   "dependencies": {
-    "motion": "^12.23.12",
     "next": "^15.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"

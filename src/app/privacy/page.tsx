@@ -9,6 +9,7 @@ export const metadata = buildMetadata({
   description:
     'Политика конфиденциальности сайта RandK Center: какие данные обрабатываются и как связаться с центром.',
   path: '/privacy',
+  noIndex: true,
 });
 
 /**

@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { cities } from '@/content/centers';
 import { languages } from '@/content/languages';
 import { programs } from '@/content/programs';
-import { absoluteUrl } from '@/lib/seo';
+import { canonicalUrl } from '@/lib/seo';
 
 /** Обязательно для статического экспорта: файл собирается один раз при сборке. */
 export const dynamic = 'force-static';
@@ -12,8 +12,6 @@ export const dynamic = 'force-static';
  * поэтому скрытые языки и направления в неё не попадают автоматически.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-
   const staticPages: { path: string; priority: number; changeFrequency: 'weekly' | 'monthly' }[] = [
     { path: '/', priority: 1, changeFrequency: 'weekly' },
     { path: '/languages', priority: 0.9, changeFrequency: 'monthly' },
@@ -22,36 +20,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/about', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/reviews', priority: 0.5, changeFrequency: 'monthly' },
     { path: '/contacts', priority: 0.8, changeFrequency: 'monthly' },
-    { path: '/privacy', priority: 0.2, changeFrequency: 'monthly' },
-    { path: '/cookies', priority: 0.2, changeFrequency: 'monthly' },
   ];
 
   return [
     ...staticPages.map((page) => ({
-      url: absoluteUrl(page.path),
-      lastModified: now,
+      url: canonicalUrl(page.path),
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     })),
     ...languages
       .filter((language) => language.active && language.showInSitemap)
       .map((language) => ({
-        url: absoluteUrl(`/languages/${language.slug}`),
-        lastModified: now,
+        url: canonicalUrl(`/languages/${language.slug}`),
         changeFrequency: 'monthly' as const,
         priority: 0.8,
       })),
     ...programs
       .filter((program) => program.active && program.showInSitemap)
       .map((program) => ({
-        url: absoluteUrl(program.href),
-        lastModified: now,
+        url: canonicalUrl(program.href),
         changeFrequency: 'monthly' as const,
         priority: 0.8,
       })),
     ...cities.map((city) => ({
-      url: absoluteUrl(`/centers/${city.slug}`),
-      lastModified: now,
+      url: canonicalUrl(`/centers/${city.slug}`),
       changeFrequency: 'monthly' as const,
       priority: 0.9,
     })),

@@ -1,7 +1,7 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useId, useState } from 'react';
+import { cn } from '@/lib/utils';
 import type { FaqItem } from '@/content/types';
 
 /**
@@ -11,7 +11,6 @@ import type { FaqItem } from '@/content/types';
 export function Accordion({ items }: { items: FaqItem[] }) {
   const [openId, setOpenId] = useState<string | null>(items[0]?.id ?? null);
   const baseId = useId();
-  const reduceMotion = useReducedMotion();
 
   return (
     <div className="border-border border-t">
@@ -47,22 +46,20 @@ export function Accordion({ items }: { items: FaqItem[] }) {
               </button>
             </h3>
 
-            <AnimatePresence initial={false}>
-              {isOpen ? (
-                <motion.div
-                  id={panelId}
-                  role="region"
-                  aria-labelledby={buttonId}
-                  initial={reduceMotion ? false : { height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                  transition={{ duration: 0.42, ease: [0.25, 1, 0.5, 1] }}
-                  className="overflow-hidden"
-                >
-                  <p className="text-muted max-w-3xl pr-10 pb-7 leading-relaxed">{item.answer}</p>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              aria-hidden={!isOpen}
+              className={cn(
+                'grid transition-[grid-template-rows,opacity] duration-400 ease-[var(--ease-out-quart)] motion-reduce:transition-none',
+                isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+              )}
+            >
+              <div className="overflow-hidden">
+                <p className="text-muted max-w-3xl pr-10 pb-7 leading-relaxed">{item.answer}</p>
+              </div>
+            </div>
           </div>
         );
       })}

@@ -26,9 +26,7 @@ export function Logo({
         unoptimized
         className={cn(
           'transition-opacity duration-300 group-hover:opacity-80',
-          isExtended
-            ? 'h-[6.3rem] w-72 max-w-full'
-            : 'h-10 w-[8.5rem] sm:h-11 sm:w-[9.35rem]',
+          isExtended ? 'h-[6.3rem] w-72 max-w-full' : 'h-10 w-[8.5rem] sm:h-11 sm:w-[9.35rem]',
         )}
       />
     </Link>

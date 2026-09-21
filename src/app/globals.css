@@ -260,6 +260,128 @@
 }
 
 @layer utilities {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-y, 24px), 0);
+  }
+
+  [data-reveal][data-reveal-visible] {
+    animation: rk-reveal 0.7s var(--ease-out-quart) var(--reveal-delay, 0s) both;
+  }
+
+  @keyframes rk-reveal {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+
+  /*
+   * Hero остаётся серверным и видимым без hydration. Небольшие вторичные
+   * элементы сохраняют редакционное появление; LCP-критичные h1 и lead
+   * намеренно не анимируются.
+   */
+  @keyframes rk-hero-enter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hero-enter {
+    animation: rk-hero-enter 0.85s var(--ease-out-quart) 0.05s both;
+  }
+
+  .hero-enter-delay-cta {
+    animation-delay: 0.36s;
+  }
+
+  .hero-enter-delay-highlights {
+    animation-delay: 0.5s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-enter {
+      animation: none;
+    }
+  }
+
+  @keyframes rk-menu-enter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -12px, 0);
+    }
+  }
+
+  @keyframes rk-menu-item {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0);
+    }
+  }
+
+  @keyframes rk-modal-backdrop {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes rk-modal-panel {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 32px, 0) scale(0.985);
+    }
+  }
+
+  @keyframes rk-back-to-top {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0);
+    }
+  }
+
+  .animate-menu-enter {
+    animation: rk-menu-enter 0.35s var(--ease-out-quart) both;
+  }
+
+  .animate-menu-item {
+    animation: rk-menu-item 0.4s var(--ease-out-quart) both;
+  }
+
+  .animate-modal-backdrop {
+    animation: rk-modal-backdrop 0.3s ease both;
+  }
+
+  .animate-modal-panel {
+    animation: rk-modal-panel 0.42s var(--ease-out-quart) both;
+  }
+
+  .animate-back-to-top {
+    animation: rk-back-to-top 0.3s ease both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-menu-enter,
+    .animate-menu-item,
+    .animate-modal-backdrop,
+    .animate-modal-panel,
+    .animate-back-to-top {
+      animation: none;
+    }
+  }
+
   /* Мягкое появление без JS — для серверных компонентов */
   @keyframes rk-fade-up {
     from {

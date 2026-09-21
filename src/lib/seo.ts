@@ -33,6 +33,17 @@ export function absoluteUrl(path: string): string {
   return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
+/** Канонический URL HTML-страницы с учётом `trailingSlash: true`. */
+export function canonicalUrl(path: string): string {
+  const [pathAndQuery, hash] = path.split('#', 2);
+  const [rawPathname, query] = (pathAndQuery ?? '/').split('?', 2);
+  const pathname = rawPathname || '/';
+  const normalizedPath = pathname === '/' || pathname.endsWith('/') ? pathname : `${pathname}/`;
+  const suffix = `${query === undefined ? '' : `?${query}`}${hash === undefined ? '' : `#${hash}`}`;
+
+  return absoluteUrl(`${normalizedPath}${suffix}`);
+}
+
 type PageMetaInput = {
   title: string;
   description: string;
@@ -50,7 +61,7 @@ export function buildMetadata({
   ogTitle,
   noIndex,
 }: PageMetaInput): Metadata {
-  const url = absoluteUrl(path);
+  const url = canonicalUrl(path);
 
   return {
     title,

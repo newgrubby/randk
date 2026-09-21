@@ -29,6 +29,7 @@ if (!base) {
 }
 
 const config = JSON.parse(await readFile(join(root, 'vercel.json'), 'utf8'));
+const sitemap = await readFile(join(root, 'out', 'sitemap.xml'), 'utf8');
 
 /** Проходит по цепочке переходов и возвращает её целиком. */
 async function trace(path) {
@@ -56,7 +57,9 @@ let failures = 0;
 console.log(`Проверка: ${base}`);
 console.log(`Правил в vercel.json: ${config.redirects.length}\n`);
 
-console.log('### Старые адреса → постоянный редирект за один переход\n');
+console.log('### Legacy redirect validation matrix\n');
+console.log('| source | expected destination | redirect status | final status | chain count |');
+console.log('|---|---|---:|---:|---:|');
 
 for (const rule of config.redirects) {
   const probe = rule.source.replace(/:[a-zA-Z]\w*/g, '12345');
@@ -65,7 +68,10 @@ for (const rule of config.redirects) {
   const single = hops.length === 1;
   const permanent = hops[0] && (hops[0].status === 301 || hops[0].status === 308);
   const reached = status === 200;
-  const ok = single && permanent && reached;
+  const expected = rule.destination.split('#', 1)[0];
+  const actual = final.split('?', 1)[0];
+  const destinationMatches = actual === expected;
+  const ok = single && permanent && reached && destinationMatches;
 
   if (!ok) failures += 1;
 
@@ -73,36 +79,42 @@ for (const rule of config.redirects) {
   if (!permanent) problems.push(`код ${hops[0]?.status ?? status}`);
   if (!single) problems.push(`переходов: ${hops.length}`);
   if (!reached) problems.push(`финал: ${status}`);
+  if (!destinationMatches) problems.push(`фактическая цель: ${actual}`);
 
   console.log(
-    `${ok ? '  OK  ' : ' FAIL '} ${probe.padEnd(32)} → ${final}${
-      problems.length > 0 ? `  [${problems.join(', ')}]` : ''
-    }`,
+    `| ${ok ? '✓' : `FAIL: ${problems.join('; ')}`} \`${probe}\` | \`${rule.destination}\` | ${hops[0]?.status ?? status} | ${status} | ${hops.length} |`,
   );
 }
 
 console.log('\n### Новые страницы открываются напрямую\n');
 
 const direct = [
-  '/',
-  '/languages/',
-  '/languages/german/',
-  '/programs/',
-  '/exams/',
-  '/centers/',
-  '/centers/pavlovsky-posad/',
-  '/about/',
-  '/reviews/',
-  '/contacts/',
-  '/privacy/',
-  '/cookies/',
-];
+  ...new Set([
+    ...[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => new URL(match[1]).pathname),
+    '/privacy/',
+    '/cookies/',
+  ]),
+].sort();
 
 for (const path of direct) {
   const response = await fetch(base + path, { redirect: 'manual' });
   const ok = response.status === 200;
   if (!ok) failures += 1;
   console.log(`${ok ? '  OK  ' : ' FAIL '} ${path.padEnd(32)} ${response.status}`);
+}
+
+console.log('\n### Query-параметры legacy URL удаляются\n');
+{
+  const { hops, status } = await trace('/fotogalereya?album_id=123&utm_source=legacy');
+  const location = hops[0]?.to ?? '';
+  const ok =
+    hops.length === 1 &&
+    hops[0]?.status === 301 &&
+    status === 200 &&
+    !location.includes('?album_id=') &&
+    !location.includes('utm_source=');
+  if (!ok) failures += 1;
+  console.log(`${ok ? '  OK  ' : ' FAIL '} /fotogalereya?album_id=123 → ${location} → ${status}`);
 }
 
 console.log('\n### Несуществующий адрес — 404, а не редирект\n');

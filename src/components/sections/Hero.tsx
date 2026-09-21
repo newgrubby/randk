@@ -1,10 +1,15 @@
-'use client';
-
-import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'motion/react';
 import { hero } from '@/content/home';
 import { ArrowRight } from '@/components/ui/Button';
+
+const heroImageSizes = [480, 640, 768, 960, 1280, 1600] as const;
+const heroImageSrcSet = (format: 'avif' | 'webp') =>
+  heroImageSizes
+    .map((width) => `/images/generated/hero/hero-main-${width}.${format} ${width}w`)
+    .join(', ');
+
+const heroImageDisplaySizes =
+  '(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 80px), (max-width: 1279px) calc((100vw - 112px) / 2), (max-width: 1439px) calc((100vw - 160px) / 2), 640px';
 
 /**
  * Первый экран.
@@ -14,24 +19,6 @@ import { ArrowRight } from '@/components/ui/Button';
  * ощущение разворота журнала, а не типовой секции лендинга.
  */
 export function Hero() {
-  const reduceMotion = useReducedMotion();
-
-  /*
-   * `data-reveal` обязателен: при выключенном JavaScript анимация никогда
-   * не запустится, а начальное opacity: 0 уже отрендерено в HTML. Правило
-   * в <noscript> (см. app/layout.tsx) возвращает такие элементы в видимое
-   * состояние — без атрибута первый экран остаётся без заголовка и кнопок.
-   */
-  const rise = (delay: number) =>
-    reduceMotion
-      ? {}
-      : {
-          'data-reveal': '',
-          initial: { opacity: 0, y: 28 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.85, delay, ease: [0.25, 1, 0.5, 1] as const },
-        };
-
   return (
     <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24 lg:pt-20">
       {/* Мягкое тёплое пятно за изображением */}
@@ -43,12 +30,9 @@ export function Hero() {
       <div className="container-page relative">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-6 xl:col-span-6">
-            <motion.p
-              {...rise(0.05)}
-              className="text-eyebrow text-muted font-medium tracking-[0.16em] uppercase"
-            >
+            <p className="hero-enter text-eyebrow text-muted font-medium tracking-[0.16em] uppercase">
               {hero.eyebrow}
-            </motion.p>
+            </p>
 
             {/*
               Между строками заголовка стоит пробел: строки — блочные,
@@ -56,25 +40,23 @@ export function Hero() {
               страницы (скринридер, поисковый робот, режим чтения)
               склеивает слова: «языки,экзамены и развитие».
             */}
-            <motion.h1 {...rise(0.14)} className="text-display mt-6 font-serif">
+            <h1 className="text-display mt-6 font-serif">
               {hero.titleLines.map((line) => (
                 <span key={line} className="block">
                   {line}{' '}
                 </span>
               ))}
               <span className="text-accent block italic">{hero.titleAccent}</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p {...rise(0.26)} className="text-lead text-muted mt-7 max-w-xl">
-              {hero.lead}
-            </motion.p>
+            <p className="text-lead text-muted mt-7 max-w-xl">{hero.lead}</p>
 
             {/*
               Обе кнопки — обычные ссылки на разделы каталога, а не открытие
               формы: сайт больше не собирает заявки, а первый шаг посетителя —
               выбрать направление или ближайший офис.
             */}
-            <motion.div {...rise(0.36)} className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="hero-enter hero-enter-delay-cta mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={hero.primaryCta.href}
                 className="group bg-accent rounded-pill shadow-soft hover:bg-accent-dark hover:shadow-lift inline-flex min-h-11 items-center justify-center gap-2.5 px-8 py-4 text-[0.9375rem] font-medium text-white transition-all duration-300"
@@ -89,41 +71,46 @@ export function Hero() {
                 {hero.secondaryCta.label}
                 <ArrowRight />
               </Link>
-            </motion.div>
+            </div>
           </div>
 
           {/*
-            Изображение первого экрана — LCP-элемент страницы, и анимации
-            появления на нём нет намеренно.
-
-            Замерено на production-сборке: с motion-входом (opacity + scale,
-            1.1 с) LCP держался на 1476 мс при FCP 200 мс — Chrome откладывал
-            кандидата на всю длину анимации, хотя сам файл загружался за 6 мс.
-            Без анимации LCP — 100 мс.
-
-            Анимации появления текста первого экрана сохранены: они дают тот
-            самый редакционный вход и на LCP уже не влияют, потому что
-            изображение крупнее любого текстового блока.
+            В static export встроенный оптимизатор next/image недоступен.
+            Поэтому браузер выбирает подходящий заранее подготовленный AVIF
+            или WebP по реальной ширине контейнера и плотности экрана.
           */}
           <div className="lg:col-span-6 xl:col-span-6">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.75rem] md:aspect-[3/2] lg:-mr-[max(0px,calc((100vw-90rem)/2))] lg:aspect-[4/3]">
-              <Image
-                src="/images/generated/hero/hero-main.webp"
-                alt="Образовательная среда RandK Center"
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-[52%_50%] md:object-center lg:object-[52%_50%]"
-              />
+              <picture>
+                <source
+                  type="image/avif"
+                  srcSet={heroImageSrcSet('avif')}
+                  sizes={heroImageDisplaySizes}
+                />
+                <source
+                  type="image/webp"
+                  srcSet={heroImageSrcSet('webp')}
+                  sizes={heroImageDisplaySizes}
+                />
+                <img
+                  src="/images/generated/hero/hero-main-1600.webp"
+                  srcSet={heroImageSrcSet('webp')}
+                  sizes={heroImageDisplaySizes}
+                  width="1600"
+                  height="1067"
+                  alt="Образовательная среда RandK Center"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="absolute inset-0 size-full object-cover object-[52%_50%] md:object-center lg:object-[52%_50%]"
+                />
+              </picture>
             </div>
           </div>
         </div>
 
         {/* Преимущества первого экрана */}
-        <motion.ul
-          {...rise(0.5)}
-          className="border-border mt-14 grid gap-8 border-t pt-10 sm:grid-cols-3 md:mt-20"
-        >
+        <ul className="hero-enter hero-enter-delay-highlights border-border mt-14 grid gap-8 border-t pt-10 sm:grid-cols-3 md:mt-20">
           {hero.highlights.map((item) => (
             <li key={item.title} className="flex items-start gap-4">
               <span
@@ -146,7 +133,7 @@ export function Hero() {
               </span>
             </li>
           ))}
-        </motion.ul>
+        </ul>
       </div>
     </section>
   );

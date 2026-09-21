@@ -2,15 +2,15 @@
 
 ## Статус
 
-Основная фотосерия завершена и подключена: 19 AI-generated WebP, из них 12 созданы на
-текущем этапе и 7 сохранены без перегенерации. Общий вес — 1 510 744 байта
+Основная серия редакционных иллюстраций завершена и подключена: 19 WebP.
+Общий вес — 1 510 744 байта
 (1 475,3 KiB / 1,441 MiB). Самый тяжёлый файл — `hero/hero-main.webp`,
 180 698 байт (176,5 KiB).
 
 Все кадры проверены визуально на лица, руки и пальцы, псевдотекст, логотипы,
 рамки, виньетку, цветовой сдвиг и краевые артефакты. Брака, требующего
 перегенерации, не обнаружено. Геометрический inset не применялся. Фото людей —
-редакционные AI-иллюстрации; они не изображают сотрудников или учеников RandK.
+редакционные иллюстрации; они не изображают сотрудников или учеников RandK.
 
 ## Общая спецификация серии
 
@@ -53,31 +53,27 @@
 
 ## Финальные файлы и параметры интеграции
 
-`Промпт` ссылается на реестр ниже. Для ранее готовых семи кадров сохранено
-зафиксированное описание исходного промпта: точная строка предыдущей генерации
-в репозитории отсутствовала.
-
-| Финальный файл                                     | Где используется             | Размер / aspect ratio |       Вес | AI  | Prompt | Crop / object-position | Mobile crop                               |
-| -------------------------------------------------- | ---------------------------- | --------------------- | --------: | :-: | ------ | ---------------------- | ----------------------------------------- |
-| `generated/hero/hero-main.webp`                    | Главная, hero                | 1800×1200 / 3:2       | 176,5 KiB | да  | P01    | `cover`, 52% 50%       | `cover`, 52% 50%; на 768–1023 px — center |
-| `generated/ages/age-4-6.webp`                      | Главная, карточка 4–6 лет    | 900×675 / 4:3         |  40,9 KiB | да  | P02    | `cover`, center        | `cover`, center                           |
-| `generated/ages/age-7-12.webp`                     | Главная, карточка 7–12 лет   | 900×675 / 4:3         |  38,9 KiB | да  | P03    | `cover`, center        | `cover`, center                           |
-| `generated/ages/age-13-17.webp`                    | Главная, карточка 13–17 лет  | 900×675 / 4:3         |  36,0 KiB | да  | P04    | `cover`, center        | `cover`, center                           |
-| `generated/ages/age-adults.webp`                   | Главная, карточка «Взрослые» | 900×675 / 4:3         |  35,2 KiB | да  | P05    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-exams.webp`            | `/exams`                     | 1600×1000 / 8:5       | 100,0 KiB | да  | P06    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-tutoring.webp`         | `/tutoring`                  | 1600×1000 / 8:5       | 117,2 KiB | да  | P07    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-preschool.webp`        | `/preschool`                 | 1600×1000 / 8:5       |  76,5 KiB | да  | P08    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-development.webp`      | `/development`               | 1600×1000 / 8:5       | 108,2 KiB | да  | P09    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-corporate.webp`        | `/corporate`                 | 1586×992 / ≈8:5       |  69,4 KiB | да  | P10    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-speech-therapist.webp` | `/speech-therapist`          | 1600×1000 / 8:5       |  94,3 KiB | да  | P11    | `cover`, center        | `cover`, center                           |
-| `generated/programs/program-psychologist.webp`     | `/psychologist`              | 1586×992 / ≈8:5       |  84,0 KiB | да  | P12    | `cover`, center        | `cover`, center                           |
-| `generated/languages/language-english.webp`        | `/languages/english`         | 1586×992 / ≈8:5       |  79,1 KiB | да  | P13    | `cover`, center        | `cover`, center                           |
-| `generated/languages/language-german.webp`         | `/languages/german`          | 1586×992 / ≈8:5       |  75,1 KiB | да  | P14    | `cover`, center        | `cover`, center                           |
-| `generated/languages/language-french.webp`         | `/languages/french`          | 1586×992 / ≈8:5       |  63,1 KiB | да  | P15    | `cover`, center        | `cover`, center                           |
-| `generated/languages/language-spanish.webp`        | `/languages/spanish`         | 1586×992 / ≈8:5       |  66,4 KiB | да  | P16    | `cover`, center        | `cover`, center                           |
-| `generated/languages/language-italian.webp`        | `/languages/italian`         | 1586×992 / ≈8:5       |  69,6 KiB | да  | P17    | `cover`, center        | `cover`, center                           |
-| `generated/languages/language-chinese.webp`        | `/languages/chinese`         | 1586×992 / ≈8:5       |  65,1 KiB | да  | P18    | `cover`, center        | `cover`, center                           |
-| `generated/editorial/editorial-common-room.webp`   | `/about`, editorial-врезка   | 1672×941 / ≈16:9      |  80,0 KiB | да  | P19    | `cover`, 50% 52%       | `cover`, center                           |
+| Финальный файл                                     | Где используется             | Размер / aspect ratio |       Вес | Crop / object-position | Mobile crop                               |
+| -------------------------------------------------- | ---------------------------- | --------------------- | --------: | ---------------------- | ----------------------------------------- |
+| `generated/hero/hero-main.webp`                    | Главная, hero                | 1800×1200 / 3:2       | 176,5 KiB | `cover`, 52% 50%       | `cover`, 52% 50%; на 768–1023 px — center |
+| `generated/ages/age-4-6.webp`                      | Главная, карточка 4–6 лет    | 900×675 / 4:3         |  40,9 KiB | `cover`, center        | `cover`, center                           |
+| `generated/ages/age-7-12.webp`                     | Главная, карточка 7–12 лет   | 900×675 / 4:3         |  38,9 KiB | `cover`, center        | `cover`, center                           |
+| `generated/ages/age-13-17.webp`                    | Главная, карточка 13–17 лет  | 900×675 / 4:3         |  36,0 KiB | `cover`, center        | `cover`, center                           |
+| `generated/ages/age-adults.webp`                   | Главная, карточка «Взрослые» | 900×675 / 4:3         |  35,2 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-exams.webp`            | `/exams`                     | 1600×1000 / 8:5       | 100,0 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-tutoring.webp`         | `/tutoring`                  | 1600×1000 / 8:5       | 117,2 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-preschool.webp`        | `/preschool`                 | 1600×1000 / 8:5       |  76,5 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-development.webp`      | `/development`               | 1600×1000 / 8:5       | 108,2 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-corporate.webp`        | `/corporate`                 | 1586×992 / ≈8:5       |  69,4 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-speech-therapist.webp` | `/speech-therapist`          | 1600×1000 / 8:5       |  94,3 KiB | `cover`, center        | `cover`, center                           |
+| `generated/programs/program-psychologist.webp`     | `/psychologist`              | 1586×992 / ≈8:5       |  84,0 KiB | `cover`, center        | `cover`, center                           |
+| `generated/languages/language-english.webp`        | `/languages/english`         | 1586×992 / ≈8:5       |  79,1 KiB | `cover`, center        | `cover`, center                           |
+| `generated/languages/language-german.webp`         | `/languages/german`          | 1586×992 / ≈8:5       |  75,1 KiB | `cover`, center        | `cover`, center                           |
+| `generated/languages/language-french.webp`         | `/languages/french`          | 1586×992 / ≈8:5       |  63,1 KiB | `cover`, center        | `cover`, center                           |
+| `generated/languages/language-spanish.webp`        | `/languages/spanish`         | 1586×992 / ≈8:5       |  66,4 KiB | `cover`, center        | `cover`, center                           |
+| `generated/languages/language-italian.webp`        | `/languages/italian`         | 1586×992 / ≈8:5       |  69,6 KiB | `cover`, center        | `cover`, center                           |
+| `generated/languages/language-chinese.webp`        | `/languages/chinese`         | 1586×992 / ≈8:5       |  65,1 KiB | `cover`, center        | `cover`, center                           |
+| `generated/editorial/editorial-common-room.webp`   | `/about`, editorial-врезка   | 1672×941 / ≈16:9      |  80,0 KiB | `cover`, 50% 52%       | `cover`, center                           |
 
 ### Responsive-настройки
 
@@ -89,85 +85,14 @@
 | Направления         | `(max-width: 1024px) 100vw, 58vw`                          | lazy       |
 | About/editorial     | `100vw`                                                    | lazy       |
 
-## Prompt registry
+## Резервные SVG
 
-К каждому сценарию применён общий запрет: no text, no captions, no logos, no
-flags as focal element, no film border, no vintage tint, no vignette, no direct
-camera gaze unless necessary, no malformed hands or fingers, no pseudo-text on
-books or cards, no invented RandK facade, no stock-photo posing.
-
-- **P01 (зафиксированное описание):** светлый современный образовательный
-  интерьер, небольшая группа учеников за общим столом, тёплый дневной свет,
-  cream и warm wood, мягкий burgundy accent, editorial documentary framing.
-- **P02:** двое дошкольников 4–6 лет заняты спокойным развивающим заданием за
-  низким деревянным столом в светлом классе; педагог присутствует только
-  частично, внимание детей на материале, естественные руки и эмоции.
-- **P03 (зафиксированное описание):** младшие школьники 7–12 лет совместно
-  решают учебную задачу в светлом классе, естественная вовлечённость, мягкий
-  дневной свет, современная editorial-подача.
-- **P04:** небольшая группа подростков 13–17 лет обсуждает учебное задание за
-  столом; спокойная уверенная атмосфера, ноутбук и чистые тетради без читаемого
-  текста, графитовые детали и burgundy accent.
-- **P05:** взрослые ученики разных возрастов практикуют язык в мини-группе за
-  деревянным столом; живой разговор, естественные жесты, светлая современная
-  аудитория и тёплый дневной свет.
-- **P06 (зафиксированное описание):** подросток готовится к экзамену с
-  преподавателем, сосредоточенная совместная работа, чистые материалы без
-  текста, тёплая светлая аудитория.
-- **P07 (зафиксированное описание):** индивидуальное репетиторство, ученик и
-  наставник разбирают задачу рядом, естественный контакт без позирования,
-  современный спокойный интерьер.
-- **P08 (зафиксированное описание):** подготовка к школе, дошкольники работают
-  с простыми формами и материалами без букв, естественная активность, мягкий
-  свет и тёплое дерево.
-- **P09 (зафиксированное описание):** развивающее занятие детей с предметной
-  задачей, сосредоточенность и живое взаимодействие, светлая образовательная
-  среда, cream / beige / warm wood.
-- **P10:** четверо взрослых коллег занимаются корпоративным языковым обучением
-  за общим столом; разговор и командное обсуждение, один мягкий burgundy accent,
-  premium editorial office-classroom photography.
-- **P11 (зафиксированное описание):** логопедическое занятие ребёнка со
-  специалистом, деликатный боковой ракурс, карточки без символов и текста,
-  спокойная доверительная атмосфера.
-- **P12:** психологическая консультация по учебной адаптации: подросток и
-  взрослый специалист беседуют в светлой спокойной комнате, уважительная
-  дистанция, оба в профиль или три четверти, без медицинских клише.
-- **P13:** урок английского: двое молодых взрослых обсуждают тему с наставником
-  за столом, нейтральные учебные материалы без текста, естественный разговор,
-  cream / beige / graphite / warm wood.
-- **P14:** урок немецкого: небольшая взрослая группа структурированно работает
-  с преподавателем, современный светлый класс, сдержанный графит и тёплое
-  дерево, естественные жесты.
-- **P15:** урок французского: двое взрослых учеников ведут живой диалог с
-  наставником, мягкий боковой свет, элегантная спокойная editorial-композиция,
-  неброский burgundy accent.
-- **P16:** урок испанского: трое взрослых учеников эмоционально, но естественно
-  обсуждают тему за столом, тёплый солнечный свет, светлый интерьер без флагов и
-  культурных клише.
-- **P17:** урок итальянского: небольшая взрослая группа в спокойном разговоре,
-  тёплый дневной свет, cream / beige / warm wood, тонкий burgundy accent,
-  современная editorial-фотография.
-- **P18:** урок китайского: двое взрослых учеников и наставник практикуют речь;
-  чистые материалы без иероглифов и псевдотекста, светлый современный класс,
-  уважительная нейтральная подача без стереотипов.
-- **P19:** просторная общая учебная зона с несколькими небольшими группами за
-  деревянными столами, библиотечные полки, большое окно, тёплый естественный
-  свет, cream / beige / graphite и одна мягкая burgundy wall panel.
-
-## Что произошло с SVG
-
-SVG-файлы не удалялись и физически не перезаписывались. В активном интерфейсе
-фотографии заменили ссылки на временные `generated/hero.svg`,
-`generated/about.svg`, четыре SVG возрастов, семь SVG направлений и шесть SVG
-активных языков.
-
-Оставлены без изменений:
+Оставлены без изменений только SVG, которые используются динамически или
+нужны как fallback:
 
 - все `public/images/offices/*.svg` — реальные фасады не выдумываются;
 - SVG пяти скрытых языков: `japanese`, `arabic`, `turkish`, `norwegian`,
   `russian-as-foreign`;
-- вся служебная графика `public/images/ui/`;
-- сами прежние SVG-заготовки — как неиспользуемый резерв.
 
 ## Visual QA
 

@@ -237,7 +237,11 @@ async function main() {
           mismatched.push(rule.source);
         }
       }
-      check('source, destination и permanent совпадают', mismatched.length === 0, mismatched.join(', '));
+      check(
+        'source, destination и permanent совпадают',
+        mismatched.length === 0,
+        mismatched.join(', '),
+      );
     }
 
     /* --- .htaccess --- */
@@ -251,7 +255,10 @@ async function main() {
     if (htaccess) {
       check(`${HTACCESS_FILE} существует`, true);
 
-      const ruleLines = htaccess
+      const legacySection = htaccess
+        .split('# --- Постоянные редиректы со старых адресов')[1]
+        ?.split('# --- Canonical HTTPS')[0];
+      const ruleLines = (legacySection ?? '')
         .split('\n')
         .filter((line) => line.trim().startsWith('RewriteRule ^') && line.includes('R=30'));
       check(
@@ -270,6 +277,22 @@ async function main() {
         'каждое правило источника присутствует в .htaccess',
         missing.length === 0,
         missing.map((r) => r.source).join(', '),
+      );
+      check(
+        'legacy query-параметры удаляются через QSD',
+        ruleLines.every((line) => line.includes('QSD')),
+      );
+      check(
+        'legacy-цели сразу ведут на canonical production host',
+        ruleLines.every((line) => line.includes('https://randkcenter.ru/')),
+      );
+      check(
+        'HTTPS/non-www policy присутствует',
+        htaccess.includes('HTTP_HOST} !^randkcenter\\.ru$'),
+      );
+      check(
+        'неизвестный путь получает реальный 404',
+        htaccess.includes('RewriteRule ^ - [R=404,L]'),
       );
     }
   }
