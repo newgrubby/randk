@@ -14,7 +14,7 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # --- Постоянные редиректы со старых адресов (40) ---
+  # --- Постоянные редиректы со старых адресов (39) ---
   # Абсолютная canonical-цель одновременно исправляет протокол/host.
   # QSD удаляет старые query-параметры (например album_id), чтобы они
   # не создавали индексируемые дубли. NE сохраняет якоря вроде #faq.
@@ -44,7 +44,6 @@
   RewriteRule ^zapisatsya-na-kursy/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
   RewriteRule ^zakazat-zvonok/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
   RewriteRule ^news/?$ https://randkcenter.ru/ [R=301,L,NE,QSD]
-  RewriteRule ^article_post/([^/]+)/?$ https://randkcenter.ru/ [R=301,L,NE,QSD]
   RewriteRule ^vakansii/?$ https://randkcenter.ru/contacts/ [R=301,L,NE,QSD]
   RewriteRule ^branches/?$ https://randkcenter.ru/centers/ [R=301,L,NE,QSD]
   RewriteRule ^branches/orekhovo-zuevo/?$ https://randkcenter.ru/centers/orekhovo-zuevo/ [R=301,L,NE,QSD]
@@ -59,18 +58,34 @@
   RewriteRule ^programs/individualnye-zanyatiya/?$ https://randkcenter.ru/programs/ [R=301,L,NE,QSD]
   RewriteRule ^personal-data-consent/?$ https://randkcenter.ru/privacy/ [R=301,L,NE,QSD]
 
+  # --- Удалённые legacy URL: HTTP 410 Gone (1) ---
+  # Нерелевантные страницы не перенаправляем на главную: поисковику
+  # явно сообщаем, что контент удалён и прямого аналога больше нет.
+  RewriteRule ^article_post/([^/]+)/?$ - [R=410,L]
+
   # --- Canonical HTTPS + non-www + trailing slash за один переход ---
-  # Сначала отдельное правило для каталогов без слэша: так запрос
-  # http://www.randkcenter.ru/contacts сразу попадёт на канонический URL.
-  RewriteCond %{HTTPS} !=on [OR]
+  # REG.RU использует nginx перед Apache. Для HTTPS учитываем
+  # X-Forwarded-Proto, иначе Apache может видеть внутренний HTTP
+  # и создавать циклический редирект https://randkcenter.ru → itself.
+
+  # Неправильный host: сразу приводим к HTTPS + non-www.
   RewriteCond %{HTTP_HOST} !^randkcenter\.ru$ [NC]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteCond %{REQUEST_URI} !/$
   RewriteRule ^(.+)$ https://randkcenter.ru/$1/ [R=301,L,NE]
 
-  # Остальные запросы на HTTP или www сохраняют path и query string.
-  RewriteCond %{HTTPS} !=on [OR]
   RewriteCond %{HTTP_HOST} !^randkcenter\.ru$ [NC]
+  RewriteRule ^ https://randkcenter.ru%{REQUEST_URI} [R=301,L,NE]
+
+  # Настоящий HTTP за nginx: HTTPS уже завершён, когда X-Forwarded-Proto=https.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.+)$ https://randkcenter.ru/$1/ [R=301,L,NE]
+
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
   RewriteRule ^ https://randkcenter.ru%{REQUEST_URI} [R=301,L,NE]
 
   # На canonical host нормализуем существующие каталоги без цепочек.
