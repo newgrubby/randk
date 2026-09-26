@@ -51,9 +51,8 @@
   },
   {
     "source": "/article_post/:id",
-    "destination": "/",
-    "permanent": true,
-    "note": "На старом сайте — шаблонный текст-заглушка платформы"
+    "status": 410,
+    "note": "Старые статьи удалены без прямого аналога на новом сайте; возвращаем Gone вместо нерелевантного редиректа на главную"
   },
   { "source": "/vakansii", "destination": "/contacts", "permanent": true },
 
