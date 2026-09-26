@@ -132,11 +132,6 @@
       "permanent": true
     },
     {
-      "source": "/article_post/:id",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/vakansii",
       "destination": "/contacts/",
       "permanent": true
@@ -200,6 +195,12 @@
       "source": "/personal-data-consent",
       "destination": "/privacy/",
       "permanent": true
+    }
+  ],
+  "routes": [
+    {
+      "src": "^/article_post/([^/]+)/?$",
+      "status": 410
     }
   ]
 }
