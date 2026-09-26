@@ -3,10 +3,17 @@
 import { access, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { format } from 'prettier';
-import { comparablePath, hasParam, loadNormalizedRules, root } from './lib/redirect-rules.mjs';
+import {
+  comparablePath,
+  hasParam,
+  isGoneRule,
+  loadNormalizedRules,
+  root,
+} from './lib/redirect-rules.mjs';
 
 const rules = await loadNormalizedRules();
-const sources = new Set(rules.map((rule) => comparablePath(rule.source)));
+const redirectRules = rules.filter((rule) => !isGoneRule(rule));
+const sources = new Set(redirectRules.map((rule) => comparablePath(rule.source)));
 const lines = [
   '# Legacy redirect validation matrix',
   '',
@@ -19,6 +26,12 @@ const lines = [
 let failures = 0;
 for (const rule of rules) {
   const probe = rule.source.replace(/:[a-zA-Z]\w*\*?/g, '12345');
+
+  if (isGoneRule(rule)) {
+    lines.push(`| \`${probe}\` | — | — | 410 | 0 |`);
+    continue;
+  }
+
   const destinationPath = comparablePath(rule.normalizedDestination);
   const destinationDir =
     destinationPath === '/' ? join(root, 'out') : join(root, 'out', destinationPath);
