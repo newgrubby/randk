@@ -30,7 +30,7 @@
 | `/zapisatsya-na-kursy`                | `/contacts/`                |             301 |          200 |           1 |
 | `/zakazat-zvonok`                     | `/contacts/`                |             301 |          200 |           1 |
 | `/news`                               | `/`                         |             301 |          200 |           1 |
-| `/article_post/12345`                 | `/`                         |             301 |          200 |           1 |
+| `/article_post/12345`                 | —                           |               — |          410 |           0 |
 | `/vakansii`                           | `/contacts/`                |             301 |          200 |           1 |
 | `/branches`                           | `/centers/`                 |             301 |          200 |           1 |
 | `/branches/orekhovo-zuevo`            | `/centers/orekhovo-zuevo/`  |             301 |          200 |           1 |
