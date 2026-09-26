@@ -19,6 +19,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isGoneRule, loadNormalizedRules } from './lib/redirect-rules.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -29,6 +30,9 @@ if (!base) {
 }
 
 const config = JSON.parse(await readFile(join(root, 'vercel.json'), 'utf8'));
+const rules = await loadNormalizedRules();
+const redirectRules = rules.filter((rule) => !isGoneRule(rule));
+const goneRules = rules.filter(isGoneRule);
 const sitemap = await readFile(join(root, 'out', 'sitemap.xml'), 'utf8');
 
 /** Проходит по цепочке переходов и возвращает её целиком. */
@@ -55,20 +59,22 @@ async function trace(path) {
 let failures = 0;
 
 console.log(`Проверка: ${base}`);
-console.log(`Правил в vercel.json: ${config.redirects.length}\n`);
+console.log(
+  `Правил: ${redirectRules.length} редиректов, ${goneRules.length} Gone; vercel.json: ${config.redirects.length} redirects / ${config.routes?.length ?? 0} routes\n`,
+);
 
 console.log('### Legacy redirect validation matrix\n');
 console.log('| source | expected destination | redirect status | final status | chain count |');
 console.log('|---|---|---:|---:|---:|');
 
-for (const rule of config.redirects) {
+for (const rule of redirectRules) {
   const probe = rule.source.replace(/:[a-zA-Z]\w*/g, '12345');
   const { hops, final, status } = await trace(probe);
 
   const single = hops.length === 1;
   const permanent = hops[0] && (hops[0].status === 301 || hops[0].status === 308);
   const reached = status === 200;
-  const expected = rule.destination.split('#', 1)[0];
+  const expected = rule.normalizedDestination.split('#', 1)[0];
   const actual = final.split('?', 1)[0];
   const destinationMatches = actual === expected;
   const ok = single && permanent && reached && destinationMatches;
@@ -82,8 +88,18 @@ for (const rule of config.redirects) {
   if (!destinationMatches) problems.push(`фактическая цель: ${actual}`);
 
   console.log(
-    `| ${ok ? '✓' : `FAIL: ${problems.join('; ')}`} \`${probe}\` | \`${rule.destination}\` | ${hops[0]?.status ?? status} | ${status} | ${hops.length} |`,
+    `| ${ok ? '✓' : `FAIL: ${problems.join('; ')}`} \`${probe}\` | \`${rule.normalizedDestination}\` | ${hops[0]?.status ?? status} | ${status} | ${hops.length} |`,
   );
+}
+
+console.log('\n### Удалённые legacy URL возвращают 410 Gone\n');
+
+for (const rule of goneRules) {
+  const probe = rule.source.replace(/:[a-zA-Z]\w*/g, '12345');
+  const { hops, status } = await trace(probe);
+  const ok = hops.length === 0 && status === 410;
+  if (!ok) failures += 1;
+  console.log(`${ok ? '  OK  ' : ' FAIL '} ${probe} → ${status} (redirects: ${hops.length})`);
 }
 
 console.log('\n### Новые страницы открываются напрямую\n');
