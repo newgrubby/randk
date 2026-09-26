@@ -27,6 +27,7 @@ import {
   VERCEL_FILE,
   comparablePath,
   hasParam,
+  isGoneRule,
   loadNormalizedRules,
   normalizeDestination,
   root,
@@ -79,9 +80,13 @@ async function collectBuiltRoutes() {
 
 async function main() {
   const rules = await loadNormalizedRules();
+  const redirectRules = rules.filter((rule) => !isGoneRule(rule));
+  const goneRules = rules.filter(isGoneRule);
 
   console.log(`Источник правил: ${SOURCE_FILE}`);
-  console.log(`Правил в источнике: ${rules.length}`);
+  console.log(
+    `Правил в источнике: ${rules.length} (${redirectRules.length} редиректов, ${goneRules.length} Gone)`,
+  );
 
   /* ---------- 1. Дубликаты source ---------- */
   section('1. Дубликаты source');
@@ -99,7 +104,7 @@ async function main() {
   /* ---------- 2. source === destination ---------- */
   section('2. Редирект «сам на себя»');
   {
-    const self = rules.filter(
+    const self = redirectRules.filter(
       (rule) => comparablePath(rule.source) === comparablePath(rule.destination),
     );
     check('таких правил нет', self.length === 0, self.map((r) => r.source).join(', '));
@@ -108,11 +113,11 @@ async function main() {
   /* ---------- 3 и 4. Циклы и цепочки ---------- */
   section('3. Циклы и цепочки');
   {
-    const sources = new Map(rules.map((rule) => [comparablePath(rule.source), rule]));
+    const sources = new Map(redirectRules.map((rule) => [comparablePath(rule.source), rule]));
     const chains = [];
     const cycles = [];
 
-    for (const rule of rules) {
+    for (const rule of redirectRules) {
       const target = comparablePath(rule.destination);
       const next = sources.get(target);
       if (!next) continue;
@@ -139,19 +144,19 @@ async function main() {
       badSource.map((r) => r.source).join(', '),
     );
 
-    const badDestination = rules.filter((rule) => !rule.destination.startsWith('/'));
+    const badDestination = redirectRules.filter((rule) => !rule.destination.startsWith('/'));
     check(
       'цели начинаются с /',
       badDestination.length === 0,
       badDestination.map((r) => r.destination).join(', '),
     );
 
-    const wrongSlash = rules.filter(
+    const wrongSlash = redirectRules.filter(
       (rule) => rule.normalizedDestination !== normalizeDestination(rule.destination),
     );
     check('цели приведены к виду с завершающим слэшем', wrongSlash.length === 0);
 
-    const rootOrHash = rules.filter(
+    const rootOrHash = redirectRules.filter(
       (rule) => rule.destination === '/' || rule.destination.includes('#'),
     );
     check(
@@ -163,7 +168,7 @@ async function main() {
   /* ---------- 6. Постоянные редиректы ---------- */
   section('6. Тип редиректа');
   {
-    const temporary = rules.filter((rule) => rule.permanent !== true);
+    const temporary = redirectRules.filter((rule) => rule.permanent !== true);
     check(
       'все правила помечены permanent: true',
       temporary.length === 0,
@@ -180,7 +185,7 @@ async function main() {
       console.log('  ПРОПУЩЕНО  папки out/ нет — выполните npm run build и повторите');
     } else {
       const missing = [];
-      for (const rule of rules) {
+      for (const rule of redirectRules) {
         if (hasParam(rule.destination)) continue;
         const target = comparablePath(rule.destination);
         const path = target === '' ? '/' : target;
@@ -220,13 +225,13 @@ async function main() {
         String(vercel.$schema),
       );
       check(
-        `правил в vercel.json = ${rules.length}`,
-        Array.isArray(vercel.redirects) && vercel.redirects.length === rules.length,
+        `редиректов в vercel.json = ${redirectRules.length}`,
+        Array.isArray(vercel.redirects) && vercel.redirects.length === redirectRules.length,
         String(vercel.redirects?.length),
       );
 
       const mismatched = [];
-      for (const [index, rule] of rules.entries()) {
+      for (const [index, rule] of redirectRules.entries()) {
         const actual = vercel.redirects?.[index];
         if (
           !actual ||
@@ -238,9 +243,26 @@ async function main() {
         }
       }
       check(
-        'source, destination и permanent совпадают',
+        'redirect source, destination и permanent совпадают',
         mismatched.length === 0,
         mismatched.join(', '),
+      );
+
+      check(
+        `Gone routes в vercel.json = ${goneRules.length}`,
+        Array.isArray(vercel.routes) && vercel.routes.length === goneRules.length,
+        String(vercel.routes?.length),
+      );
+      const goneMismatch = goneRules.filter((rule) => {
+        const fragment = rule.source.replace(/^\//, '').replace(/:[a-zA-Z]\w*/g, '');
+        return !vercel.routes?.some(
+          (route) => route.status === 410 && typeof route.src === 'string' && route.src.includes(fragment),
+        );
+      });
+      check(
+        'все Gone rules присутствуют в routes со статусом 410',
+        goneMismatch.length === 0,
+        goneMismatch.map((r) => r.source).join(', '),
       );
     }
 
@@ -255,40 +277,105 @@ async function main() {
     if (htaccess) {
       check(`${HTACCESS_FILE} существует`, true);
 
-      const legacySection = htaccess
+      const redirectSection = htaccess
         .split('# --- Постоянные редиректы со старых адресов')[1]
-        ?.split('# --- Canonical HTTPS')[0];
-      const ruleLines = (legacySection ?? '')
+        ?.split('# --- Удалённые legacy URL')[0];
+      const redirectLines = (redirectSection ?? '')
         .split('\n')
         .filter((line) => line.trim().startsWith('RewriteRule ^') && line.includes('R=30'));
       check(
-        `правил редиректа в .htaccess = ${rules.length}`,
-        ruleLines.length === rules.length,
-        String(ruleLines.length),
+        `правил редиректа в .htaccess = ${redirectRules.length}`,
+        redirectLines.length === redirectRules.length,
+        String(redirectLines.length),
       );
 
-      const missing = rules.filter((rule) => {
+      const missingRedirects = redirectRules.filter((rule) => {
         const pattern = rule.source.replace(/^\//, '').replace(/:[a-zA-Z]\w*/g, '');
-        return !ruleLines.some(
+        return !redirectLines.some(
           (line) => line.includes(pattern) && line.includes(rule.normalizedDestination),
         );
       });
       check(
-        'каждое правило источника присутствует в .htaccess',
-        missing.length === 0,
-        missing.map((r) => r.source).join(', '),
+        'каждый redirect rule присутствует в .htaccess',
+        missingRedirects.length === 0,
+        missingRedirects.map((r) => r.source).join(', '),
       );
       check(
         'legacy query-параметры удаляются через QSD',
-        ruleLines.every((line) => line.includes('QSD')),
+        redirectLines.every((line) => line.includes('QSD')),
       );
       check(
         'legacy-цели сразу ведут на canonical production host',
-        ruleLines.every((line) => line.includes('https://randkcenter.ru/')),
+        redirectLines.every((line) => line.includes('https://randkcenter.ru/')),
+      );
+
+      const goneSection = htaccess
+        .split('# --- Удалённые legacy URL')[1]
+        ?.split('# --- Canonical HTTPS')[0];
+      const goneLines = (goneSection ?? '')
+        .split('\n')
+        .filter((line) => line.trim().startsWith('RewriteRule ^') && line.includes('R=410'));
+      check(
+        `Gone rules в .htaccess = ${goneRules.length}`,
+        goneLines.length === goneRules.length,
+        String(goneLines.length),
+      );
+      const missingGone = goneRules.filter((rule) => {
+        const pattern = rule.source.replace(/^\//, '').replace(/:[a-zA-Z]\w*/g, '');
+        return !goneLines.some((line) => line.includes(pattern));
+      });
+      check(
+        'каждый Gone rule присутствует в .htaccess',
+        missingGone.length === 0,
+        missingGone.map((r) => r.source).join(', '),
       );
       check(
         'HTTPS/non-www policy присутствует',
-        htaccess.includes('HTTP_HOST} !^randkcenter\\.ru$'),
+        htaccess.includes('HTTP_HOST} !^randkcenter\\.ru
+      check(
+        'неизвестный путь получает реальный 404',
+        htaccess.includes('RewriteRule ^ - [R=404,L]'),
+      );
+    }
+  }
+
+  /* ---------- Обязательный минимум из задания ---------- */
+  section('9. Контрольные адреса из задания');
+  {
+    const required = [
+      '/nemeckiy_yazyk',
+      '/francuzskiy_yazyk',
+      '/inostrannye_yazyki1',
+      '/address',
+      '/uchebnyy_process',
+      '/branches',
+    ];
+    for (const source of required) {
+      const rule = rules.find((item) => item.source === source);
+      check(
+        `${source} → ${rule ? rule.normalizedDestination : '—'}`,
+        Boolean(rule) && rule.permanent === true,
+      );
+    }
+  }
+
+  console.log(`\n=== Проверок: ${checks}, провалено: ${failures} ===`);
+
+  if (failures > 0) {
+    console.error('\nПравила и конфиги расходятся. Выполните: node scripts/generate-redirects.mjs');
+    process.exitCode = 1;
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+),
+      );
+      check(
+        'REG.RU reverse-proxy HTTPS учитывает X-Forwarded-Proto',
+        htaccess.includes('HTTP:X-Forwarded-Proto} !https'),
       );
       check(
         'неизвестный путь получает реальный 404',
