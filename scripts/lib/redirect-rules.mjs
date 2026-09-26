@@ -70,11 +70,16 @@ export function hasParam(value) {
   return /:[a-zA-Z]\w*/.test(value);
 }
 
+/** true для legacy URL, которые должны отвечать HTTP 410 Gone без редиректа. */
+export function isGoneRule(rule) {
+  return rule.status === 410;
+}
+
 /** Правила в виде, готовом для записи в конфиги. */
 export async function loadNormalizedRules() {
   const rules = await loadRules();
   return rules.map((rule) => ({
     ...rule,
-    normalizedDestination: normalizeDestination(rule.destination),
+    normalizedDestination: isGoneRule(rule) ? null : normalizeDestination(rule.destination),
   }));
 }
